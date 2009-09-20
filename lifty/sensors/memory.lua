@@ -1,0 +1,1 @@
+module("lifty.sensors.memory")

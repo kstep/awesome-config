@@ -1,0 +1,10 @@
+require("lifty.sensors.battery")
+require("lifty.sensors.cpu")
+require("lifty.sensors.date")
+require("lifty.sensors.fs")
+require("lifty.sensors.memory")
+require("lifty.sensors.mixer")
+require("lifty.sensors.net")
+require("lifty.sensors.thermal")
+
+module("lifty.sensors")

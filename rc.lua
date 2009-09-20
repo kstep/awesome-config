@@ -133,13 +133,8 @@ mytasklist.buttons = awful.util.table.join(
                                               client.focus = c
                                               c:raise()
                                           end),
-                     awful.button({ }, 3, function ()
-                                              if instance then
-                                                  instance:hide()
-                                                  instance = nil
-                                              else
-                                                  instance = awful.menu.clients({ width=250 })
-                                              end
+                     awful.button({ }, 3, function (c)
+                                              c:kill()
                                           end),
                      awful.button({ }, 4, function ()
                                               awful.client.focus.byidx(1)

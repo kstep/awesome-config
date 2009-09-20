@@ -150,7 +150,7 @@ for s = 1, screen.count() do
     mypromptbox[s] = awful.widget.prompt({ align = "left" })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
-    mylayoutbox[s] = widget({ type = "imagebox", align = "right" })
+    mylayoutbox[s] = widget({ type = "imagebox", align = "left" })
     mylayoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
@@ -169,10 +169,10 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { mylauncher,
                            mytaglist[s],
+                           mylayoutbox[s],
                            mytasklist[s],
                            mypromptbox[s],
                            mytextbox,
-                           mylayoutbox[s],
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
 end

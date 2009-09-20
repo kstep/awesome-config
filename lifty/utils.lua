@@ -58,3 +58,11 @@ function fread_table(fname)
 	end
 	return result
 end
+
+function table_sum(tbl)
+	local sum = 0
+	for i = 1, #tbl do
+		sum = sum + tbl[i]
+	end
+	return sum
+end

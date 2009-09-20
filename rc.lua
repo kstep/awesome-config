@@ -49,6 +49,50 @@ use_titlebar = false
 -- }}}
 
 -- {{{ Tags
+shifty.config.tags = {
+	["term"]   = { position = 1, layout = awful.layout.suit.tile, init = true, },
+	["msgs"]   = { position = 2, layout = awful.layout.suit.tile, mwfact = 0.75, },
+	["www"]    = { position = 3, layout = awful.layout.suit.max, },
+	["edit"]   = { position = 4, layout = awful.layout.suit.tile.bottom, },
+	["files"]  = { position = 5, layout = awful.layout.suit.tile, nopopup = false, },
+	["view"]   = { position = 6, layout = awful.layout.suit.tile, },
+	["graph"]  = { position = 7, layout = awful.layout.suit.tile.left, },
+	["video"]  = { position = 8, layout = awful.layout.suit.max, nopopup = false, },
+	["design"] = { position = 9, layout = awful.layout.suit.fair, mwfact = 0.7, ncol = 2, },
+	["dbms"]   = { layout = awful.layout.suit.max, },
+	["other"]  = { position = 0, },
+	["notes"]  = { },
+}
+
+shifty.config.apps = {
+	{ match = {"Qjackctl"}, tag = "audio", float = true, geometry = { width = 550, height = 115 } },
+	{ match = {"Rosegarden"}, tag = "audio" },
+	{ match = {"Grecord"}, tag = "audio", float = true },
+	{ match = {"Gvim", "Vim", "OpenOffice"},  tag = "edit" },
+	{ match = {"gimp"},  tag = "graph" },
+	{ match = {"Smplayer", "MPlayer", "VLC.*"},  tag = "video" },
+	{ match = {"Opera", "Firefox", "Links", "IEXPLORE"},  tag = "www" },
+	{ match = {"Rox", "Konqueror", "emelfm2"},  tag = "files" },
+	{ match = {"Gliv", "GQview", "Xloadimage", "Kview", "Kpdf"},  tag = "view" },
+	{ match = {"Thunderbird.*"},  tag = "msgs" },
+	{ match = {"Pidgin", "Skype.*"},  tag = "msgs", slave = true },
+	{ match = {"Xterm", "URxvt"},  tag = "term" },
+	{ match = {"^Dia$", "designer", "glade"}, tag = "design", slave = true },
+	{ match = {"mysql-.*"}, tag = "dbms" },
+	{ match = {"xmessage"},  float = true, nopopup = true, geometry = { x = 1000, y = 600 } },
+	{ match = {".*calc.*", "screenruler"},  float = true },
+	{ match = {"Giggle", "Gitg"}, tag = "git" },
+	{ match = {"Gournal", "Xournal"}, tag = "notes" },
+}
+
+shifty.config.defaults = {
+	layout  = awful.layout.suit.max,
+	mwfact  = 0.62,
+	nopopup = true,
+	tag     = "other",
+}
+
+shifty.init()
 -- }}}
 
 -- {{{ Wibox

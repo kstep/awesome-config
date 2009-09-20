@@ -4,6 +4,8 @@ require("awful")
 require("beautiful")
 -- Notification library
 require("naughty")
+-- Shifty tagging library
+require("shifty")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers

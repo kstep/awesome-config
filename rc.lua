@@ -44,48 +44,11 @@ layouts =
     awful.layout.suit.floating
 }
 
--- Table of clients that should be set floating. The index may be either
--- the application class or instance. The instance is useful when running
--- a console app in a terminal like (Music on Console)
---    xterm -name mocp -e mocp
-floatapps =
-{
-    -- by class
-    ["MPlayer"] = true,
-    ["pinentry"] = true,
-    ["gimp"] = true,
-    -- by instance
-    ["mocp"] = true
-}
-
--- Applications to be moved to a pre-defined tag by class or instance.
--- Use the screen and tags indices.
-apptags =
-{
-    -- ["Firefox"] = { screen = 1, tag = 2 },
-    -- ["mocp"] = { screen = 2, tag = 4 },
-}
-
 -- Define if we want to use titlebar on all applications.
 use_titlebar = false
 -- }}}
 
 -- {{{ Tags
--- Define tags table.
-tags = {}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = {}
-    -- Create 9 tags per screen.
-    for tagnumber = 1, 9 do
-        tags[s][tagnumber] = tag(tagnumber)
-        -- Add tags to screen one by one
-        tags[s][tagnumber].screen = s
-        awful.layout.set(layouts[1], tags[s][tagnumber])
-    end
-    -- I'm sure you want to see at least one tag.
-    tags[s][1].selected = true
-end
 -- }}}
 
 -- {{{ Wibox
@@ -368,27 +331,6 @@ awful.hooks.manage.register(function (c, startup)
     -- if they're not focusable, so set border anyway.
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_normal
-
-    -- Check if the application should be floating.
-    local cls = c.class
-    local inst = c.instance
-    if floatapps[cls] ~= nil then
-        awful.client.floating.set(c, floatapps[cls])
-    elseif floatapps[inst] ~= nil then
-        awful.client.floating.set(c, floatapps[inst])
-    end
-
-    -- Check application->screen/tag mappings.
-    local target
-    if apptags[cls] then
-        target = apptags[cls]
-    elseif apptags[inst] then
-        target = apptags[inst]
-    end
-    if target then
-        c.screen = target.screen
-        awful.client.movetotag(tags[target.screen][target.tag], c)
-    end
 
     -- Do this after tag mapping, so you don't see it on the wrong tag for a split second.
     client.focus = c

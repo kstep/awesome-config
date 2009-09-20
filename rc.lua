@@ -10,7 +10,7 @@ require("shifty")
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 -- The default is a dark theme
-theme_path = "/usr/local/share/awesome/themes/default/theme.lua"
+theme_path = awful.util.getdir("config") .. "/themes/default/theme.lua"
 -- Uncommment this for a lighter theme
 -- theme_path = "/usr/local/share/awesome/themes/sky/theme.lua"
 

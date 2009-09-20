@@ -225,46 +225,42 @@ clientkeys = awful.util.table.join(
         end)
 )
 
--- Compute the maximum number of digit we need, limited to 9
-keynumber = 0
-for s = 1, screen.count() do
-   keynumber = math.min(9, math.max(#tags[s], keynumber));
-end
-
-for i = 1, keynumber do
+for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey }, i,
                   function ()
-                        local screen = mouse.screen
-                        if tags[screen][i] then
-                            awful.tag.viewonly(tags[screen][i])
+                        local tag = shifty.getpos(i)
+                        if tag then
+                            awful.tag.viewonly(tag)
                         end
                   end),
         awful.key({ modkey, "Control" }, i,
                   function ()
-                      local screen = mouse.screen
-                      if tags[screen][i] then
-                          tags[screen][i].selected = not tags[screen][i].selected
+                      local tag = shifty.getpos(i)
+                      if tag then
+                          tag.selected = not tags.selected
                       end
                   end),
         awful.key({ modkey, "Shift" }, i,
                   function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.movetotag(tags[client.focus.screen][i])
+                      local tag = shifty.getpos(i)
+                      if client.focus and tag then
+                          awful.client.movetotag(tag)
                       end
                   end),
         awful.key({ modkey, "Control", "Shift" }, i,
                   function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.toggletag(tags[client.focus.screen][i])
+                      local tag = shifty.getpos(i)
+                      if client.focus and tag then
+                          awful.client.toggletag(tag)
                       end
                   end),
         awful.key({ modkey, "Shift" }, "F" .. i,
                   function ()
-                      local screen = mouse.screen
-                      if tags[screen][i] then
+                      local tag = shifty.getpos(i)
+                      if tag then
                           for k, c in pairs(awful.client.getmarked()) do
-                              awful.client.movetotag(tags[screen][i], c)
+                              awful.client.movetotag(tag, c)
                           end
                       end
                    end))

@@ -22,6 +22,12 @@ terminal = "urxvt"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
+-- Freedesktop menus support
+require("freedesktop.utils")
+freedesktop.utils.terminal = terminal
+freedesktop.utils.icon_theme = "gnome"
+require("freedesktop.menu")
+
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
@@ -102,17 +108,17 @@ mytextbox = widget({ type = "textbox", align = "right" })
 mytextbox.text = "<b><small> " .. awesome.release .. " </small></b>"
 
 -- Create a laucher widget and a main menu
+menu_items = freedesktop.menu.new()
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
    { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
+table.insert(menu_items, { "awesome", myawesomemenu, beautiful.awesome_icon })
+table.insert(menu_items, { "open terminal", terminal, freedesktop.utils.lookup_icon({icon = 'terminal'}) })
 
-mymainmenu = awful.menu.new({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                        { "open terminal", terminal }
-                                      }
-                            })
+mymainmenu = awful.menu.new({ items = menu_items, width = 150 })
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })

@@ -1,7 +1,7 @@
 local pairs = pairs
 local io = io
 
-module("lifty.util")
+module("lifty.utils")
 
 function humanize_size(size, exp)
 	local suffix = { "b", "K", "M", "G", "T" }

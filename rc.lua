@@ -242,9 +242,9 @@ for s = 1, screen.count() do
 	mystatwibox[s].widgets = {
 		mypromptbox[s],
 		battery_widget[s],
-		thermal_widgets[s],
 		cpufreq_widgets[s],
 		cpuload_widgets[s],
+		thermal_widgets[s],
 	}
 	mystatwibox[s].screen = s
 end

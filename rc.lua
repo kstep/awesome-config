@@ -178,8 +178,8 @@ mytasklist.buttons = awful.util.table.join(
 
 mystatwibox = {}
 battery_widget = {}
+cpufreq_widget = {}
 thermal_widgets = {}
-cpufreq_widgets = {}
 cpuload_widgets = {}
 
 bar_widget_params = { align = "right", vertical = true, width = 10, height = 0.66 }
@@ -227,9 +227,9 @@ for s = 1, screen.count() do
 			["therm1"] = { sensor = thermal_sensors[2] },
 		}).widgets
 	bar_widget_params.title = " %s "
-	cpufreq_widgets[s] =
+	cpufreq_widget[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
-			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2, humanize = { base = 1000, postfixes = { "Hz", "MHz", "GHz" } } },
+			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2 },
 		}).widgets
 	bar_widget_params.title = "load:"
 	cpuload_widgets[s] =
@@ -242,7 +242,7 @@ for s = 1, screen.count() do
 	mystatwibox[s].widgets = {
 		mypromptbox[s],
 		battery_widget[s],
-		cpufreq_widgets[s],
+		cpufreq_widget[s],
 		cpuload_widgets[s],
 		thermal_widgets[s],
 	}

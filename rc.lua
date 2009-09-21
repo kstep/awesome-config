@@ -132,10 +132,7 @@ mysystray = widget({ type = "systray", align = "right" })
 
 -- Sensors
 battery_sensor = lifty.sensors.battery(0)
-cpufreq_sensors = {
-	lifty.sensors.cpu.frequency(0),
-	lifty.sensors.cpu.frequency(1),
-}
+cpufreq_sensor = lifty.sensors.cpu.frequency(0)
 cpuload_sensors = {
 	lifty.sensors.cpu.loadstat(0),
 	lifty.sensors.cpu.loadstat(1),
@@ -232,8 +229,7 @@ for s = 1, screen.count() do
 	bar_widget_params.title = "freq:"
 	cpufreq_widgets[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
-			["cpufreq0"] = { sensor = cpufreq_sensors[1], period = 2, humanize = { base = 1000, postfixes = { "Hz", "MHz", "GHz" } } },
-			["cpufreq1"] = { sensor = cpufreq_sensors[2], period = 2, humanize = { base = 1000, postfixes = { "Hz", "MHz", "GHz" } } },
+			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2, humanize = { base = 1000, postfixes = { "Hz", "MHz", "GHz" } } },
 		}).widgets
 	bar_widget_params.title = "load:"
 	cpuload_widgets[s] =

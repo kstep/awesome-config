@@ -1,4 +1,5 @@
 local pairs = pairs
+local unpack = unpack
 local math = { min = math.min, max = math.max }
 local table = { remove = table.remove, insert = table.insert }
 local capi = { widget = widget }
@@ -46,17 +47,26 @@ function register_sensors(wibox, sensors, period)
 		hook_funcs[barname] = hook_func
 	end
 
-	local timer_hook = function ()
-		local values = {}
-		local v, s
-		for k, hookf in pairs(hook_funcs) do
-			v, s = hookf()
-			if s and beautiful[s] then
-				table.insert(values, beautiful[s])
+	local timer_hook
+	if title then
+		timer_hook = function ()
+			local values = {}
+			local v, s
+			for k, hookf in pairs(hook_funcs) do
+				v, s = hookf()
+				if s and beautiful[s] then
+					table.insert(values, beautiful[s])
+				end
+				table.insert(values, v)
 			end
-			table.insert(values, v)
+			title.text = title_format:format(unpack(values))
 		end
-		--title.text = title_format:format(v)
+	else
+		timer_hook = function ()
+			for k, hookf in pairs(hook_funcs) do
+				hookf()
+			end
+		end
 	end
 	awful.hooks.timer.register(timeout, timer_hook)
 	timer_hook()
@@ -91,7 +101,6 @@ function statistic(wtype, params, bars, without_title)
 	if not without_title then
 		wid_title = capi.widget({ type = "textbox", align = wid_align })
 		wid_wibox.title = params["title"] or ""
-		wid_title.text = wid_wibox.title
 	end
 	local wid_widget = new_widget(wid_type, wid_align)
 

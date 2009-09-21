@@ -58,7 +58,6 @@ function register_sensor(widget, barname, sensor, period)
 		min_value = sensor_data.min_value or 0,
 		max_value = sensor_data.max_value or 100
 	})
-	widget:bar_data_add(barname, sensor_data.value)
 	
 	local hook_func
 	if sensor.get_state then
@@ -76,6 +75,7 @@ function register_sensor(widget, barname, sensor, period)
 	end
 
 	awful.hooks.timer.register(timeout, hook_func)
+	hook_func()
 end
 
 function fread_num(fname, match)

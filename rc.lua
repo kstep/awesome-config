@@ -214,19 +214,19 @@ for s = 1, screen.count() do
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
 
-	bar_widget_params.title = "bat:"
+	bar_widget_params.title = " <span color='%s'>%d%%</span> "
 	battery_widget[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["bat0"] = { sensor = battery_sensor },
 		}).widgets
 
-	bar_widget_params.title = "therm:"
+	bar_widget_params.title = " %0.1f/%0.1f "
 	thermal_widgets[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["therm0"] = { sensor = thermal_sensors[1] },
 			["therm1"] = { sensor = thermal_sensors[2] },
 		}).widgets
-	bar_widget_params.title = "freq:"
+	bar_widget_params.title = " %d "
 	cpufreq_widgets[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2, humanize = { base = 1000, postfixes = { "Hz", "MHz", "GHz" } } },
@@ -236,7 +236,7 @@ for s = 1, screen.count() do
 		lifty.widgets.common.graph(bar_widget_params, {
 			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
 			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
-		}).widgets
+		}, true).widgets
 
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 	mystatwibox[s].widgets = {

@@ -37,42 +37,53 @@ function new_bar_widget(params, bars, without_title)
 		new_widget[k] = v
 	end
 
+	local sensors = {}
+	local period = 10
 	for bar_name, bar_data in pairs(bars) do
 		if bar_data["sensor"] then
-			register_sensor(new_widget, bar_name, bar_data["sensor"], bar_data["period"])
+			sensors[bar_name] = bar_data["sensor"]
+			period = math.min(bar_data["period"] or 10, period)
 		end
 		new_widget:bar_properties_set(bar_name, bar_data)
 	end
 
+	register_sensors(new_widget, sensors, period)
+
 	return new_title, new_widget
 end
 
-function register_sensor(widget, barname, sensor, period)
+function register_sensors(widget, sensors, period)
 	local timeout = period or 10
-	local sensor_data = sensor:get_data()
 
-	widget:bar_properties_set(barname, {
-		min_value = sensor_data.min_value or 0,
-		max_value = sensor_data.max_value or 100
-	})
-	
-	local hook_func
-	if sensor.get_state then
-		hook_func = function ()
-			widget:bar_data_add(barname, sensor:get_value())
-			local state = sensor:get_state()
-			if state and beautiful[state] then
-				widget:bar_properties_set(barname, { fg = beautiful[state] })
+	local hook_funcs = {}
+	for barname, sensor in pairs(sensors) do
+		local sensor_data = sensor:get_data()
+		widget:bar_properties_set(barname, {
+			min_value = sensor_data.min_value or 0,
+			max_value = sensor_data.max_value or 100,
+		})
+
+		local hook_func
+		if sensor.get_state then
+			hook_func = function ()
+				widget:bar_data_add(barname, sensor:get_value())
+				local state = sensor:get_state()
+				if state and beautiful[state] then
+					widget:bar_properties_set(barname, { fg = beautiful[state] })
+				end
+			end
+		else
+			hook_func = function ()
+				widget:bar_data_add(barname, sensor:get_value())
 			end
 		end
-	else
-		hook_func = function ()
-			widget:bar_data_add(barname, sensor:get_value())
-		end
+		hook_funcs[barname] = hook_func
+		hook_func()
 	end
 
-	awful.hooks.timer.register(timeout, hook_func)
-	hook_func()
+	awful.hooks.timer.register(timeout, function ()
+		for k, hookf in pairs(hook_funcs) do hookf() end
+	end)
 end
 
 function fread_num(fname, match)

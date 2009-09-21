@@ -218,35 +218,31 @@ for s = 1, screen.count() do
     mywibox[s].screen = s
 
 	bar_widget_params.width = 15
-	bar_widget_params.title = "accu:"
-	battery_widget[s] = {
+	bar_widget_params.title = " <span color='%s'>%d%%</span> "
+	battery_widget[s] =
 		lifty.utils.new_bar_widget(bar_widget_params, {
 			["bat0"] = { sensor = battery_sensor },
-		}),
-	}
+		}).widgets
 
 	bar_widget_params.width = 20
-	bar_widget_params.title = "therm:"
-	thermal_widgets[s] = {
+	bar_widget_params.title = " %0.1f/%0.1f "
+	thermal_widgets[s] =
 		lifty.utils.new_bar_widget(bar_widget_params, {
 			["therm0"] = { sensor = thermal_sensors[1] },
 			["therm1"] = { sensor = thermal_sensors[2] },
-		}),
-	}
-	bar_widget_params.title = "freq:"
-	cpufreq_widgets[s] = {
+		}).widgets
+	bar_widget_params.title = " %s/%s "
+	cpufreq_widgets[s] =
 		lifty.utils.new_bar_widget(bar_widget_params, {
-			["cpufreq0"] = { sensor = cpufreq_sensors[1], period = 2 },
-			["cpufreq1"] = { sensor = cpufreq_sensors[2], period = 2 },
-		}),
-	}
-	bar_widget_params.title = "load:"
-	cpuload_widgets[s] = {
+			["cpufreq0"] = { sensor = cpufreq_sensors[1], period = 2, humanize = { base = 1000, postfixes = { "", "MHz", "GHz" } } },
+			["cpufreq1"] = { sensor = cpufreq_sensors[2], period = 2, humanize = { base = 1000, postfixes = { "", "MHz", "GHz" } } },
+		}).widgets
+	bar_widget_params.title = " %d%%/%d%% "
+	cpuload_widgets[s] =
 		lifty.utils.new_bar_widget(bar_widget_params, {
 			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
 			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
-		}),
-	}
+		}).widgets
 
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 	mystatwibox[s].widgets = {

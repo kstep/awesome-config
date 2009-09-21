@@ -1,5 +1,15 @@
 local pairs = pairs
+local table = {
+	remove = table.remove
+}
+local capi = {
+	widget = widget
+}
 local io = io
+local awful = {
+	hooks = require("awful.hooks")
+}
+local beautiful = require("beautiful")
 
 module("lifty.utils")
 
@@ -16,28 +26,56 @@ function humanize_size(size, exp)
 	return ("%0.1f %s"):format(size, suffix[i])
 end
 
-function new_titled_stat_widget(w_type, w_align, params, bars)
-	local wid_align = w_align or "left"
-	local wid_type = w_type
+function new_bar_widget(params, bars, without_title)
+	local wid_align = params["align"] or "left"
 
-	local new_title = widget({ type = "textbox", align = wid_align })
-	local new_widget = widget({ type = wid_type, align = wid_align })
+	local new_title = nil
+	if not without_title then
+		new_title = capi.widget({ type = "textbox", align = wid_align })
+		new_title.text = params["title"] or ""
+	end
+	local new_widget = capi.widget({ type = "progressbar", align = wid_align })
 
 	for k, v in pairs(params) do
 		new_widget[k] = v
 	end
 
-	if wid_type == "progressbar" then
-		for bar_name, bar_data in pairs(bars) do
-			new_widget:bar_properties_set(bar_name, bar_data)
+	for bar_name, bar_data in pairs(bars) do
+		if bar_data["sensor"] then
+			register_sensor(new_widget, bar_name, bar_data["sensor"], bar_data["period"])
+		end
+		new_widget:bar_properties_set(bar_name, bar_data)
+	end
+
+	return new_title, new_widget
+end
+
+function register_sensor(widget, barname, sensor, period)
+	local timeout = period or 10
+	local sensor_data = sensor:get_data()
+
+	widget:bar_properties_set(barname, {
+		min_value = sensor_data.min_value or 0,
+		max_value = sensor_data.max_value or 100
+	})
+	widget:bar_data_add(barname, sensor_data.value)
+	
+	local hook_func
+	if sensor.get_state then
+		hook_func = function ()
+			widget:bar_data_add(barname, sensor:get_value())
+			local state = sensor:get_state()
+			if state and beautiful[state] then
+				widget:bar_properties_set(barname, { fg = beautiful[state] })
+			end
 		end
 	else
-		for bar_name, bar_data in pairs(bars) do
-			new_widget:plot_properties_set(bar_name, bar_data)
+		hook_func = function ()
+			widget:bar_data_add(barname, sensor:get_value())
 		end
 	end
 
-	return new_widget, new_title
+	awful.hooks.timer.register(timeout, hook_func)
 end
 
 function fread_num(fname, match)

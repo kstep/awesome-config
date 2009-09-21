@@ -6,6 +6,8 @@ require("beautiful")
 require("naughty")
 -- Shifty tagging library
 require("shifty")
+-- Lifty monitoring library
+require("lifty")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -128,6 +130,21 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- Create a systray
 mysystray = widget({ type = "systray", align = "right" })
 
+-- Sensors
+battery_sensor = lifty.sensors.battery(0)
+cpufreq_sensors = {
+	lifty.sensors.cpu.frequency(0),
+	lifty.sensors.cpu.frequency(1),
+}
+cpuload_sensors = {
+	lifty.sensors.cpu.loadstat(0),
+	lifty.sensors.cpu.loadstat(1),
+}
+thermal_sensors = {
+	lifty.sensors.thermal.temperature(0),
+	lifty.sensors.thermal.temperature(1),
+}
+
 -- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
@@ -162,6 +179,14 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+mystatwibox = {}
+battery_widget = {}
+thermal_widgets = {}
+cpufreq_widgets = {}
+cpuload_widgets = {}
+
+bar_widget_params = { align = "right", vertical = true, width = 20, height = 0.66 }
+
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ align = "left" })
@@ -192,6 +217,46 @@ for s = 1, screen.count() do
                            mytextbox,
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
+
+	bar_widget_params.width = 15
+	bar_widget_params.title = "accu:"
+	battery_widget[s] = {
+		lifty.utils.new_bar_widget(bar_widget_params, {
+			["bat0"] = { sensor = battery_sensor },
+		}),
+	}
+
+	bar_widget_params.width = 20
+	bar_widget_params.title = "therm:"
+	thermal_widgets[s] = {
+		lifty.utils.new_bar_widget(bar_widget_params, {
+			["therm0"] = { sensor = thermal_sensors[1] },
+			["therm1"] = { sensor = thermal_sensors[2] },
+		}),
+	}
+	bar_widget_params.title = "freq:"
+	cpufreq_widgets[s] = {
+		lifty.utils.new_bar_widget(bar_widget_params, {
+			["cpufreq0"] = { sensor = cpufreq_sensors[1], period = 2 },
+			["cpufreq1"] = { sensor = cpufreq_sensors[2], period = 2 },
+		}),
+	}
+	bar_widget_params.title = "load:"
+	cpuload_widgets[s] = {
+		lifty.utils.new_bar_widget(bar_widget_params, {
+			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
+			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
+		}),
+	}
+
+	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
+	mystatwibox[s].widgets = {
+		battery_widget[s],
+		thermal_widgets[s],
+		cpufreq_widgets[s],
+		cpuload_widgets[s],
+	}
+	mystatwibox[s].screen = s
 end
 -- }}}
 

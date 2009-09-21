@@ -232,6 +232,7 @@ for s = 1, screen.count() do
 			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2 },
 		}).widgets
 	bar_widget_params.title = "load:"
+	bar_widget_params.width = 20
 	cpuload_widgets[s] =
 		lifty.widgets.common.graph(bar_widget_params, {
 			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },

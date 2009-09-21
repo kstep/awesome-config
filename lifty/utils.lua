@@ -1,14 +1,11 @@
 local pairs = pairs
-local table = {
-	remove = table.remove
-}
-local capi = {
-	widget = widget
-}
 local io = io
-local awful = {
-	hooks = require("awful.hooks")
-}
+
+local table = { remove = table.remove }
+local math = { max = math.max, min = math.min }
+local capi = { widget = widget }
+
+local awful = { hooks = require("awful.hooks") }
 local beautiful = require("beautiful")
 
 module("lifty.utils")

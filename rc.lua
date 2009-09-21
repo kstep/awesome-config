@@ -213,7 +213,6 @@ for s = 1, screen.count() do
                            mytaglist[s],
                            mylayoutbox[s],
                            mytasklist[s],
-                           mypromptbox[s],
                            mytextbox,
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
@@ -251,6 +250,7 @@ for s = 1, screen.count() do
 
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 	mystatwibox[s].widgets = {
+		mypromptbox[s],
 		battery_widget[s],
 		thermal_widgets[s],
 		cpufreq_widgets[s],

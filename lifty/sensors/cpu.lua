@@ -62,7 +62,7 @@ end
 
 local function get_load_data(self)
 	local data = {}
-	data["value"] = self:aload()
+	data["value"] = self:get_value()
 	return data
 end
 

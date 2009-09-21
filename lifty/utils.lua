@@ -1,12 +1,4 @@
-local pairs = pairs
 local io = io
-
-local table = { remove = table.remove, insert = table.insert }
-local math = { max = math.max, min = math.min }
-local capi = { widget = widget }
-
-local awful = { hooks = require("awful.hooks") }
-local beautiful = require("beautiful")
 
 module("lifty.utils")
 
@@ -21,94 +13,6 @@ function humanize(size, exp, suffixes)
 		i = i + 1
 	end
 	return ("%0.1f %s"):format(size, suffix[i])
-end
-
-function new_bar_widget(params, bars, without_title)
-	local wid_align = params["align"] or "left"
-	local new_wibox = {}
-
-	local new_title = nil
-	if not without_title then
-		new_title = capi.widget({ type = "textbox", align = wid_align })
-		new_wibox.title = params["title"] or ""
-	end
-	local new_widget = capi.widget({ type = "progressbar", align = wid_align })
-
-	for k, v in pairs(params) do
-		new_widget[k] = v
-	end
-
-	new_wibox.widgets = {
-		new_title,
-		new_widget,
-	}
-	
-	local sensors = {}
-	local period = 10
-	for bar_name, bar_data in pairs(bars) do
-		if bar_data["sensor"] then
-			sensors[bar_name] = bar_data["sensor"]
-			period = math.min(bar_data["period"] or 10, period)
-		end
-		new_widget:bar_properties_set(bar_name, bar_data)
-	end
-
-	register_sensors(new_wibox, sensors, period)
-
-	return new_wibox
-end
-
-function register_sensors(wibox, sensors, period)
-	local timeout = period or 10
-	local widget = wibox.widgets[2]
-
-	local title = wibox.widgets[1]
-	local title_format = wibox.title
-
-	local hook_funcs = {}
-	for barname, sensor in pairs(sensors) do
-		local sensor_data = sensor:get_data()
-		widget:bar_properties_set(barname, {
-			min_value = sensor_data.min_value or 0,
-			max_value = sensor_data.max_value or 100,
-		})
-
-		local hook_func
-		if sensor.get_state then
-			hook_func = function ()
-				local value = sensor:get_value()
-				local state = sensor:get_state()
-				widget:bar_data_add(barname, value)
-				local state = state
-				if state and beautiful[state] then
-					widget:bar_properties_set(barname, { fg = beautiful[state] })
-				end
-				return value, state
-			end
-		else
-			hook_func = function ()
-				local value = sensor:get_value()
-				widget:bar_data_add(barname, value)
-				return value
-			end
-		end
-		hook_funcs[barname] = hook_func
-	end
-
-	local timer_hook = function ()
-		local values = {}
-		local v, s
-		for k, hookf in pairs(hook_funcs) do
-			v, s = hookf()
-			if s and beautiful[s] then
-				table.insert(values, beautiful[s])
-			end
-			table.insert(values, v)
-		end
-		title.text = title_format:format(v)
-	end
-	awful.hooks.timer.register(timeout, timer_hook)
-	timer_hook()
 end
 
 function fread_num(fname, match)

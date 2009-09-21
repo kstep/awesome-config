@@ -7,7 +7,7 @@ local base_syspath = "/sys/class/thermal"
 
 local function get_temp_value(self)
 	local temp
-	temp = (utils.fread_num(self.path .. "/temp") or 0) / 1000.0
+	temp = (utils.fread_num(self.path .. "/temp") or 0)
 	return temp
 end
 
@@ -26,6 +26,7 @@ function temperature(num)
 
 	therm.get_value = get_temp_value
 	therm.get_data = get_temp_data
+	therm.humanize = function (self, value) return ("%0.1f°C"):format((value or self:get_value()) / 1000.0) end
 	setmetatable(therm, { __call = get_temp_data })
 
 	return therm

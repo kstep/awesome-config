@@ -220,7 +220,7 @@ for s = 1, screen.count() do
 			["bat0"] = { sensor = battery_sensor },
 		}).widgets
 
-	bar_widget_params.title = " %0.1f/%0.1f "
+	bar_widget_params.title = " %s/%s "
 	thermal_widgets[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["therm0"] = { sensor = thermal_sensors[1] },

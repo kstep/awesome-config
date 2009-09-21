@@ -238,11 +238,14 @@ for s = 1, screen.count() do
 			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
 		}, true).widgets
 
+	spacer = widget({ type = "textbox", align = "right" })
+	spacer.text = " "
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 	mystatwibox[s].widgets = {
 		mypromptbox[s],
 		battery_widget[s],
 		cpufreq_widget[s],
+		spacer,
 		cpuload_widgets[s],
 		thermal_widgets[s],
 	}

@@ -233,7 +233,7 @@ for s = 1, screen.count() do
 		}).widgets
 	bar_widget_params.title = "load:"
 	cpuload_widgets[s] =
-		lifty.widgets.common.progressbar(bar_widget_params, {
+		lifty.widgets.common.graph(bar_widget_params, {
 			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
 			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
 		}).widgets

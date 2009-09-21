@@ -2,14 +2,17 @@ local io = io
 
 module("lifty.utils")
 
-function humanize(size, exp, suffixes)
-	local suffix = suffixes or { "b", "K", "M", "G", "T" }
+function humanize(size, factor, suffix, exp)
+	suffix = suffix or { "b", "K", "M", "G", "T" }
+	factor = factor or 1024
+	exp = exp or 1
+
 	local i = 1
-	if exp and (exp > 1 or exp <= #suffix) then
+	if exp < 1 or #suffix >= exp then
 		i = exp
 	end
-	while size > 1023 and i < #suffix do
-		size = size / 1024
+	while size > factor and i < #suffix do
+		size = size / factor
 		i = i + 1
 	end
 	return ("%0.1f %s"):format(size, suffix[i])

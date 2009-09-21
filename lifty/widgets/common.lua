@@ -35,13 +35,13 @@ function register_sensors(wibox, sensors, period)
 				if state and beautiful[state] then
 					widget:set_properties(barname, { fg = beautiful[state] })
 				end
-				return value, state
+				return sensor.humanize and sensor:humanize(value) or value, state
 			end
 		else
 			hook_func = function ()
 				local value = sensor:get_value()
 				widget:add_data(barname, value)
-				return value
+				return sensor.humanize and sensor:humanize(value) or value
 			end
 		end
 		hook_funcs[barname] = hook_func

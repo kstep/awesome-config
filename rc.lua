@@ -226,7 +226,7 @@ for s = 1, screen.count() do
 			["therm0"] = { sensor = thermal_sensors[1] },
 			["therm1"] = { sensor = thermal_sensors[2] },
 		}).widgets
-	bar_widget_params.title = " %d "
+	bar_widget_params.title = " %s "
 	cpufreq_widgets[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2, humanize = { base = 1000, postfixes = { "Hz", "MHz", "GHz" } } },

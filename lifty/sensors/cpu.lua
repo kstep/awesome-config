@@ -34,6 +34,7 @@ function frequency(num)
 
 	cpufreq.get_value = get_freq_value
 	cpufreq.get_data = get_freq_data
+	cpufreq.humanize = function (self, value) return utils.humanize(value or self:get_value(), 1000, { 'Hz', 'MHz', 'GHz' }, 1) end
 	setmetatable(cpufreq, { __call = get_freq_data })
 
 	return cpufreq

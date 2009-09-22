@@ -36,7 +36,7 @@ function interface(name, wireless)
 
 	iface.get_value = get_iface_value
 	iface.get_state = get_iface_state
-	iface.get_data = get_iface_data
+	iface.get_info = get_iface_data
 
 	setmetatable(iface, { __call = get_iface_data })
 	return iface

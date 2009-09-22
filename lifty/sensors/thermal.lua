@@ -25,7 +25,7 @@ function temperature(num)
 	therm.max_value = utils.fread_num(therm.path .. "/trip_point_0_temp")
 
 	therm.get_value = get_temp_value
-	therm.get_data = get_temp_data
+	therm.get_info = get_temp_data
 	therm.humanize = function (self, value) return ("%0.1f°C"):format((value or self:get_value()) / 1000.0) end
 	setmetatable(therm, { __call = get_temp_data })
 
@@ -52,7 +52,7 @@ function cooler(num)
 	fan.max_value = utils.fread_num(fan.path .. "/max_state")
 
 	fan.get_value = get_cooler_value
-	fan.get_data = get_cooler_data
+	fan.get_info = get_cooler_data
 	setmetatable(fan, { __call = get_cooler_data })
 
 	return fan

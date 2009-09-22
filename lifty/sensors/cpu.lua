@@ -33,7 +33,7 @@ function frequency(num)
 	cpufreq.min_value = utils.fread_num(cpufreq.path .. "/scaling_min_freq")
 
 	cpufreq.get_value = get_freq_value
-	cpufreq.get_data = get_freq_data
+	cpufreq.get_info = get_freq_data
 	cpufreq.humanize = function (self, value) return utils.humanize(value or self:get_value(), 1000, { 'Hz', 'MHz', 'GHz' }, 1) end
 	setmetatable(cpufreq, { __call = get_freq_data })
 
@@ -74,7 +74,7 @@ function loadstat(num)
 	cpuload.cache = { 0, 0 }
 
 	cpuload.get_value = get_load_value
-	cpuload.get_data = get_load_data
+	cpuload.get_info = get_load_data
 	setmetatable(cpuload, { __call = get_freq_data })
 
 	return cpuload

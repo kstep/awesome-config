@@ -19,7 +19,7 @@ function register_sensors(wibox, sensors, period)
 
 	local hook_funcs = {}
 	for barname, sensor in pairs(sensors) do
-		local sensor_data = sensor:get_data()
+		local sensor_data = sensor:get_info()
 		widget:set_properties(barname, {
 			min_value = sensor_data.min_value or 0,
 			max_value = sensor_data.max_value or 100,

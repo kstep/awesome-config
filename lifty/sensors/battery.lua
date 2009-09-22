@@ -16,7 +16,7 @@ local function status(self)
 	return status
 end
 
-local function get_data(self)
+local function get_info(self)
 	local data = {}
 	data["value"] = self:get_value()
 	data["state"] = self:get_state()
@@ -31,9 +31,9 @@ function new(self, num)
 
 	battery.get_value = charge
 	battery.get_state = status
-	battery.get_data = get_data
+	battery.get_info = get_info
 
-	setmetatable(battery, { __call = get_data })
+	setmetatable(battery, { __call = get_info })
 	return battery
 end
 

@@ -131,15 +131,10 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 mysystray = widget({ type = "systray", align = "right" })
 
 -- Sensors
-battery_sensor = lifty.sensors.battery(0)
 cpufreq_sensor = lifty.sensors.cpu.frequency(0)
 cpuload_sensors = {
 	lifty.sensors.cpu.loadstat(0),
 	lifty.sensors.cpu.loadstat(1),
-}
-thermal_sensors = {
-	lifty.sensors.thermal.temperature(0),
-	lifty.sensors.thermal.temperature(1),
 }
 
 -- Create a wibox for each screen and add it
@@ -177,9 +172,7 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 mystatwibox = {}
-battery_widget = {}
 cpufreq_widget = {}
-thermal_widgets = {}
 cpuload_widgets = {}
 
 bar_widget_params = { align = "right", vertical = true, width = 10, height = 0.66 }
@@ -214,18 +207,6 @@ for s = 1, screen.count() do
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
 
-	bar_widget_params.format = " <span color='%s'>%3d%%</span> "
-	battery_widget[s] =
-		lifty.widgets.common.progressbar(bar_widget_params, {
-			["bat0"] = { sensor = battery_sensor },
-		}).widgets
-
-	bar_widget_params.format = " %s/%s "
-	thermal_widgets[s] =
-		lifty.widgets.common.progressbar(bar_widget_params, {
-			["therm0"] = { sensor = thermal_sensors[1] },
-			["therm1"] = { sensor = thermal_sensors[2] },
-		}).widgets
 	bar_widget_params.format = " %9s "
 	cpufreq_widget[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
@@ -244,10 +225,8 @@ for s = 1, screen.count() do
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 	mystatwibox[s].widgets = {
 		mypromptbox[s],
-		battery_widget[s],
 		cpuload_widgets[s],
 		cpufreq_widget[s],
-		thermal_widgets[s],
 	}
 	mystatwibox[s].screen = s
 end

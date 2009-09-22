@@ -15,56 +15,36 @@ function register_sensors(wibox, sensors, period)
 	local widget = wibox.widgets[2]
 
 	local title = wibox.widgets[1]
-	local title_format = wibox.title
+	local title_format = wibox.format
 
-	local hook_funcs = {}
 	for barname, sensor in pairs(sensors) do
 		local sensor_data = sensor:get_info()
 		widget:set_properties(barname, {
 			min_value = sensor_data.min_value or 0,
 			max_value = sensor_data.max_value or 100,
 		})
-
-		local hook_func
-		if sensor.get_state then
-			hook_func = function ()
-				local value = sensor:get_value()
-				local state = sensor:get_state()
-				widget:add_data(barname, value)
-				local state = state
-				if state and beautiful[state] then
-					widget:set_properties(barname, { fg = beautiful[state] })
-				end
-				return sensor.humanize and sensor:humanize(value) or value, state
-			end
-		else
-			hook_func = function ()
-				local value = sensor:get_value()
-				widget:add_data(barname, value)
-				return sensor.humanize and sensor:humanize(value) or value
-			end
-		end
-		hook_funcs[barname] = hook_func
 	end
 
 	local timer_hook
-	if title then
+	if title_format then
 		timer_hook = function ()
 			local values = {}
 			local v, s
-			for k, hookf in pairs(hook_funcs) do
-				v, s = hookf()
+			for barname, sensor in pairs(sensors) do
+				v, s = sensor:get_data()
 				if s and beautiful[s] then
+					widget:set_properties(barname, { fg = beautiful[s] })
 					table.insert(values, beautiful[s])
 				end
-				table.insert(values, v)
+				widget:add_data(barname, v)
+				table.insert(values, sensor:humanize(v))
 			end
 			title.text = title_format:format(unpack(values))
 		end
 	else
 		timer_hook = function ()
-			for k, hookf in pairs(hook_funcs) do
-				hookf()
+			for barname, sensor in pairs(sensors) do
+				widget:add_data(barname, sensor:get_value())
 			end
 		end
 	end
@@ -100,7 +80,8 @@ function statistic(wtype, params, bars, without_title)
 	local wid_title = nil
 	if not without_title then
 		wid_title = capi.widget({ type = "textbox", align = wid_align })
-		wid_wibox.title = params["title"] or ""
+		wid_title.text = params["title"] or ""
+		wid_wibox.format = params["format"] or nil
 	end
 	local wid_widget = new_widget(wid_type, wid_align)
 

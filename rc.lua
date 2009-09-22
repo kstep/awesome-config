@@ -214,40 +214,39 @@ for s = 1, screen.count() do
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
 
-	bar_widget_params.title = " <span color='%s'>%3d%%</span> "
+	bar_widget_params.format = " <span color='%s'>%3d%%</span> "
 	battery_widget[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["bat0"] = { sensor = battery_sensor },
 		}).widgets
 
-	bar_widget_params.title = " %s/%s "
+	bar_widget_params.format = " %s/%s "
 	thermal_widgets[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["therm0"] = { sensor = thermal_sensors[1] },
 			["therm1"] = { sensor = thermal_sensors[2] },
 		}).widgets
-	bar_widget_params.title = " %9s "
+	bar_widget_params.format = " %9s "
 	cpufreq_widget[s] =
 		lifty.widgets.common.progressbar(bar_widget_params, {
 			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2 },
 		}).widgets
-	bar_widget_params.title = "load:"
+
+	bar_widget_params.title = " cpu: "
+	bar_widget_params.format = nil
 	bar_widget_params.width = 20
 	cpuload_widgets[s] =
 		lifty.widgets.common.graph(bar_widget_params, {
 			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
 			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
-		}, true).widgets
+		}).widgets
 
-	spacer = widget({ type = "textbox", align = "right" })
-	spacer.text = " "
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 	mystatwibox[s].widgets = {
 		mypromptbox[s],
 		battery_widget[s],
-		cpufreq_widget[s],
-		spacer,
 		cpuload_widgets[s],
+		cpufreq_widget[s],
 		thermal_widgets[s],
 	}
 	mystatwibox[s].screen = s

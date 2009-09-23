@@ -250,6 +250,16 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
+    awful.key({ modkey, "Control" }, "space", function ()
+        local clients = client.get()
+        local opacity = (clients[1].opacity or 1.0)
+        opacity = opacity == 1.0 and 0.4 or 1.0
+
+        for k, c in ipairs(clients) do
+            c.opacity = opacity
+        end
+    end),
+
     -- Prompt
     awful.key({ modkey },            "grave", function () mypromptbox[mouse.screen]:run() end),
 

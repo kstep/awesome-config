@@ -10,9 +10,8 @@ local function get_state(self)
 	return utils.fread_num(self.path .. "/status", "*l")
 end
 
-local function get_value(self)
-	local charge = sensor_base.get_value(self)
-	return charge * 100 / self.max_value
+local function humanize_charge(self, value)
+	return (value or self:get_value()) * 100 / self.max_value
 end
 
 function new(self, num)
@@ -23,7 +22,7 @@ function new(self, num)
 	battery.max_value = utils.fread_num(battery.path .. "/charge_full")
 
 	battery.get_state = get_state
-	battery.get_value = get_value
+	battery.humanize = humanize_charge
 
 	return battery
 end

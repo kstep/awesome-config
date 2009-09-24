@@ -141,6 +141,11 @@ thermal_sensors = {
 	lifty.sensors.thermal.temperature(0),
 	lifty.sensors.thermal.temperature(1),
 }
+meminfo_sensors = {
+	["unwired"] = lifty.sensors.memory.unwired(),
+	["cached"]  = lifty.sensors.memory.cached(),
+	["buffers"] = lifty.sensors.memory.buffers(),
+}
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -179,6 +184,7 @@ mytasklist.buttons = awful.util.table.join(
 mystatwibox = {}
 battery_widget = {}
 cpufreq_widget = {}
+meminfo_widget = {}
 thermal_widgets = {}
 cpuload_widgets = {}
 
@@ -232,9 +238,18 @@ for s = 1, screen.count() do
 			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2 },
 		}).widgets
 
-	bar_widget_params.title = " cpu: "
+	bar_widget_params.title = " mem: "
 	bar_widget_params.format = nil
 	bar_widget_params.width = 20
+	meminfo_widget[s] =
+		lifty.widgets.common.graph(bar_widget_params, {
+			["unwired"] = { sensor = meminfo_sensors["unwired"], fg = "#909090" },
+			["cached"]  = { sensor = meminfo_sensors["cached"], fg = "#900090" },
+			["buffers"] = { sensor = meminfo_sensors["buffers"], fg = "#009090" },
+		}).widgets
+
+	bar_widget_params.title = " cpu: "
+	bar_widget_params.format = nil
 	cpuload_widgets[s] =
 		lifty.widgets.common.graph(bar_widget_params, {
 			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
@@ -245,6 +260,7 @@ for s = 1, screen.count() do
 	mystatwibox[s].widgets = {
 		mypromptbox[s],
 		battery_widget[s],
+		meminfo_widget[s],
 		cpuload_widgets[s],
 		cpufreq_widget[s],
 		thermal_widgets[s],

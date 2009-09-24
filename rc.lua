@@ -295,6 +295,12 @@ end
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+	awful.key({ "Control", "Mod1", "Shift" }, "Escape",
+              function ()
+                  awful.prompt.run({ prompt = "Keyboard locked" },
+                  mypromptbox[mouse.screen].widget,
+                  function (c) end)
+              end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Tab", awful.tag.history.restore),

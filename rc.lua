@@ -218,8 +218,8 @@ for s = 1, screen.count() do
 	bar_widget_params.width = 20
 	cpuload_widgets[s] =
 		lifty.widgets.common.graph(bar_widget_params, {
-			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
-			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
+			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2, fg = "#000090" },
+			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2, fg = "#009000" },
 		}).widgets
 
 	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })

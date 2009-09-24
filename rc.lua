@@ -322,7 +322,10 @@ clientkeys = awful.util.table.join(
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
-        end)
+        end),
+    awful.key({ modkey, "Mod1" }, "space", function (c) c.opacity = (c.opacity or 1.0) == 1.0 and 0.4 or 1.0 end),
+    awful.key({ modkey }, "minus", function (c) c.opacity = c.opacity - 0.1 end),
+    awful.key({ modkey }, "equal", function (c) c.opacity = c.opacity + 0.1 end)
 )
 
 for i = 1, 9 do

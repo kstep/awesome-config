@@ -347,6 +347,8 @@ globalkeys = awful.util.table.join(
             end
         end),
 
+    awful.key({                   }, "Num_Lock", function () awful.util.spawn("3ddesk --mode=viewmaster") end),
+
     -- Standard program
     awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal .. " -e screen") end),
     awful.key({                   }, "Scroll_Lock", function () awful.util.spawn(locker) end),

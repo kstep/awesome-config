@@ -9,6 +9,14 @@ require("shifty")
 -- Lifty monitoring library
 require("lifty")
 
+package.path = package.path .. ";/usr/lib64/lua/5.1/rocks/luasocket/2.0.2-1/lua/?.lua"
+package.cpath = package.cpath .. ";/usr/lib64/lua/5.1/rocks/luasocket/2.0.2-1/lib/?.so"
+require("telak")
+
+oots = telak({ image = "/home/kstep/pic/oots/latest.gif" })
+oots:geometry({ x = 900, y = 50 })
+oots.screen = 1
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 -- The default is a dark theme

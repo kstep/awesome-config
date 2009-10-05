@@ -120,7 +120,7 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 table.insert(menu_items, { "awesome", myawesomemenu, beautiful.awesome_icon })
-table.insert(menu_items, { "open terminal", terminal, freedesktop.utils.lookup_icon({icon = 'terminal'}) })
+table.insert(menu_items, { "open terminal", terminal .. " -e screen", freedesktop.utils.lookup_icon({icon = 'terminal'}) })
 
 mymainmenu = awful.menu.new({ items = menu_items, width = 150 })
 
@@ -348,7 +348,7 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal .. " -e screen") end),
     awful.key({                   }, "Scroll_Lock", function () awful.util.spawn(locker) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),

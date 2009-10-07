@@ -318,6 +318,10 @@ globalkeys = awful.util.table.join(
         end
     end),
 
+	awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer sset Master 10%+") end),
+	awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer sset Master 10%-") end),
+	awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer sset Master toggle") end),
+
     -- Prompt
     awful.key({ modkey },            "grave", function () mypromptbox[mouse.screen]:run() end),
 

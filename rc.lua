@@ -263,6 +263,21 @@ function find_tags(name)
 	end
 end
 
+function find_clients(name)
+	if not name or name == "" then return end
+
+	local clients = client.get(mouse.screen)
+	local found_clis = {}
+	if clients and #clients > 1 then
+		for i, cli in ipairs(clients) do
+			if cli.name:find(name) then
+				table.insert(found_clis, cli)
+			end
+		end
+		if #found_clis > 0 then return found_clis end
+	end
+end
+
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
@@ -351,6 +366,37 @@ globalkeys = awful.util.table.join(
 						local tags = find_tags(name)
 						if tags then
 							awful.tag.viewmore(tags)
+						end
+					end, nil, nil)
+				end),
+
+	awful.key({ modkey }, "slash", function ()
+					awful.prompt.run({ prompt = "Client name: " },
+					mypromptbox[mouse.screen].widget,
+					function (name)
+						local clis = find_clients(name)
+						if clis then
+							awful.tag.viewonly(clis[1]:tags()[1])
+							client.focus = clis[1]
+						end
+					end, nil, nil)
+				end),
+
+	awful.key({ modkey, "Shift" }, "slash", function ()
+					awful.prompt.run({ prompt = "Clients name: " },
+					mypromptbox[mouse.screen].widget,
+					function (name)
+						local clis = find_clients(name)
+						if clis then
+							local current_tags = {}
+							local tags = screen[mouse.screen]:tags()
+							for i, tag in ipairs(tags) do
+								if tag.selected then table.insert(current_tags, tag) end
+							end
+
+							for i, cli in ipairs(clis) do
+								cli:tags(current_tags)
+							end
 						end
 					end, nil, nil)
 				end)

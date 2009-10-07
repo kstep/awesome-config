@@ -283,7 +283,9 @@ function find_clients(name)
 	local found_clis = {}
 	if clients and #clients > 1 then
 		for i, cli in ipairs(clients) do
-			if cli.name:find(name) then
+			if cli.name:lower():find(name)
+				or cli.class:lower():find(name)
+				or cli.instance:lower():find(name) then
 				table.insert(found_clis, cli)
 			end
 		end

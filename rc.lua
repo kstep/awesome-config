@@ -261,6 +261,21 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
+function find_tags(name)
+	if not name or name == "" then return end
+
+	local tags = screen[mouse.screen]:tags()
+	local found_tags = {}
+	if tags and #tags > 0 then
+		for i, tag in ipairs(tags) do
+			if tag.name:find(name) then
+				table.insert(found_tags, tag)
+			end
+		end
+		if #found_tags > 0 then return found_tags end
+	end
+end
+
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
@@ -331,7 +346,29 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
-              end)
+              end),
+
+	awful.key({ modkey }, "apostrophe", function ()
+					awful.prompt.run({ prompt = "Tag name: " },
+					mypromptbox[mouse.screen].widget,
+					function (name)
+						local tags = find_tags(name)
+						if tags then
+							awful.tag.viewonly(tags[1])
+						end
+					end, nil, nil)
+				end),
+
+	awful.key({ modkey, "Shift" }, "apostrophe", function ()
+					awful.prompt.run({ prompt = "Tags name: " },
+					mypromptbox[mouse.screen].widget,
+					function (name)
+						local tags = find_tags(name)
+						if tags then
+							awful.tag.viewmore(tags)
+						end
+					end, nil, nil)
+				end)
 )
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them

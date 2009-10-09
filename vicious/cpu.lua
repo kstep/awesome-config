@@ -37,6 +37,8 @@ local function worker(format)
             for match in line:gmatch("[%s]+([%d]+)") do
                   table.insert(cpu_lines[cpuid], match)
             end
+        else
+            break
         end
     end
     f:close()

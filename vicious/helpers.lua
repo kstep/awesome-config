@@ -10,6 +10,9 @@ local string = {
     sub = string.sub,
     gsub = string.gsub
 }
+local io = {
+    open = io.open
+}
 -- }}}
 
 
@@ -26,6 +29,24 @@ function format(format, args)
     return format
 end
 -- }}}
+
+function scale(widget, args)
+    local value = args[1]
+    local max = args[2] or 100
+    local min = args[3] or 0
+    local mult = args[4] or 100
+
+    return (value - min) * mult / max
+end
+
+function readfile(filename, format)
+    local f = io.open(filename)
+    if f then
+        local line = f:read(format or "*a")
+        f:close()
+        return line
+    end
+end
 
 --{{{ Escape a string
 function escape(text)

@@ -8,8 +8,6 @@ require("beautiful")
 require("naughty")
 -- Shifty tagging library
 require("shifty")
--- Lifty monitoring library
-require("lifty")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -132,23 +130,6 @@ mytextclock = awful.widget.textclock({ align = "right" })
 -- Create a systray
 mysystray = widget({ type = "systray" })
 
--- Sensors
-battery_sensor = lifty.sensors.battery(0)
-cpufreq_sensor = lifty.sensors.cpu.frequency(0)
-cpuload_sensors = {
-	lifty.sensors.cpu.loadstat(0),
-	lifty.sensors.cpu.loadstat(1),
-}
-thermal_sensors = {
-	lifty.sensors.thermal.temperature(0),
-	lifty.sensors.thermal.temperature(1),
-}
-meminfo_sensors = {
-	["unwired"] = lifty.sensors.memory.unwired(),
-	["cached"]  = lifty.sensors.memory.cached(),
-	["buffers"] = lifty.sensors.memory.buffers(),
-}
-
 -- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
@@ -183,14 +164,6 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
-mystatwibox = {}
-battery_widget = {}
-cpufreq_widget = {}
-meminfo_widget = {}
-thermal_widgets = {}
-cpuload_widgets = {}
-
-bar_widget_params = { align = "right", vertical = true, width = 10, height = 0.66 }
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -226,55 +199,6 @@ for s = 1, screen.count() do
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
-
-	bar_widget_params.format = " <span color='%s'>%3d%%</span> "
-	battery_widget[s] =
-		lifty.widgets.common.progressbar(bar_widget_params, {
-			["bat0"] = { sensor = battery_sensor },
-		}).widgets
-
-	bar_widget_params.format = " %s/%s "
-	thermal_widgets[s] =
-		lifty.widgets.common.progressbar(bar_widget_params, {
-			["therm0"] = { sensor = thermal_sensors[1] },
-			["therm1"] = { sensor = thermal_sensors[2] },
-		}).widgets
-	bar_widget_params.format = " %9s "
-	cpufreq_widget[s] =
-		lifty.widgets.common.progressbar(bar_widget_params, {
-			["cpufreq0"] = { sensor = cpufreq_sensor, period = 2 },
-		}).widgets
-
-	bar_widget_params.title = " mem: "
-	bar_widget_params.format = nil
-	bar_widget_params.width = 20
-	meminfo_widget[s] =
-		lifty.widgets.common.graph(bar_widget_params, {
-			["unwired"] = { sensor = meminfo_sensors["unwired"], fg = "#909090" },
-			["cached"]  = { sensor = meminfo_sensors["cached"], fg = "#900090" },
-			["buffers"] = { sensor = meminfo_sensors["buffers"], fg = "#009090" },
-		}).widgets
-
-	bar_widget_params.title = " cpu: "
-	bar_widget_params.format = nil
-	cpuload_widgets[s] =
-		lifty.widgets.common.graph(bar_widget_params, {
-			["cpuload0"] = { sensor = cpuload_sensors[1], period = 2 },
-			["cpuload1"] = { sensor = cpuload_sensors[2], period = 2 },
-		}).widgets
-
-	mystatwibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal, screen = s })
-	mystatwibox[s].widgets = {
-		mypromptbox[s],
-		battery_widget[s],
-		meminfo_widget[s],
-		cpuload_widgets[s],
-		cpufreq_widget[s],
-		thermal_widgets[s],
-
-        layout = awful.widget.layout.horizontal.rightleft
-	}
-end
 -- }}}
 
 -- {{{ Mouse bindings

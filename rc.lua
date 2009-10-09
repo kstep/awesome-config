@@ -9,6 +9,8 @@ require("naughty")
 -- Shifty tagging library
 require("shifty")
 
+require("vicious")
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 -- The default is a dark theme
@@ -199,6 +201,7 @@ for s = 1, screen.count() do
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
+end
 -- }}}
 
 -- {{{ Mouse bindings

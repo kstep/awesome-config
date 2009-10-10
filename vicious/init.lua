@@ -22,7 +22,7 @@ local table = {
 }
 
 -- Grab C API
-local capi = { timer = timer }
+local capi = { timer = timer, widget = widget }
 -- }}}
 
 
@@ -265,6 +265,14 @@ function update(widget, reg, disablecache)
     end
 
     return data
+end
+
+function label(text, wargs)
+    local args = wargs or {}
+    args.type = "textbox"
+    local widget = capi.widget(args)
+    widget.text = text or ""
+    return widget
 end
 -- }}}
 -- }}}

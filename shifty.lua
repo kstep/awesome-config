@@ -404,6 +404,7 @@ function match(c, startup)
   local role = c.role
   local name = c.name
   local keys = config.clientkeys or c:keys() or {}
+  local buttons = config.clientbuttons or c:buttons() or {}
   local target_screen = mouse.screen
 
   c.border_color = beautiful.border_normal
@@ -441,7 +442,7 @@ function match(c, startup)
           if a.ontop ~= nil then c.ontop = a.ontop end
           if a.above ~= nil then c.above = a.above end
           if a.below ~= nil then c.below = a.below end
-          if a.buttons ~= nil then c:buttons(a.buttons) end
+          if a.buttons ~= nil then buttons = a.buttons end
           if a.nofocus ~= nil then nofocus = a.nofocus end
           if a.keys ~= nil then keys = awful.util.table.join(keys, a.keys) end
           if a.hidden ~= nil then c.hidden = a.hidden end
@@ -465,6 +466,7 @@ function match(c, startup)
 
   -- set key bindings
   c:keys(keys)
+  c:buttons(buttons)
 
   -- set properties of floating clients
   if float ~= nil then

@@ -111,6 +111,14 @@ function register(widget, wtype, format, timer, warg)
     -- Return a reg object for reuse
     return reg
 end
+
+function registermore(widgets, wtype, format, timer, warg)
+    local result = {}
+    for i, widget in ipairs(widgets) do
+        table.insert(result, register(widget, wtype, format, timer, warg))
+    end
+    return result
+end
 -- }}}
 
 -- {{{ Register from reg object

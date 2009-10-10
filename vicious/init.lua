@@ -244,7 +244,12 @@ function update(widget, reg, disablecache)
 
     -- Do we have output chached for a widget newer than last update
     if widget_cache[reg.type] ~= nil then
-        local c = widget_cache[reg.type]
+        local c = widget_cache[reg.type][reg.warg]
+
+        if c == nil then
+            widget_cache[reg.type][reg.warg] = {}
+            c = widget_cache[reg.type][reg.warg]
+        end
 
         if c.time == nil or c.time <= t - reg.timer or disablecache then
             c.time = t

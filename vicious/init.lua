@@ -9,6 +9,7 @@
 -- {{{ Grab environment
 require("awful")
 require("vicious.helpers")
+require("vicious.formatters")
 
 local type = type
 local pairs = pairs
@@ -249,7 +250,7 @@ function update(widget, reg, disablecache)
 
     if type(data) == "table" then
         if type(reg.format) == "string" then
-            data = helpers.format(reg.format, data)
+            data = formatters.format(reg.format, data)
         elseif type(reg.format) == "function" then
             data = reg.format(widget, data)
         end

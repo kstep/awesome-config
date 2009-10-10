@@ -5,11 +5,6 @@
 ----------------------------------------------------------
 
 -- {{{ Grab environment
-local pairs = pairs
-local string = {
-    sub = string.sub,
-    gsub = string.gsub
-}
 local io = {
     open = io.open
 }
@@ -19,26 +14,7 @@ local io = {
 -- Helpers: provides helper functions for vicious widgets
 module("vicious.helpers")
 
-
--- {{{ Format a string with args
-function format(format, args)
-    for var, val in pairs(args) do
-        format = string.gsub(format, "$" .. var, val)
-    end
-
-    return format
-end
--- }}}
-
-function scale(widget, args)
-    local value = args[1]
-    local max = args[2] or 100
-    local min = args[3] or 0
-    local mult = args[4] or 100
-
-    return (value - min) * mult / max
-end
-
+--{{{ Read data from file
 function readfile(filename, format)
     local f = io.open(filename)
     if f then
@@ -47,6 +23,7 @@ function readfile(filename, format)
         return line
     end
 end
+-- }}}
 
 --{{{ Escape a string
 function escape(text)

@@ -10,12 +10,15 @@ local string = {
     find = string.find,
     match = string.match
 }
+local helpers = require("vicious.helpers")
 -- }}}
 
 
 -- Cpufreq: provides freq, voltage and governor info for a requested CPU
 module("vicious.cpufreq")
 
+local basedir = "/sys/devices/system/cpu/"
+local cpu_data = {}
 
 -- {{{ CPU frequency widget type
 local function worker(format, cpuid)
@@ -28,38 +31,15 @@ local function worker(format, cpuid)
     --}
 
     -- Get the current frequency
-    local ffreq = io.open("/sys/devices/system/cpu/"..cpuid.."/cpufreq/scaling_cur_freq")
-    local freq = ffreq:read("*line")
-    ffreq:close()
+    local freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_cur_freq", "*n")
 
-    -- Calculate MHz and GHz
-    local freqmhz = freq / 1000
-    local freqghz = freqmhz / 1000
-
-
-    -- Get the current voltage
-    local fvolt = io.open("/sys/devices/system/cpu/"..cpuid.."/cpufreq/scaling_voltages")
-    for line in fvolt:lines() do
-        if line:find("^"..freq) then
-            voltagemv = line:match("[%d]+[%s]([%d]+)")
-            break
-        end
+    if cpu_data[cpuid] == nil then
+        local max_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_max_freq", "*n")
+        local min_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_min_freq", "*n")
+        cpu_data[cpuid] = { max_freq, min_freq }
     end
-    fvolt:close()
 
-    -- Calculate voltage from mV
-    local voltagev = voltagemv / 1000
-
-
-    -- Get the current governor
-    local fgov = io.open("/sys/devices/system/cpu/"..cpuid.."/cpufreq/scaling_governor")
-    local governor = fgov:read("*line")
-    fgov:close()
-
-    -- Represent the governor as a symbol
-    --local governor = governor_state[governor] or governor
-
-    return {freqmhz, freqghz, voltagemv, voltagev, governor}
+    return {freq, cpu_data[cpuid][1], cpu_data[cpuid][2], format = " %3.1f %s ", suffixes = {"KHz", "MHz", "GHz"}, scale = 1000}
 end
 -- }}}
 

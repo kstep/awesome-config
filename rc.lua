@@ -197,7 +197,7 @@ for s = 1, screen.count() do
         {
             mylauncher,
             mytaglist[s],
-			mylayoutbox[s],
+            mylayoutbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
         mytextclock,

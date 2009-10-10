@@ -134,6 +134,8 @@ mysystray = widget({ type = "systray" })
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+statwibox = {}
+
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -166,6 +168,8 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+thermal_sensors = {}
+cpufreq_sensors = {}
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -199,6 +203,61 @@ for s = 1, screen.count() do
         mytextclock,
         s == 1 and mysystray or nil,
         mytasklist[s],
+        layout = awful.widget.layout.horizontal.rightleft
+    }
+
+    thermal_sensors[s] =
+    {
+        vicious.register(
+            awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }),
+            vicious.thermal,
+            vicious.formatters.scale,
+            10,
+            0
+        ).widget,
+        vicious.register(
+            awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }),
+            vicious.thermal,
+            vicious.formatters.scale,
+            10,
+            1
+        ).widget,
+        vicious.register(vicious.label(), vicious.thermal, "$1°C ", 10, 0).widget,
+        vicious.register(vicious.label(), vicious.thermal, " $1°C/", 10, 1).widget,
+
+        layout = awful.widget.layout.horizontal.rightleft
+    }
+    thermal_sensors[s][1]:set_vertical(true)
+    thermal_sensors[s][2]:set_vertical(true)
+
+    cpufreq_sensors[s] =
+    {
+        vicious.register(
+            awful.widget.progressbar({ width = 10, layout = awful.widget.layout.horizontal.rightleft }),
+            vicious.cpufreq,
+            vicious.formatters.scale,
+            5,
+            "cpu0"
+        ).widget,
+        vicious.register(
+            widget({ type = "textbox", align = "right" }),
+            vicious.cpufreq,
+            vicious.formatters.humanize,
+            5,
+            "cpu0"
+        ).widget,
+
+        layout = awful.widget.layout.horizontal.rightleft
+    }
+    cpufreq_sensors[s][1]:set_vertical(true)
+
+    statwibox[s] = awful.wibox({ position = "bottom", screen = s })
+    statwibox[s].widgets = {
+
+        thermal_sensors[s],
+        cpufreq_sensors[s],
+        mypromptbox[s],
+
         layout = awful.widget.layout.horizontal.rightleft
     }
 end

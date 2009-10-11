@@ -4,6 +4,9 @@ local string = {
     sub = string.sub,
     gsub = string.gsub
 }
+local math = {
+    floor = math.floor
+}
 
 module("vicious.formatters")
 
@@ -21,6 +24,19 @@ function scale(widget, args, meta)
     local min = meta.min or 0
 
     return (value - min) / (max - min)
+end
+
+function percent(widget, args, meta)
+    local result = scale(widget, args, meta) * 100
+    args[1] = result
+    return args
+end
+
+function hms(widget, args, meta)
+    local secs = args[1]
+    local hours = math.floor(secs / 3600); secs = secs % 3600
+    local mins  = math.floor(secs / 60); secs = secs % 60
+    return { hours, mins, secs }
 end
 
 function humanize(widget, args, meta)

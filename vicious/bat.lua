@@ -29,16 +29,6 @@ end
 
 -- {{{ Battery widget type
 local function worker(format, batid)
-    local battery_state = {
-        ["Full"] = "↯",
-        ["Unknown"] = "⌁",
-        ["Charged"] = "↯",
-        ["Charging"] = "+",
-        ["Discharging"] = "-"
-    }
-
-    -- Get /proc/acpi/battery info
-    
     local remaining = helpers.readfile(basedir .. batid .. "/charge_now", "*n")
     local status = helpers.readfile(basedir .. batid .. "/status", "*l")
     local current = helpers.readfile(basedir .. batid .. "/current_now", "*n")

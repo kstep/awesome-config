@@ -42,7 +42,7 @@ local function worker(format, batid)
     local remaining = helpers.readfile(basedir .. batid .. "/charge_now", "*n")
     local status = helpers.readfile(basedir .. batid .. "/status", "*l")
     local current = helpers.readfile(basedir .. batid .. "/current_now", "*n")
-    local timeleft = (remaining / current) * 3600 -- seconds
+    local timeleft = current > 0 and ((remaining / current) * 3600) or 86400 -- seconds
 
     return { remaining, timeleft, status } --battery_state[status] }
 end

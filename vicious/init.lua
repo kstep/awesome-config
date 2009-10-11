@@ -13,6 +13,7 @@ require("vicious.formatters")
 
 local type = type
 local pairs = pairs
+local unpack = unpack
 local awful = awful
 local tonumber = tonumber
 local os = { time = os.time }
@@ -284,12 +285,30 @@ function update(widget, reg, disablecache)
     return data
 end
 
+local function set_label(w, data)
+    local text = ""
+    if type(data) == "table" then
+        text = w.format:format(unpack(data))
+    else
+        text = w.format:format(data)
+    end
+    w.widget.text = text
+end
+
 function label(text, wargs)
+    local w = {}
     local args = wargs or {}
+    local txt = text or ""
+
     args.type = "textbox"
     local widget = capi.widget(args)
-    widget.text = text or ""
-    return widget
+    widget.text = txt
+
+    w.layout = args.layout or awful.widget.layout.horizontal.rightleft
+    w.widget = widget
+    w.format = txt
+    w.set_value = set_label
+    return w
 end
 -- }}}
 -- }}}

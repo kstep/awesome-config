@@ -239,11 +239,12 @@ end
 local function get_cache(reg)
     if widget_cache[reg.type] ~= nil then
         local t = os.time()
-        local c = widget_cache[reg.type][reg.warg]
+        local warg = reg.warg or 0
+        local c = widget_cache[reg.type][warg]
 
         if c == nil then
-            widget_cache[reg.type][reg.warg] = { meta = reg.type.meta(reg.warg) }
-            c = widget_cache[reg.type][reg.warg]
+            widget_cache[reg.type][warg] = { meta = reg.type.meta(reg.warg) }
+            c = widget_cache[reg.type][warg]
         end
 
         if c.time == nil or c.time <= t - reg.timer then

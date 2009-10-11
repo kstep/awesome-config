@@ -228,6 +228,26 @@ end
 -- }}}
 
 -- {{{ Update a widget
+local function get_cache(reg)
+    if widget_cache[reg.type] ~= nil then
+        local t = os.time()
+        local c = widget_cache[reg.type][reg.warg]
+
+        if c == nil then
+            widget_cache[reg.type][reg.warg] = { meta = reg.type.meta(reg.warg) }
+            c = widget_cache[reg.type][reg.warg]
+        end
+
+        if c.time == nil or c.time <= t - reg.timer then
+            c.time = t
+            c.data = reg.type(reg.format, reg.warg)
+        end
+
+        return c.data, c.meta
+    end
+end
+
+
 function update(widget, reg, disablecache)
     -- Check if there are any equal widgets
     if reg == nil then
@@ -242,38 +262,28 @@ function update(widget, reg, disablecache)
         return
     end
 
-    local t = os.time()
-    local data = {}
+    local data
+    local meta
 
     -- Do we have output chached for a widget newer than last update
-    if widget_cache[reg.type] ~= nil then
-        local c = widget_cache[reg.type][reg.warg]
-
-        if c == nil then
-            widget_cache[reg.type][reg.warg] = {}
-            c = widget_cache[reg.type][reg.warg]
-        end
-
-        if c.time == nil or c.time <= t - reg.timer or disablecache then
-            c.time = t
-            c.data = reg.type(reg.format, reg.warg)
-        end
-
-        data = c.data
-    else
-        data = reg.type(reg.format, reg.warg)
+    if not disablecache then
+        data, meta = get_cache(reg)
     end
 
-    if reg.channels ~= nil then
-        data = helpers.slice(data, reg.channels)
+    if not data then
+        data, meta = reg.type(reg.format, reg.warg), reg.type.meta(reg.warg)
     end
 
-    if type(data) == "table" then
-        if type(reg.format) == "string" then
-            data = formatters.format(reg.format, data)
-        elseif type(reg.format) == "function" then
-            data = reg.format(widget, data)
+    if type(data) == "table" and reg.channels ~= nil then
+        if type(reg.channels) == "table" then
+            data = helpers.slice(data, reg.channels)
+        else
+            data = data[reg.channels]
         end
+    end
+
+    if type(reg.format) == "function" then
+        data = reg.format(widget, data, meta)
     end
 
     if reg.method ~= nil then

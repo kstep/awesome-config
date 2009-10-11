@@ -170,6 +170,7 @@ mytasklist.buttons = awful.util.table.join(
 
 thermal_sensors = {}
 cpufreq_sensors = {}
+battery_sensors = {}
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -251,11 +252,33 @@ for s = 1, screen.count() do
     }
     cpufreq_sensors[s][1]:set_vertical(true)
 
+    battery_sensors[s] =
+    {
+        vicious.register(
+            awful.widget.progressbar({ width = 10, layout = awful.widget.layout.horizontal.rightleft }), nil,
+            vicious.bat, { 1 },
+            vicious.formatters.scale,
+            5,
+            "BAT0"
+        ).widget,
+        vicious.register(vicious.label("(%d:%02d) "), nil, vicious.bat, { 2 }, vicious.formatters.hms, 5, "BAT0").widget,
+        vicious.register(vicious.label(" %3d%%%s "), nil, vicious.bat, { 1, 3 }, vicious.formatters.percent, 5, "BAT0").widget,
+
+        --vicious.registermore(vicious.cpufreq, {
+        --  { vicious.label("%5.1f %s"), nil, { 1 }, vicious.formatters.humanize },
+        --  { awful.widget.progressbar({...}), nil, { 1 }, vicious.formatters.scale  },
+        --}, 5, 1)
+
+        layout = awful.widget.layout.horizontal.rightleft
+    }
+    battery_sensors[s][1]:set_vertical(true)
+
     statwibox[s] = awful.wibox({ position = "bottom", screen = s })
     statwibox[s].widgets = {
 
         thermal_sensors[s],
         cpufreq_sensors[s],
+        battery_sensors[s],
         mypromptbox[s],
 
         layout = awful.widget.layout.horizontal.rightleft

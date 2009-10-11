@@ -222,8 +222,8 @@ for s = 1, screen.count() do
             10,
             1
         ).widget,
-        vicious.register(vicious.label("%0.1f°C "), nil, vicious.thermal, { 1 }, nil, 10, 0).widget,
-        vicious.register(vicious.label(" %0.1f°C/"), nil, vicious.thermal, { 1 }, nil, 10, 1).widget,
+        vicious.register(vicious.label("%0.1f°C "), nil, vicious.thermal, nil, nil, 10, 0).widget,
+        vicious.register(vicious.label(" %0.1f°C/"), nil, vicious.thermal, nil, nil, 10, 1).widget,
 
         layout = awful.widget.layout.horizontal.rightleft
     }

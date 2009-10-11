@@ -241,7 +241,7 @@ for s = 1, screen.count() do
             "cpu0"
         ).widget,
         vicious.register(
-            vicious.label(" %.1f %s "), nil,
+            vicious.label(" %5.1f %s "), nil,
             vicious.cpufreq, nil,
             vicious.formatters.humanize,
             5,

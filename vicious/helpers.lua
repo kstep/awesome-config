@@ -6,7 +6,7 @@
 
 -- {{{ Grab environment
 local type = type
-local pairs = pairs
+local ipairs = ipairs
 local io = {
     open = io.open
 }
@@ -59,8 +59,8 @@ end
 function slice(tbl, start, stop)
     local result = {}
     if type(start) == "table" then
-        for k, v in pairs(start) do
-            result[k] = v
+        for i, k in ipairs(start) do
+            result[k] = tbl[k]
         end
     else
         if start == nil and stop == nil then

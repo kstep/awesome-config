@@ -7,6 +7,7 @@ local string = {
 local math = {
     floor = math.floor
 }
+local beautiful = require("beautiful")
 
 module("vicious.formatters")
 
@@ -30,6 +31,10 @@ function percent(widget, args, meta)
     local result = scale(widget, args, meta) * 100
     args[1] = result
     return args
+end
+
+function theme(widget, args, meta)
+    return beautiful[args[1]] or beautiful.fg_normal
 end
 
 function hms(widget, args, meta)

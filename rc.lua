@@ -188,7 +188,7 @@ cpufreq_widgets[1]:set_vertical(true)
 
 battery_widgets = {
     awful.widget.progressbar({ width = 10, layout = swibox_layout }), -- bat0
-    vicious.label("(%2d:%02d) "), -- bat0
+    vicious.label("[%2d:%02d] "), -- bat0
     vicious.label(" %3d%% "), -- bat0
     layout = swibox_layout
 }

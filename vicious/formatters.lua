@@ -27,7 +27,6 @@ function humanize(widget, args)
     local suffixes = args.suffixes or { "b", "Kb", "Mb", "Gb", "Tb" }
     local scale = args.scale or 1024
     local init = args.init or 1
-    local format = args.format or " %.3f %s "
     local value = args[1]
 
     local suffix = init
@@ -35,5 +34,5 @@ function humanize(widget, args)
         value = value / scale
         suffix = suffix + 1
     end
-    return format:format(value, suffixes[suffix])
+    return { value, suffixes[suffix] }
 end

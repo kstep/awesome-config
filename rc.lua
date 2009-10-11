@@ -222,8 +222,8 @@ for s = 1, screen.count() do
             10,
             1
         ).widget,
-        vicious.register(vicious.label(), nil, vicious.thermal, nil, "$1°C ", 10, 0).widget,
-        vicious.register(vicious.label(), nil, vicious.thermal, nil, " $1°C/", 10, 1).widget,
+        vicious.register(vicious.label("%0.1f°C "), nil, vicious.thermal, { 1 }, nil, 10, 0).widget,
+        vicious.register(vicious.label(" %0.1f°C/"), nil, vicious.thermal, { 1 }, nil, 10, 1).widget,
 
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -240,7 +240,7 @@ for s = 1, screen.count() do
             "cpu0"
         ).widget,
         vicious.register(
-            vicious.label(), nil,
+            vicious.label(" %.1f %s "), nil,
             vicious.cpufreq, nil,
             vicious.formatters.humanize,
             5,

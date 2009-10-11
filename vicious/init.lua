@@ -87,7 +87,7 @@ end
 
 -- {{{ Main functions
 -- {{{ Register a widget
-function registermore(wtype, widgets, timer, warg)
+function registermore(wtype, widgets, params, timer, warg)
     local reg = {}
 
     -- Set properties
@@ -96,17 +96,18 @@ function registermore(wtype, widgets, timer, warg)
     reg.timer  = timer
     reg.warg   = warg
     reg.widgets = widgets
+    reg.params = params
 
     -- 1:widget, 2:method, 3:channels, 4:formatter
     for i, widget in ipairs(reg.widgets) do
-        if widget[2] == nil then
-            widget[2] = widget[1].set_value or widget[1].add_value
+        if reg.params[i][1] == nil then
+            reg.params[i][1] = widget.set_value or widget.add_value
         end
     end
 
     -- Update function
     reg.update = function ()
-        update_reg(reg)
+        update(reg)
     end
 
     -- Default to 2s timer
@@ -122,7 +123,7 @@ function registermore(wtype, widgets, timer, warg)
 end
 
 function register(widget, method, wtype, channels, format, timer, warg)
-    return registermore(wtype, { { widget, method, channels, format } }, timer, warg)
+    return registermore(wtype, { widget }, { { method, channels, format } }, timer, warg)
 end
 -- }}}
 
@@ -251,11 +252,10 @@ local function get_cache(reg)
     end
 end
 
-local function update_widget(widget, data, meta)
-    local method = widget[2]
-    local channels = widget[3]
-    local format = widget[4]
-    local widget = widget[1]
+local function update_widget(widget, params, data, meta)
+    local method = params[1]
+    local channels = params[2]
+    local format = params[3]
 
     if type(data) == "table" and channels ~= nil then
         if type(channels) == "table" then
@@ -276,34 +276,15 @@ local function update_widget(widget, data, meta)
     end
 end
 
-function update_reg(reg)
+function update(reg, disablecache)
     local data
     local meta
     if not disablecache then data, meta = get_cache(reg) end
     if not data then data, meta = reg.type(reg.format, reg.warg), reg.type.meta(reg.warg) end
 
     for i, widget in ipairs(reg.widgets) do
-        update_widget(widget, data, meta)
+        update_widget(widget, reg.params[i], data, meta)
     end
-end
-
-function update(widget, reg, disablecache)
-    -- Check if there are any equal widgets
-    if reg == nil then
-        for w, i in pairs(registered) do
-            if w == widget then
-                for _, v in pairs(i) do
-                    update(w, v, disablecache)
-                end
-            end
-        end
-
-        return
-    end
-
-    update_widget(reg, widget, data, meta)
-
-    return data
 end
 
 -- }}}

@@ -60,7 +60,7 @@ function slice(tbl, start, stop)
     local result = {}
     if type(start) == "table" then
         for i, k in ipairs(start) do
-            result[k] = tbl[k]
+            result[i] = tbl[k]
         end
     else
         if start == nil and stop == nil then

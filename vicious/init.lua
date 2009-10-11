@@ -84,7 +84,7 @@ end
 
 -- {{{ Main functions
 -- {{{ Register a widget
-function register(widget, wtype, format, timer, warg)
+function register(widget, method, wtype, channels, format, timer, warg)
     local reg = {}
     local widget = widget
 
@@ -94,6 +94,8 @@ function register(widget, wtype, format, timer, warg)
     reg.timer  = timer
     reg.warg   = warg
     reg.widget = widget
+    reg.method = method or widget.set_value or widget.add_value
+    reg.channels = channels
 
     -- Update function
     reg.update = function ()
@@ -261,6 +263,10 @@ function update(widget, reg, disablecache)
         data = reg.type(reg.format, reg.warg)
     end
 
+    if reg.channels ~= nil then
+        data = helpers.slice(data, reg.channels)
+    end
+
     if type(data) == "table" then
         if type(reg.format) == "string" then
             data = formatters.format(reg.format, data)
@@ -269,10 +275,8 @@ function update(widget, reg, disablecache)
         end
     end
 
-    if widget.add_value ~= nil then
-        widget:add_value(tonumber(data))
-    elseif widget.set_value ~= nil then
-        widget:set_value(tonumber(data) / 100)
+    if reg.method ~= nil then
+        reg.method(widget, data)
     else
         widget.text = data
     end

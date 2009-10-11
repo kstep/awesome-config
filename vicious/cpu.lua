@@ -22,6 +22,10 @@ local cpu_usage  = {}
 local cpu_total  = {}
 local cpu_active = {}
 
+function meta()
+    return {}
+end
+
 -- {{{ CPU widget type
 local function worker(format)
     -- Get /proc/stat

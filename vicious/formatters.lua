@@ -15,19 +15,19 @@ function format(format, args)
     return format
 end
 
-function scale(widget, args)
-    local value = args[1]
-    local max = args[2] or 100
-    local min = args[3] or 0
+function scale(widget, arg, meta)
+    local value = arg
+    local max = meta.max or 100
+    local min = meta.min or 0
 
     return (value - min) / (max - min)
 end
 
-function humanize(widget, args)
-    local suffixes = args.suffixes or { "b", "Kb", "Mb", "Gb", "Tb" }
-    local scale = args.scale or 1024
-    local init = args.init or 1
-    local value = args[1]
+function humanize(widget, arg, meta)
+    local suffixes = meta.suffixes or { "b", "Kb", "Mb", "Gb", "Tb" }
+    local scale = meta.scale or 1024
+    local init = meta.init or 1
+    local value = arg
 
     local suffix = init
     while value > scale and suffix < #suffixes do

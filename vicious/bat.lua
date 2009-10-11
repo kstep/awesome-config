@@ -39,8 +39,8 @@ local function worker(format, batid)
 
     -- Get /proc/acpi/battery info
     
-    local ramaining = helpers.readfile(basedir .. batid .. "/charge_now", "*n")
-    local status = helpers.readfile(basedir .. batid .. "/status", "*n")
+    local remaining = helpers.readfile(basedir .. batid .. "/charge_now", "*n")
+    local status = helpers.readfile(basedir .. batid .. "/status", "*l")
     local current = helpers.readfile(basedir .. batid .. "/current_now", "*n")
     local timeleft = (remaining / current) * 3600 -- seconds
 

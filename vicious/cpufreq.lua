@@ -18,7 +18,12 @@ local helpers = require("vicious.helpers")
 module("vicious.cpufreq")
 
 local basedir = "/sys/devices/system/cpu/"
-local cpu_data = {}
+
+function meta(cpuid)
+    local max_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_max_freq", "*n")
+    local min_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_min_freq", "*n")
+    return { max = max_freq, min = min_freq, suffixes = {"KHz", "MHz", "GHz"}, scale = 1000 }
+end
 
 -- {{{ CPU frequency widget type
 local function worker(format, cpuid)
@@ -32,14 +37,7 @@ local function worker(format, cpuid)
 
     -- Get the current frequency
     local freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_cur_freq", "*n")
-
-    if cpu_data[cpuid] == nil then
-        local max_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_max_freq", "*n")
-        local min_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_min_freq", "*n")
-        cpu_data[cpuid] = { max_freq, min_freq }
-    end
-
-    return {freq, cpu_data[cpuid][1], cpu_data[cpuid][2], format = " %3.1f %s ", suffixes = {"KHz", "MHz", "GHz"}, scale = 1000}
+    return freq
 end
 -- }}}
 

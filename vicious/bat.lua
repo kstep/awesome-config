@@ -21,7 +21,11 @@ local string = {
 module("vicious.bat")
 
 local basedir = "/sys/class/power_supply/"
-local bat_info = {}
+
+function meta(batid)
+    local capacity = helpers.readfile(basedir .. batid .. "/charge_full", "*n")
+    return { max = capacity }
+end
 
 -- {{{ Battery widget type
 local function worker(format, batid)
@@ -35,14 +39,12 @@ local function worker(format, batid)
 
     -- Get /proc/acpi/battery info
     
-    local capacity = helpers.readfile(basedir .. batid .. "/charge_full", "*n")
     local ramaining = helpers.readfile(basedir .. batid .. "/charge_now", "*n")
     local status = helpers.readfile(basedir .. batid .. "/status", "*n")
     local current = helpers.readfile(basedir .. batid .. "/current_now", "*n")
     local timeleft = (remaining / current) * 3600 -- seconds
 
-    return { remaining, capacity, 0, timeleft, battery_state[status] }
-
+    return { remaining, timeleft, battery_state[status] }
 end
 -- }}}
 

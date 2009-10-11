@@ -194,6 +194,13 @@ battery_widgets = {
 }
 battery_widgets[1]:set_vertical(true)
 
+cpuload_widgets = {
+    awful.widget.graph({ width = 15, layout = swibox_layout }), -- bat0
+    --awful.widget.graph({ width = 15, layout = swibox_layout }), -- bat0
+    layout = swibox_layout--awful.widget.layout.horizontal.rightleft
+}
+cpuload_widgets[1]:set_max_value(100)
+
 -- method, channels, formatter
 vicious.registermore(vicious.thermal, { thermal_widgets[1], thermal_widgets[3] }, {
     { nil, nil, vicious.formatters.scale },
@@ -223,6 +230,11 @@ vicious.registermore(vicious.bat, awful.util.table.join(battery_widgets, battery
     { "set_color", { 3 }, vicious.formatters.theme },
 },
 5, "BAT0")
+
+vicious.registermore(vicious.cpu, cpuload_widgets, {
+    { nil, 1, nil },
+    --{ nil, 3, nil },
+}, 2)
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -264,6 +276,8 @@ for s = 1, screen.count() do
 
         thermal_widgets,
         cpufreq_widgets,
+        cpuload_widgets,
+        vicious.label(" cpu: "),
         battery_widgets,
         mypromptbox[s],
 

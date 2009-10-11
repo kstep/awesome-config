@@ -215,16 +215,16 @@ for s = 1, screen.count() do
             vicious.formatters.scale,
             10,
             0
-        ).widget,
+        ).widgets[1][1],
         vicious.register(
             awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }), nil,
             vicious.thermal, nil,
             vicious.formatters.scale,
             10,
             1
-        ).widget,
-        vicious.register(vicious.label("%0.1f°C "), nil, vicious.thermal, nil, nil, 10, 0).widget,
-        vicious.register(vicious.label(" %0.1f°C/"), nil, vicious.thermal, nil, nil, 10, 1).widget,
+        ).widgets[1][1],
+        vicious.register(vicious.label("%0.1f°C "), nil, vicious.thermal, nil, nil, 10, 0).widgets[1][1],
+        vicious.register(vicious.label(" %0.1f°C/"), nil, vicious.thermal, nil, nil, 10, 1).widgets[1][1],
 
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -239,14 +239,14 @@ for s = 1, screen.count() do
             vicious.formatters.scale,
             5,
             "cpu0"
-        ).widget,
+        ).widgets[1][1],
         vicious.register(
             vicious.label(" %5.1f %s "), nil,
             vicious.cpufreq, nil,
             vicious.formatters.humanize,
             5,
             "cpu0"
-        ).widget,
+        ).widgets[1][1],
 
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -260,9 +260,9 @@ for s = 1, screen.count() do
             vicious.formatters.scale,
             5,
             "BAT0"
-        ).widget,
-        vicious.register(vicious.label("(%d:%02d) "), nil, vicious.bat, { 2 }, vicious.formatters.hms, 5, "BAT0").widget,
-        vicious.register(vicious.label(" %3d%%%s "), nil, vicious.bat, { 1, 3 }, vicious.formatters.percent, 5, "BAT0").widget,
+        ).widgets[1][1],
+        vicious.register(vicious.label("(%d:%02d) "), nil, vicious.bat, { 2 }, vicious.formatters.hms, 5, "BAT0").widgets[1][1],
+        vicious.register(vicious.label(" %3d%%%s "), nil, vicious.bat, { 1, 3 }, vicious.formatters.percent, 5, "BAT0").widgets[1][1],
 
         --vicious.registermore(vicious.cpufreq, {
         --  { vicious.label("%5.1f %s"), nil, { 1 }, vicious.formatters.humanize },

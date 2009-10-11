@@ -13,6 +13,7 @@ require("vicious.formatters")
 
 local type = type
 local pairs = pairs
+local ipairs = ipairs
 local unpack = unpack
 local awful = awful
 local tonumber = tonumber
@@ -85,22 +86,26 @@ end
 
 -- {{{ Main functions
 -- {{{ Register a widget
-function register(widget, method, wtype, channels, format, timer, warg)
+function registermore(wtype, widgets, timer, warg)
     local reg = {}
-    local widget = widget
 
     -- Set properties
     reg.type   = wtype
     reg.format = format
     reg.timer  = timer
     reg.warg   = warg
-    reg.widget = widget
-    reg.method = method or widget.set_value or widget.add_value
-    reg.channels = channels
+    reg.widgets = widgets
+
+    -- 1:widget, 2:method, 3:channels, 4:formatter
+    for i, widget in ipairs(reg.widgets) do
+        if widget[2] == nil then
+            widget[2] = widget[1].set_value or widget[1].add_value
+        end
+    end
 
     -- Update function
     reg.update = function ()
-        update(widget, reg)
+        update_reg(reg)
     end
 
     -- Default to 2s timer
@@ -115,41 +120,39 @@ function register(widget, method, wtype, channels, format, timer, warg)
     return reg
 end
 
-function registermore(widgets, wtype, format, timer, warg)
-    local result = {}
-    for i, widget in ipairs(widgets) do
-        table.insert(result, register(widget, wtype, format, timer, warg))
-    end
-    return result
+function register(widget, method, wtype, channels, format, timer, warg)
+    return registermore(wtype, { { widget, method, channels, format } }, timer, warg)
 end
 -- }}}
 
 -- {{{ Register from reg object
 function regregister(reg)
     if not reg.running then
-        if registered[reg.widget] == nil then
-            registered[reg.widget] = {}
-            table.insert(registered[reg.widget], reg)
-        else
-            local already = false
+        for i, widget in ipairs(reg.widgets) do
+            if registered[widget] == nil then
+                registered[widget] = {}
+                table.insert(registered[widget], reg)
+            else
+                local already = false
 
-            for w, i in pairs(registered) do
-                if w == reg.widget then
-                    for _, v in pairs(i) do
-                        if v == reg then
-                            already = true
+                for w, i in pairs(registered) do
+                    if w == widget then
+                        for _, v in pairs(i) do
+                            if v == reg then
+                                already = true
+                                break
+                            end
+                        end
+
+                        if already then
                             break
                         end
                     end
-
-                    if already then
-                        break
-                    end
                 end
-            end
 
-            if not already then
-                table.insert(registered[reg.widget], reg)
+                if not already then
+                    table.insert(registered[widget], reg)
+                end
             end
         end
 
@@ -247,6 +250,41 @@ local function get_cache(reg)
     end
 end
 
+local function update_widget(widget, data, meta)
+    local method = widget[2]
+    local channels = widget[3]
+    local format = widget[4]
+    local widget = widget[1]
+
+    if type(data) == "table" and channels ~= nil then
+        if type(channels) == "table" then
+            data = helpers.slice(data, channels)
+        else
+            data = data[channels]
+        end
+    end
+
+    if type(format) == "function" then
+        data = format(widget, data, meta)
+    end
+
+    if method ~= nil then
+        method(widget, data)
+    else
+        widget.text = data
+    end
+end
+
+function update_reg(reg)
+    local data
+    local meta
+    if not disablecache then data, meta = get_cache(reg) end
+    if not data then data, meta = reg.type(reg.format, reg.warg), reg.type.meta(reg.warg) end
+
+    for i, widget in ipairs(reg.widgets) do
+        update_widget(widget, data, meta)
+    end
+end
 
 function update(widget, reg, disablecache)
     -- Check if there are any equal widgets
@@ -262,35 +300,7 @@ function update(widget, reg, disablecache)
         return
     end
 
-    local data
-    local meta
-
-    -- Do we have output chached for a widget newer than last update
-    if not disablecache then
-        data, meta = get_cache(reg)
-    end
-
-    if not data then
-        data, meta = reg.type(reg.format, reg.warg), reg.type.meta(reg.warg)
-    end
-
-    if type(data) == "table" and reg.channels ~= nil then
-        if type(reg.channels) == "table" then
-            data = helpers.slice(data, reg.channels)
-        else
-            data = data[reg.channels]
-        end
-    end
-
-    if type(reg.format) == "function" then
-        data = reg.format(widget, data, meta)
-    end
-
-    if reg.method ~= nil then
-        reg.method(widget, data)
-    else
-        widget.text = data
-    end
+    update_widget(reg, widget, data, meta)
 
     return data
 end

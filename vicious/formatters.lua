@@ -41,6 +41,7 @@ function hms(widget, args, meta)
     local secs = args[1]
     local hours = math.floor(secs / 3600); secs = secs % 3600
     local mins  = math.floor(secs / 60); secs = secs % 60
+    if hours > 24 then return { 0, 0, 0 } end
     return { hours, mins, secs }
 end
 

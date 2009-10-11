@@ -5,8 +5,13 @@
 ----------------------------------------------------------
 
 -- {{{ Grab environment
+local type = type
+local pairs = pairs
 local io = {
     open = io.open
+}
+local table = {
+    insert = table.insert
 }
 -- }}}
 

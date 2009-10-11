@@ -20,7 +20,7 @@ function scale(widget, args)
     local max = args[2] or 100
     local min = args[3] or 0
 
-    return (value - min) * 100 / (max - min)
+    return (value - min) / (max - min)
 end
 
 function humanize(widget, args)

@@ -50,3 +50,23 @@ function truncate(text, maxlen)
     return text
 end
 -- }}}
+
+function slice(tbl, start, stop)
+    local result = {}
+    if type(start) == "table" then
+        for k, v in pairs(start) do
+            result[k] = v
+        end
+    else
+        if start == nil and stop == nil then
+            return tbl
+        else
+            local start = start or 1
+            local stop = stop or #tbl
+            for i = start, stop do
+                table.insert(result, tbl[i])
+            end
+        end
+    end
+    return result
+end

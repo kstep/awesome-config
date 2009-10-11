@@ -37,7 +37,7 @@ local function worker(format, cpuid)
 
     -- Get the current frequency
     local freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_cur_freq", "*n")
-    return freq
+    return { freq }
 end
 -- }}}
 

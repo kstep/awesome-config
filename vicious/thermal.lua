@@ -26,7 +26,7 @@ local function worker(format, thermal_zone)
     local line = helpers.readfile(basedir .. thermal_zone .. "/temp", "*n")
     local temperature = line / 1000
 
-    return temperature
+    return { temperature }
 end
 -- }}}
 

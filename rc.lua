@@ -218,9 +218,9 @@ vicious.registermore(vicious.bat, awful.util.table.join(battery_widgets, battery
     { nil, { 2 }, vicious.formatters.hms },
     { nil, { 1 }, vicious.formatters.percent },
 
-    { battery_widgets[1].set_color, { 3 }, vicious.formatters.theme },
-    { battery_widgets[2].set_color, { 3 }, vicious.formatters.theme },
-    { battery_widgets[3].set_color, { 3 }, vicious.formatters.theme },
+    { "set_color", { 3 }, vicious.formatters.theme },
+    { "set_color", { 3 }, vicious.formatters.theme },
+    { "set_color", { 3 }, vicious.formatters.theme },
 },
 5, "BAT0")
 

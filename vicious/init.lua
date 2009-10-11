@@ -100,7 +100,10 @@ function registermore(wtype, widgets, params, timer, warg)
 
     -- 1:widget, 2:method, 3:channels, 4:formatter
     for i, widget in ipairs(reg.widgets) do
-        if reg.params[i][1] == nil then
+        if type(reg.params[i][1]) == "string" then
+            reg.params[i][1] = widget[reg.params[i][1]]
+        end
+        if type(reg.params[i][1]) ~= "function" then
             reg.params[i][1] = widget.set_value or widget.add_value
         end
     end

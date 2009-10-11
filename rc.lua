@@ -209,21 +209,21 @@ for s = 1, screen.count() do
     thermal_sensors[s] =
     {
         vicious.register(
-            awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }),
-            vicious.thermal,
+            awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }), nil,
+            vicious.thermal, nil,
             vicious.formatters.scale,
             10,
             0
         ).widget,
         vicious.register(
-            awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }),
-            vicious.thermal,
+            awful.widget.progressbar({ width = 5, layout = awful.widget.layout.horizontal.rightleft }), nil,
+            vicious.thermal, nil,
             vicious.formatters.scale,
             10,
             1
         ).widget,
-        vicious.register(vicious.label(), vicious.thermal, "$1°C ", 10, 0).widget,
-        vicious.register(vicious.label(), vicious.thermal, " $1°C/", 10, 1).widget,
+        vicious.register(vicious.label(), nil, vicious.thermal, nil, "$1°C ", 10, 0).widget,
+        vicious.register(vicious.label(), nil, vicious.thermal, nil, " $1°C/", 10, 1).widget,
 
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -233,15 +233,15 @@ for s = 1, screen.count() do
     cpufreq_sensors[s] =
     {
         vicious.register(
-            awful.widget.progressbar({ width = 10, layout = awful.widget.layout.horizontal.rightleft }),
-            vicious.cpufreq,
+            awful.widget.progressbar({ width = 10, layout = awful.widget.layout.horizontal.rightleft }), nil,
+            vicious.cpufreq, nil,
             vicious.formatters.scale,
             5,
             "cpu0"
         ).widget,
         vicious.register(
-            widget({ type = "textbox", align = "right" }),
-            vicious.cpufreq,
+            vicious.label(), nil,
+            vicious.cpufreq, nil,
             vicious.formatters.humanize,
             5,
             "cpu0"

@@ -7,6 +7,8 @@
 -- {{{ Grab environment
 local type = type
 local ipairs = ipairs
+local unpack = unpack
+local tonumber = tonumber
 local io = {
     open = io.open
 }
@@ -75,3 +77,13 @@ function slice(tbl, start, stop)
     end
     return result
 end
+
+function reformat(frm, pars)
+    local args = {}
+    for p in frm:gmatch("%%%(([%d%w]+)%)") do
+        table.insert(args, pars[tonumber(p) or p])
+        frm = frm:gsub("%%%("..p.."%)", "%%")
+    end
+    return frm:format(unpack(#args > 0 and args or pars))
+end
+

@@ -169,6 +169,8 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 swibox_layout = awful.widget.layout.horizontal.rightleft
+uptime_widget = vicious.label(" [%dd %2d:%02d]")
+
 thermal_widgets = {
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz1
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz0
@@ -202,6 +204,8 @@ cpuload_widgets = {
 cpuload_widgets[1]:set_max_value(100)
 
 -- method, channels, formatter
+vicious.registermore(vicious.uptime, { uptime_widget }, { { nil, nil, vicious.formatters.hms } }, 60)
+
 vicious.registermore(vicious.thermal, { thermal_widgets[1], thermal_widgets[3] }, {
     { nil, nil, vicious.formatters.scale },
     { nil, nil, nil },
@@ -266,6 +270,7 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mytextclock,
+        uptime_widget,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft

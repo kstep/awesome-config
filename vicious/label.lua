@@ -4,6 +4,7 @@ local unpack = unpack
 local capi = { widget = widget }
 local layouts = require("awful.widget.layout")
 local theme = require("beautiful")
+local helpers = require("vicious.helpers")
 
 module("vicious.label")
 
@@ -14,7 +15,7 @@ end
 local function set_value(w, data)
     local text = ""
     if type(data) == "table" then
-        text = w.format:format(unpack(data))
+        text = helpers.reformat(w.format, data)
     else
         text = w.format:format(data)
     end

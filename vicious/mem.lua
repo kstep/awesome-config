@@ -9,46 +9,34 @@ local tonumber = tonumber
 local io = { open = io.open }
 local setmetatable = setmetatable
 local math = { floor = math.floor }
+local helpers = require('vicious.helpers')
+local max = math.max
 -- }}}
 
 
 -- Mem: provides RAM and Swap usage statistics
 module("vicious.mem")
 
+function meta(warg)
+    local data = readtfile("/proc/meminfo", "%d+")
+    local meta = {}
+    meta.max = max(data['MemTotal'], data['SwapTotal'])
+    meta.init = 2
+    return meta
+end
+
 
 -- {{{ Memory widget type
 local function worker(format)
     -- Get meminfo
-    local f = io.open("/proc/meminfo")
+    local data = readtfile("/proc/meminfo", "%d+")
+    local mem_free = tonumber(data['MemFree']) + tonumber(data['Cached']) + tonumber(data['Buffers'])
+    local swap_free = tonumber(data['SwapFree'])
 
-    for line in f:lines() do
-        if line:match("^MemTotal.*") then
-            mem_total = math.floor(tonumber(line:match("([%d]+)")) / 1024)
-        elseif line:match("^MemFree.*") then
-            free = math.floor(tonumber(line:match("([%d]+)")) / 1024)
-        elseif line:match("^Buffers.*") then
-            buffers = math.floor(tonumber(line:match("([%d]+)")) / 1024)
-        elseif line:match("^Cached.*") then
-            cached = math.floor(tonumber(line:match("([%d]+)")) / 1024)
-        -- Get swap stats while we're at it
-        elseif line:match("^SwapTotal.*") then
-            swap_total = math.floor(tonumber(line:match("([%d]+)")) / 1024)
-        elseif line:match("^SwapFree.*") then
-            swap_free = math.floor(tonumber(line:match("([%d]+)")) / 1024)
-        end
-    end
-    f:close()
+    local mem_used = tonumber(data['MemTotal'] - mem_free)
+    local swap_used = tonumber(data['SwapTotal'] - swap_free)
 
-    -- Calculate percentage
-    mem_free = free + buffers + cached
-    mem_inuse = mem_total - mem_free
-    mem_usepercent = math.floor(mem_inuse/mem_total*100)
-    -- Calculate swap percentage
-    swap_inuse = swap_total - swap_free
-    swap_usepercent = math.floor(swap_inuse/swap_total*100)
-
-    return {mem_usepercent,  mem_inuse,  mem_total,  mem_free,
-            swap_usepercent, swap_inuse, swap_total, swap_free}
+    return { mem_used, swap_used }
 end
 -- }}}
 

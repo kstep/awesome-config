@@ -21,6 +21,7 @@ module("vicious.cpu")
 local cpu_usage  = {}
 local cpu_total  = {}
 local cpu_active = {}
+local cpu_iowait = {}
 
 function meta()
     return {}
@@ -47,38 +48,51 @@ local function worker(format)
     end
     f:close()
 
+    local cpu_num = #cpu_lines
+
     -- Ensure tables are initialized correctly
-    while #cpu_total < #cpu_lines do
+    while #cpu_total < 2*cpu_num do
         table.insert(cpu_total, 0)
     end
-    while #cpu_active < #cpu_lines do
+    while #cpu_active < cpu_num do
         table.insert(cpu_active, 0)
     end
-    while #cpu_usage < #cpu_lines do
+    while #cpu_usage < cpu_num do
         table.insert(cpu_usage, 0)
     end
+    while #cpu_iowait < cpu_num do
+        table.insert(cpu_iowait, 0)
+    end
 
-    local total_new   = {}
-    local active_new  = {}
-    local diff_total  = {}
-    local diff_active = {}
+    local total_new
+    local active_new
+    local iowait_new
+
+    local diff_total
+    local diff_active
+    local diff_iowait
 
     for i, v in ipairs(cpu_lines) do
         -- Calculate totals
-        total_new[i]  = 0
+        total_new = 0
         for j = 1, #v do
-            total_new[i] = total_new[i] + v[j]
+            total_new = total_new + v[j]
         end
-        active_new[i] = v[1] + v[2] + v[3]
+        active_new = v[1] + v[2] + v[3]
+        iowait_new = v[5]
 
         -- Calculate percentage
-        diff_total[i]  = total_new[i]  - cpu_total[i]
-        diff_active[i] = active_new[i] - cpu_active[i]
-        cpu_usage[i]   = math.floor(diff_active[i] / diff_total[i] * 100)
+        diff_total  = total_new - cpu_total[i]
+        diff_active = active_new - cpu_active[i]
+        diff_iowait = iowait_new - cpu_iowait[i]
+
+        cpu_usage[i] = math.floor(diff_active * 100 / diff_total)
+        cpu_usage[i+cpu_num] = math.floor(diff_iowait * 100 / diff_total)
 
         -- Store totals
-        cpu_total[i]   = total_new[i]
-        cpu_active[i]  = active_new[i]
+        cpu_total[i]  = total_new
+        cpu_active[i] = active_new
+        cpu_iowait[i] = iowait_new
     end
 
     return cpu_usage

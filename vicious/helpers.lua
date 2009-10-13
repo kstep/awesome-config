@@ -30,6 +30,21 @@ function readfile(filename, format)
         return line
     end
 end
+
+function readtfile(filename, format)
+    local f = io.open(filename)
+    local result = {}
+    local format = format or "%d+"
+    if f then
+        format = "^(%w[%w%d]+):%s("..format..")"
+        for line in f:lines() do
+            local key, value = line:match(format)
+            if key then result[key] = value end
+        end
+        f:close()
+    end
+    return result
+end
 -- }}}
 
 --{{{ Escape a string

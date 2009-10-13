@@ -21,9 +21,11 @@ local string = {
 module("vicious.bat")
 
 local basedir = "/sys/class/power_supply/"
+local max_capacity = {}
 
 function meta(batid)
     local capacity = helpers.readfile(basedir .. batid .. "/charge_full", "*n")
+    max_capacity[batid] = capacity
     return { max = capacity }
 end
 
@@ -32,7 +34,10 @@ local function worker(format, batid)
     local remaining = helpers.readfile(basedir .. batid .. "/charge_now", "*n")
     local status = helpers.readfile(basedir .. batid .. "/status", "*l")
     local current = helpers.readfile(basedir .. batid .. "/current_now", "*n")
-    local timeleft = current > 0 and ((remaining / current) * 3600) or 86400 -- seconds
+    local timeleft = 86400
+    if current > 0 then
+        timeleft = (status == "Charging" and (max_capacity[batid] - remaining) or remaining) * 3600 / current
+    end
 
     return { remaining, timeleft, status } --battery_state[status] }
 end

@@ -49,6 +49,7 @@ function new(text, wargs)
     w.layout = args.layout or layouts.horizontal.rightleft
     w.widget = widget
     w.format = txt
+    w.text = txt
 
     w.set_value = set_value
     w.set_color = set_color

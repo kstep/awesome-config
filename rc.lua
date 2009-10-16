@@ -204,27 +204,27 @@ cpuload_widgets = {
 cpuload_widgets[1]:set_max_value(100)
 
 -- method, channels, formatter
-vicious.registermore(vicious.uptime, { uptime_widget }, { { nil, nil, vicious.formatters.hms } }, 60)
+vicious.registermore(vicious.uptime(), { uptime_widget }, { { nil, nil, vicious.formatters.hms } }, 60)
 
-vicious.registermore(vicious.thermal, { thermal_widgets[1], thermal_widgets[3] }, {
+vicious.registermore(vicious.thermal(1), { thermal_widgets[1], thermal_widgets[3] }, {
     { nil, nil, vicious.formatters.scale },
     { nil, nil, nil },
 },
-10, 1)
+10)
 
-vicious.registermore(vicious.thermal, { thermal_widgets[2], thermal_widgets[4] }, {
+vicious.registermore(vicious.thermal(0), { thermal_widgets[2], thermal_widgets[4] }, {
     { nil, nil, vicious.formatters.scale },
     { nil, nil, nil },
 },
-10, 0)
+10)
 
-vicious.registermore(vicious.cpufreq, cpufreq_widgets, {
+vicious.registermore(vicious.cpufreq("cpu0"), cpufreq_widgets, {
     { nil, nil, vicious.formatters.scale },
     { nil, nil, vicious.formatters.humanize },
 },
-5, "cpu0")
+5)
 
-vicious.registermore(vicious.bat, awful.util.table.join(battery_widgets, battery_widgets), {
+vicious.registermore(vicious.bat("BAT0"), awful.util.table.join(battery_widgets, battery_widgets), {
     { nil, { 1 }, vicious.formatters.scale },
     { nil, { 2 }, vicious.formatters.hms },
     { nil, { 1 }, vicious.formatters.percent },
@@ -233,9 +233,9 @@ vicious.registermore(vicious.bat, awful.util.table.join(battery_widgets, battery
     { "set_color", { 3 }, vicious.formatters.theme },
     { "set_color", { 3 }, vicious.formatters.theme },
 },
-5, "BAT0")
+5)
 
-vicious.registermore(vicious.cpu, cpuload_widgets, {
+vicious.registermore(vicious.cpu(), cpuload_widgets, {
     { nil, 1, nil },
     --{ nil, 3, nil },
 }, 2)

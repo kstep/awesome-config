@@ -17,7 +17,7 @@ local helpers = require('vicious.helpers')
 module("vicious.mem")
 
 function meta(warg)
-    local data = readtfile("/proc/meminfo", "%d+")
+    local data = helpers.readtfile("/proc/meminfo", "%d+")
     local meta = {}
     meta.max = max(data['MemTotal'], data['SwapTotal'])
     meta.init = 2
@@ -28,7 +28,7 @@ end
 -- {{{ Memory widget type
 local function worker(format)
     -- Get meminfo
-    local data = readtfile("/proc/meminfo", "%d+")
+    local data = helpers.readtfile("/proc/meminfo", "%d+")
     local mem_free = tonumber(data['MemFree']) + tonumber(data['Cached']) + tonumber(data['Buffers'])
     local swap_free = tonumber(data['SwapFree'])
 

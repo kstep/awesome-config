@@ -16,10 +16,8 @@ local helpers = require("vicious.helpers")
 -- Uptime: provides system uptime information
 module("vicious.uptime")
 
-function meta() return {} end
-
 -- {{{ Uptime widget type
-local function worker(format)
+function worker(self)
     -- Get /proc/uptime
     local line = helpers.readfile("/proc/uptime", "*line")
     local total_uptime   = math.floor(tonumber(line:match("[%d%.]+")))
@@ -28,4 +26,14 @@ local function worker(format)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+local sensor
+local function new()
+    if not sensor then
+        sensor = { meta = {} }
+        setmetatable(sensor, { __call = worker })
+    end
+    return sensor
+end
+
+
+setmetatable(_M, { __call = function(_, ...) return new(...) end })

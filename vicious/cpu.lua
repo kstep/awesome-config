@@ -23,12 +23,8 @@ local cpu_total  = {}
 local cpu_active = {}
 local cpu_iowait = {}
 
-function meta()
-    return {}
-end
-
 -- {{{ CPU widget type
-local function worker(format)
+function worker(self)
     -- Get /proc/stat
     local f = io.open("/proc/stat")
     local cpu_lines = {}
@@ -99,4 +95,15 @@ local function worker(format)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+local sensor
+local function new(args)
+    if not sensor then
+        sensor = {}
+        sensor.meta = {}
+        sensor.args = args
+        setmetatable(sensor, { __call = worker })
+    end
+    return sensor
+end
+
+setmetatable(_M, { __call = function(_, ...) return new(...) end })

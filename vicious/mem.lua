@@ -16,18 +16,8 @@ local helpers = require('vicious.helpers')
 -- Mem: provides RAM and Swap usage statistics
 module("vicious.mem")
 
-function meta(warg)
-    local data = helpers.readtfile("/proc/meminfo", "%d+")
-    local meta = {}
-    --meta.max = math.max(data['MemTotal'], data['SwapTotal'])
-    meta.max = data['MemTotal']
-    meta.init = 2
-    return meta
-end
-
-
 -- {{{ Memory widget type
-local function worker(format)
+function worker(self)
     -- Get meminfo
     local data = helpers.readtfile("/proc/meminfo", "%d+")
     local mem_free = tonumber(data['MemFree']) + tonumber(data['Cached']) + tonumber(data['Buffers'])
@@ -40,4 +30,17 @@ local function worker(format)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+local sensor
+function new(warg)
+    if not sensor then
+        sensor = {}
+        local data = helpers.readtfile("/proc/meminfo", "%d+")
+        --meta.max = math.max(data['MemTotal'], data['SwapTotal'])
+        sensor.meta = { max = data['MemTotal'], init = 2 }
+        sensor.args = warg
+        setmetatable(sensor, { __call = worker })
+    end
+    return sensor
+end
+
+setmetatable(_M, { __call = function(_, ...) return new(...) end })

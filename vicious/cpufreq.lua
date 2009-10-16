@@ -19,14 +19,8 @@ module("vicious.cpufreq")
 
 local basedir = "/sys/devices/system/cpu/"
 
-function meta(cpuid)
-    local max_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_max_freq", "*n")
-    local min_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_min_freq", "*n")
-    return { max = max_freq, min = min_freq, suffixes = {"KHz", "MHz", "GHz"}, scale = 1000 }
-end
-
 -- {{{ CPU frequency widget type
-local function worker(format, cpuid)
+function worker(self)
     --local governor_state = {
     --    ["ondemand"] = "↯",
     --    ["powersave"] = "⌁",
@@ -36,9 +30,20 @@ local function worker(format, cpuid)
     --}
 
     -- Get the current frequency
-    local freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_cur_freq", "*n")
+    local freq = helpers.readfile(basedir .. self.args .. "/cpufreq/scaling_cur_freq", "*n")
     return { freq }
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+local function new(cpuid)
+    local sensor = {}
+    local max_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_max_freq", "*n")
+    local min_freq = helpers.readfile(basedir .. cpuid .. "/cpufreq/scaling_min_freq", "*n")
+    sensor.meta = { min = min_freq, max = max_freq, suffixes = {"KHz", "MHz", "GHz"}, scale = 1000 }
+    sensor.args = cpuid
+    setmetatable(sensor, { __call = worker })
+    return sensor
+end
+
+
+setmetatable(_M, { __call = function(_, ...) return new(...) end })

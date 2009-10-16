@@ -87,16 +87,14 @@ end
 
 -- {{{ Main functions
 -- {{{ Register a widget
-function registermore(wtype, widgets, params, timer, warg)
+function registermore(sensor, widgets, params, timer)
     local reg = {}
 
     -- Set properties
-    reg.type   = wtype
-    reg.format = format
-    reg.timer  = timer
-    reg.warg   = warg
+    reg.sensor  = sensor
     reg.widgets = widgets
-    reg.params = params
+    reg.params  = params
+    reg.timer   = timer
 
     -- 1:widget, 2:method, 3:channels, 4:formatter
     for i, widget in ipairs(reg.widgets) do
@@ -125,8 +123,8 @@ function registermore(wtype, widgets, params, timer, warg)
     return reg
 end
 
-function register(widget, method, wtype, channels, format, timer, warg)
-    return registermore(wtype, { widget }, { { method, channels, format } }, timer, warg)
+function register(widget, method, sensor, channels, format, timer)
+    return registermore(sensor, { widget }, { { method, channels, format } }, timer)
 end
 -- }}}
 
@@ -237,22 +235,16 @@ end
 
 -- {{{ Update a widget
 local function get_cache(reg)
-    if widget_cache[reg.type] ~= nil then
+    if widget_cache[reg.sensor] ~= nil then
         local t = os.time()
-        local warg = reg.warg or 0
-        local c = widget_cache[reg.type][warg]
-
-        if c == nil then
-            widget_cache[reg.type][warg] = { meta = reg.type.meta(reg.warg) }
-            c = widget_cache[reg.type][warg]
-        end
+        local c = widget_cache[reg.sensor]
 
         if c.time == nil or c.time <= t - reg.timer then
             c.time = t
-            c.data = reg.type(reg.format, reg.warg)
+            c.data = reg.sensor()
         end
 
-        return c.data, c.meta
+        return c.data, reg.sensor.meta
     end
 end
 
@@ -284,7 +276,7 @@ function update(reg, disablecache)
     local data
     local meta
     if not disablecache then data, meta = get_cache(reg) end
-    if not data then data, meta = reg.type(reg.format, reg.warg), reg.type.meta(reg.warg) end
+    if not data then data, meta = reg.sensor(), reg.sensor.meta end
 
     for i, widget in ipairs(reg.widgets) do
         update_widget(widget, reg.params[i], data, meta)

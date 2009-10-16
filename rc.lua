@@ -205,6 +205,18 @@ cpuload_widgets[1]:set_border_color("#006600")
 cpuload_widgets[1]:set_background_color("#000000dd")
 cpuload_widgets[1]:set_color("#009900")
 
+usedmem_widgets = {
+    awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    sensual.label("/%.1f %s "),
+    sensual.label(" %.1f %s"),
+    layout = swibox_layout
+}
+usedmem_widgets[1]:set_max_value(1)
+usedmem_widgets[1]:set_border_color("#006600")
+usedmem_widgets[1]:set_background_color("#000000dd")
+usedmem_widgets[1]:set_color("#009900")
+
+
 -- method, channels, formatter
 sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, nil, sensual.formatters.hms } }, 60)
 
@@ -240,6 +252,13 @@ sensual.registermore(sensual.bat("BAT0"), awful.util.table.join(battery_widgets,
 sensual.registermore(sensual.cpu(), cpuload_widgets, {
     { nil, 1, nil },
     --{ nil, 3, nil },
+}, 2)
+
+sensual.registermore(sensual.mem(), usedmem_widgets, {
+    { nil, { 1 }, sensual.formatters.scale },
+    { nil, { 4 }, sensual.formatters.humanize },
+    { nil, { 3 }, sensual.formatters.humanize },
+    --{ nil, { 1 }, sensual.formatters.humanize },
 }, 2)
 
 for s = 1, screen.count() do
@@ -285,6 +304,8 @@ for s = 1, screen.count() do
         cpufreq_widgets,
         cpuload_widgets,
         sensual.label(" cpu: "),
+        usedmem_widgets,
+        sensual.label(" mem:"),
         battery_widgets,
         mypromptbox[s],
 

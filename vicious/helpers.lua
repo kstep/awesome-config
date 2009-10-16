@@ -36,7 +36,7 @@ function readtfile(filename, format)
     local result = {}
     local format = format or "%d+"
     if f then
-        format = "^(%w[%w%d]+):%s("..format..")"
+        format = "^(%w[%w%d]+):%s+("..format..")"
         for line in f:lines() do
             local key, value = line:match(format)
             if key then result[key] = value end

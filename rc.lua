@@ -196,11 +196,14 @@ battery_widgets = {
 battery_widgets[1]:set_vertical(true)
 
 cpuload_widgets = {
-    awful.widget.graph({ width = 15, layout = swibox_layout }), -- bat0
+    awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }), -- bat0
     --awful.widget.graph({ width = 15, layout = swibox_layout }), -- bat0
     layout = swibox_layout--awful.widget.layout.horizontal.rightleft
 }
 cpuload_widgets[1]:set_max_value(100)
+cpuload_widgets[1]:set_border_color("#006600")
+cpuload_widgets[1]:set_background_color("#000000dd")
+cpuload_widgets[1]:set_color("#009900")
 
 -- method, channels, formatter
 sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, nil, sensual.formatters.hms } }, 60)

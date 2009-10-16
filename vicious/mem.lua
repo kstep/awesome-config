@@ -8,9 +8,8 @@
 local tonumber = tonumber
 local io = { open = io.open }
 local setmetatable = setmetatable
-local math = { floor = math.floor }
+local math = { floor = math.floor, max = math.max }
 local helpers = require('vicious.helpers')
-local max = math.max
 -- }}}
 
 

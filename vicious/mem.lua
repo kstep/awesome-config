@@ -36,7 +36,7 @@ local function worker(format)
     local mem_used = tonumber(data['MemTotal'] - mem_free)
     local swap_used = tonumber(data['SwapTotal'] - swap_free)
 
-    return { mem_used, swap_used }
+    return { mem_used, swap_used, mem_free, swap_free }
 end
 -- }}}
 

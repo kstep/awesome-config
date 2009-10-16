@@ -19,7 +19,8 @@ module("vicious.mem")
 function meta(warg)
     local data = helpers.readtfile("/proc/meminfo", "%d+")
     local meta = {}
-    meta.max = max(data['MemTotal'], data['SwapTotal'])
+    --meta.max = math.max(data['MemTotal'], data['SwapTotal'])
+    meta.max = data['MemTotal']
     meta.init = 2
     return meta
 end

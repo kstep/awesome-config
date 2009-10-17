@@ -9,7 +9,7 @@ require("naughty")
 -- Shifty tagging library
 require("shifty")
 
-require("vicious")
+require("sensual")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -169,13 +169,13 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 swibox_layout = awful.widget.layout.horizontal.rightleft
-uptime_widget = vicious.label(" [%dd %2d:%02d]")
+uptime_widget = sensual.label(" [%dd %2d:%02d]")
 
 thermal_widgets = {
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz1
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz0
-    vicious.label("/%.1f°C "), -- tz1
-    vicious.label(" %.1f°C"), -- tz0
+    sensual.label("/%.1f°C "), -- tz1
+    sensual.label(" %.1f°C"), -- tz0
     layout = swibox_layout
 }
 thermal_widgets[1]:set_vertical(true)
@@ -183,15 +183,15 @@ thermal_widgets[2]:set_vertical(true)
 
 cpufreq_widgets = {
     awful.widget.progressbar({ width = 10, layout = swibox_layout }), -- cpu0
-    vicious.label(" %5.1f %s "), -- cpu0
+    sensual.label(" %5.1f %s "), -- cpu0
     layout = swibox_layout
 }
 cpufreq_widgets[1]:set_vertical(true)
 
 battery_widgets = {
     awful.widget.progressbar({ width = 10, layout = swibox_layout }), -- bat0
-    vicious.label("[%(2)2d:%(3)02d] "), -- bat0
-    vicious.label(" %3d%% "), -- bat0
+    sensual.label("[%(2)2d:%(3)02d] "), -- bat0
+    sensual.label(" %3d%% "), -- bat0
     layout = swibox_layout
 }
 battery_widgets[1]:set_vertical(true)
@@ -204,38 +204,38 @@ cpuload_widgets = {
 cpuload_widgets[1]:set_max_value(100)
 
 -- method, channels, formatter
-vicious.registermore(vicious.uptime(), { uptime_widget }, { { nil, nil, vicious.formatters.hms } }, 60)
+sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, nil, sensual.formatters.hms } }, 60)
 
-vicious.registermore(vicious.thermal(1), { thermal_widgets[1], thermal_widgets[3] }, {
-    { nil, nil, vicious.formatters.scale },
+sensual.registermore(sensual.thermal(1), { thermal_widgets[1], thermal_widgets[3] }, {
+    { nil, nil, sensual.formatters.scale },
     { nil, nil, nil },
 },
 10)
 
-vicious.registermore(vicious.thermal(0), { thermal_widgets[2], thermal_widgets[4] }, {
-    { nil, nil, vicious.formatters.scale },
+sensual.registermore(sensual.thermal(0), { thermal_widgets[2], thermal_widgets[4] }, {
+    { nil, nil, sensual.formatters.scale },
     { nil, nil, nil },
 },
 10)
 
-vicious.registermore(vicious.cpufreq("cpu0"), cpufreq_widgets, {
-    { nil, nil, vicious.formatters.scale },
-    { nil, nil, vicious.formatters.humanize },
+sensual.registermore(sensual.cpufreq("cpu0"), cpufreq_widgets, {
+    { nil, nil, sensual.formatters.scale },
+    { nil, nil, sensual.formatters.humanize },
 },
 5)
 
-vicious.registermore(vicious.bat("BAT0"), awful.util.table.join(battery_widgets, battery_widgets), {
-    { nil, { 1 }, vicious.formatters.scale },
-    { nil, { 2 }, vicious.formatters.hms },
-    { nil, { 1 }, vicious.formatters.percent },
+sensual.registermore(sensual.bat("BAT0"), awful.util.table.join(battery_widgets, battery_widgets), {
+    { nil, { 1 }, sensual.formatters.scale },
+    { nil, { 2 }, sensual.formatters.hms },
+    { nil, { 1 }, sensual.formatters.percent },
 
-    { "set_color", { 3 }, vicious.formatters.theme },
-    { "set_color", { 3 }, vicious.formatters.theme },
-    { "set_color", { 3 }, vicious.formatters.theme },
+    { "set_color", { 3 }, sensual.formatters.theme },
+    { "set_color", { 3 }, sensual.formatters.theme },
+    { "set_color", { 3 }, sensual.formatters.theme },
 },
 5)
 
-vicious.registermore(vicious.cpu(), cpuload_widgets, {
+sensual.registermore(sensual.cpu(), cpuload_widgets, {
     { nil, 1, nil },
     --{ nil, 3, nil },
 }, 2)
@@ -282,7 +282,7 @@ for s = 1, screen.count() do
         thermal_widgets,
         cpufreq_widgets,
         cpuload_widgets,
-        vicious.label(" cpu: "),
+        sensual.label(" cpu: "),
         battery_widgets,
         mypromptbox[s],
 

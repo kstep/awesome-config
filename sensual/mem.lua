@@ -9,12 +9,12 @@ local tonumber = tonumber
 local io = { open = io.open }
 local setmetatable = setmetatable
 local math = { floor = math.floor, max = math.max }
-local helpers = require('vicious.helpers')
+local helpers = require('sensual.helpers')
 -- }}}
 
 
 -- Mem: provides RAM and Swap usage statistics
-module("vicious.mem")
+module("sensual.mem")
 
 -- {{{ Memory widget type
 function worker(self)

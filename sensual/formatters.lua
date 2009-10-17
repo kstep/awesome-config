@@ -9,7 +9,7 @@ local math = {
 }
 local beautiful = require("beautiful")
 
-module("vicious.formatters")
+module("sensual.formatters")
 
 function format(format, args)
     for var, val in pairs(args) do

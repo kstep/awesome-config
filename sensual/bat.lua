@@ -8,7 +8,7 @@ local tonumber = tonumber
 local io = { open = io.open }
 local setmetatable = setmetatable
 local math = { floor = math.floor }
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 local string = {
     find = string.find,
     match = string.match,
@@ -17,7 +17,7 @@ local string = {
 -- }}}
 
 -- Bat: provides state, charge, and remaining time for a requested battery
-module("vicious.bat")
+module("sensual.bat")
 
 local basedir = "/sys/class/power_supply/"
 local max_capacity = {}

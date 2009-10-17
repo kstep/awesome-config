@@ -11,7 +11,7 @@ local setmetatable = setmetatable
 
 
 -- FS: provides file system disk space usage
-module("vicious.fs")
+module("sensual.fs")
 
 
 -- {{{ Filesystem widget type

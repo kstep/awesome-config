@@ -11,7 +11,7 @@ local string = { match = string.match }
 
 
 -- Volume: provides volume levels of requested ALSA mixers
-module("vicious.volume")
+module("sensual.volume")
 
 
 -- {{{ Volume widget type

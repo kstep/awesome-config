@@ -11,7 +11,7 @@ local setmetatable = setmetatable
 
 
 -- Cpuinf: provides speed and cache information for all available CPUs/cores
-module("vicious.cpuinf")
+module("sensual.cpuinf")
 
 
 -- {{{ CPU Information widget type

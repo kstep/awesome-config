@@ -4,9 +4,9 @@ local unpack = unpack
 local capi = { widget = widget }
 local layouts = require("awful.widget.layout")
 local theme = require("beautiful")
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 
-module("vicious.label")
+module("sensual.label")
 
 local function attrs(w, text)
     return '<span color="' .. (w.color or theme.fg_normal) .. '" bgcolor="' .. (w.background_color or theme.bg_normal) .. '">' .. text .. '</span>'

@@ -14,7 +14,7 @@ local math = { floor = math.floor }
 
 
 -- Net: provides usage statistics for all network interfaces
-module("vicious.net")
+module("sensual.net")
 
 
 -- Initialise function tables

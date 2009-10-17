@@ -14,7 +14,7 @@ local table = { insert = table.insert }
 
 
 -- Disk I/O: provides I/O statistics for requested storage devices
-module("vicious.dio")
+module("sensual.dio")
 
 
 -- Initialise function tables

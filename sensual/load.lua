@@ -10,7 +10,7 @@ local setmetatable = setmetatable
 
 
 -- Load: provides system load averages for the past 1, 5, and 15 minutes
-module("vicious.load")
+module("sensual.load")
 
 
 -- {{{ Load widget type

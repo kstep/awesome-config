@@ -11,7 +11,7 @@ local setmetatable = setmetatable
 
 
 -- Pacman: provides number of pending updates on Arch Linux
-module("vicious.pacman")
+module("sensual.pacman")
 
 
 -- {{{ Pacman widget type

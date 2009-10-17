@@ -6,12 +6,12 @@
 -- {{{ Grab environment
 local io = { popen = io.popen }
 local setmetatable = setmetatable
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 -- }}}
 
 
 -- Gmail: provides count of new and subject of last e-mail in a Gmail inbox
-module("vicious.gmail")
+module("sensual.gmail")
 
 
 -- {{{ Gmail widget type

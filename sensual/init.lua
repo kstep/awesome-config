@@ -8,9 +8,9 @@
 
 -- {{{ Grab environment
 require("awful")
-require("vicious.helpers")
-require("vicious.formatters")
-require("vicious.label")
+require("sensual.helpers")
+require("sensual.formatters")
+require("sensual.label")
 
 local type = type
 local pairs = pairs
@@ -30,35 +30,35 @@ local capi = { timer = timer, widget = widget }
 
 
 -- {{{ Configure widgets
-require("vicious.cpu")
--- require("vicious.cpuinf")
-require("vicious.cpufreq")
-require("vicious.thermal")
--- require("vicious.load")
-require("vicious.uptime")
-require("vicious.bat")
--- require("vicious.batat")
-require("vicious.mem")
--- require("vicious.fs")
--- require("vicious.dio")
--- require("vicious.hddtemp")
--- require("vicious.net")
-require("vicious.wifi")
--- require("vicious.mbox")
--- require("vicious.mboxc")
--- require("vicious.mdir")
--- require("vicious.gmail")
--- require("vicious.entropy")
--- require("vicious.org")
--- require("vicious.pacman")
--- require("vicious.mpd")
--- require("vicious.volume")
--- require("vicious.weather")
--- require("vicious.date")
+require("sensual.cpu")
+-- require("sensual.cpuinf")
+require("sensual.cpufreq")
+require("sensual.thermal")
+-- require("sensual.load")
+require("sensual.uptime")
+require("sensual.bat")
+-- require("sensual.batat")
+require("sensual.mem")
+-- require("sensual.fs")
+-- require("sensual.dio")
+-- require("sensual.hddtemp")
+-- require("sensual.net")
+require("sensual.wifi")
+-- require("sensual.mbox")
+-- require("sensual.mboxc")
+-- require("sensual.mdir")
+-- require("sensual.gmail")
+-- require("sensual.entropy")
+-- require("sensual.org")
+-- require("sensual.pacman")
+-- require("sensual.mpd")
+-- require("sensual.volume")
+-- require("sensual.weather")
+-- require("sensual.date")
 -- }}}
 
 -- Vicious: widgets for the awesome window manager
-module("vicious")
+module("sensual")
 
 
 -- {{{ Initialise tables
@@ -211,7 +211,7 @@ function unregister(widget, keep, reg)
 end
 -- }}}
 
--- {{{ Suspend vicious
+-- {{{ Suspend sensual
 function suspend()
     for w, i in pairs(registered) do
         for _, v in pairs(i) do
@@ -221,7 +221,7 @@ function suspend()
 end
 -- }}}
 
--- {{{ Activate vicious
+-- {{{ Activate sensual
 function activate(widget)
     for w, i in pairs(registered) do
         if widget == nil or w == widget then

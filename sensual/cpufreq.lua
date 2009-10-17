@@ -10,12 +10,12 @@ local string = {
     find = string.find,
     match = string.match
 }
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 -- }}}
 
 
 -- Cpufreq: provides freq, voltage and governor info for a requested CPU
-module("vicious.cpufreq")
+module("sensual.cpufreq")
 
 local basedir = "/sys/devices/system/cpu/"
 

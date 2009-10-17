@@ -9,19 +9,19 @@ local tonumber = tonumber
 local io = { open = io.open }
 local setmetatable = setmetatable
 local math = { floor = math.floor }
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 -- }}}
 
 
 -- Uptime: provides system uptime information
-module("vicious.uptime")
+module("sensual.uptime")
 
 -- {{{ Uptime widget type
 function worker(self)
     -- Get /proc/uptime
     local line = helpers.readfile("/proc/uptime", "*line")
     local total_uptime   = math.floor(tonumber(line:match("[%d%.]+")))
-    -- use vicious.formatters.hms() to get days/hours/mins/secs
+    -- use sensual.formatters.hms() to get days/hours/mins/secs
     return { total_uptime }
 end
 -- }}}

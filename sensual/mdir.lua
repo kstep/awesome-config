@@ -11,7 +11,7 @@ local setmetatable = setmetatable
 
 
 -- Mdir: provides a number of new and unread messages in a Maildir structure
-module("vicious.mdir")
+module("sensual.mdir")
 
 
 -- {{{ Maildir widget type

@@ -6,12 +6,12 @@
 -- {{{ Grab environment
 local io = { open = io.open }
 local setmetatable = setmetatable
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 -- }}}
 
 
 -- Thermal: provides temperature levels of ACPI thermal zones
-module("vicious.thermal")
+module("sensual.thermal")
 
 local basedir = "/sys/class/thermal/thermal_zone"
 

@@ -16,7 +16,7 @@ local os = {
 
 
 -- Org: provides agenda statistics for Emacs org-mode
-module("vicious.org")
+module("sensual.org")
 
 
 -- {{{ OrgMode widget type

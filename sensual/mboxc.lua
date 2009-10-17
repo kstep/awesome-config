@@ -11,7 +11,7 @@ local string = { find = string.find }
 
 
 -- Mboxc: provides the count of total, old and new messages in a mbox
-module("vicious.mboxc")
+module("sensual.mboxc")
 
 
 -- {{{ Mbox count widget type

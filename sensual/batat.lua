@@ -11,7 +11,7 @@ local table = { insert = table.insert }
 
 
 -- Batat: provides state, charge, and remaining time for all batteries using acpitool
-module("vicious.batat")
+module("sensual.batat")
 
 
 -- {{{ Battery widget type

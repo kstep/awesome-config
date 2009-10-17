@@ -12,7 +12,7 @@ local string = { match = string.match }
 
 
 -- Weather: provides weather information for a requested station
-module("vicious.weather")
+module("sensual.weather")
 
 
 -- {{{ Weather widget type

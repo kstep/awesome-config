@@ -11,7 +11,7 @@ local math = { ceil = math.ceil }
 
 
 -- Entropy: provides available system entropy
-module("vicious.entropy")
+module("sensual.entropy")
 
 
 -- {{{ Entropy widget type

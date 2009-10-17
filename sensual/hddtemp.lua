@@ -10,7 +10,7 @@ local setmetatable = setmetatable
 
 
 -- Hddtemp: provides hard drive temperatures using the hddtemp daemon
-module("vicious.hddtemp")
+module("sensual.hddtemp")
 
 
 -- {{{ HDD Temperature widget type

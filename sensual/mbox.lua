@@ -7,12 +7,12 @@
 local io = { open = io.open }
 local setmetatable = setmetatable
 local string = { gfind = string.gfind }
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 -- }}}
 
 
 -- Mbox: provides the subject of last e-mail in a mbox file
-module("vicious.mbox")
+module("sensual.mbox")
 
 
 -- {{{ Mailbox widget type

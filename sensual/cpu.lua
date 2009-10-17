@@ -14,7 +14,7 @@ local table = { insert = table.insert }
 
 
 -- Cpu: provides CPU usage for all available CPUs/cores
-module("vicious.cpu")
+module("sensual.cpu")
 
 
 -- Initialise function tables

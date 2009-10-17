@@ -18,8 +18,8 @@ local table = {
 -- }}}
 
 
--- Helpers: provides helper functions for vicious widgets
-module("vicious.helpers")
+-- Helpers: provides helper functions for sensual widgets
+module("sensual.helpers")
 
 --{{{ Read data from file
 function readfile(filename, format)

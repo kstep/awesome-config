@@ -7,12 +7,12 @@
 -- {{{ Grab environment
 local io = { popen = io.popen }
 local setmetatable = setmetatable
-local helpers = require("vicious.helpers")
+local helpers = require("sensual.helpers")
 -- }}}
 
 
 -- Mpd: provides the currently playing song in MPD
-module("vicious.mpd")
+module("sensual.mpd")
 
 
 -- {{{ MPD widget type

@@ -9,6 +9,10 @@ theme.Full        = "#C4C871"
 theme.Charging    = "#39C83C"
 theme.Discharging = "#C84D4D"
 
+theme.up      = "#39C83C"
+theme.down    = "#C84D4D"
+theme.unknown = "#C4C871"
+
 theme.wallpaper_cmd = { "awsetbg " .. awful.util.getdir("config") .. "/themes/default/Desktopography-1800x1125.jpg" }
 
 return theme

@@ -23,9 +23,9 @@ function worker(self)
 
     local data = {
         helpers.readfile(statdir .. "operstate", "*l"),
-        tonumber(helpers.readfile(statdir .. "carrier", "*n")) == 1,
-        tonumber(helpers.readfile(statdir .. "statistics/rx_bytes", "*n")),
-        tonumber(helpers.readfile(statdir .. "statistics/tx_bytes", "*n")),
+        tonumber(helpers.readfile(statdir .. "carrier", "*n") or 0) == 1,
+        tonumber(helpers.readfile(statdir .. "statistics/rx_bytes", "*n") or 0),
+        tonumber(helpers.readfile(statdir .. "statistics/tx_bytes", "*n") or 0),
     }
 
     local d_rx = data[3] - self.cache[1]; self.cache[1] = data[3]

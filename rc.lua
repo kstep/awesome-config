@@ -216,6 +216,12 @@ usedmem_widgets[1]:set_border_color("#006600")
 usedmem_widgets[1]:set_background_color("#000000dd")
 usedmem_widgets[1]:set_color("#009900")
 
+ppp0_widgets = {
+    awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    sensual.label(" ppp0 "),
+    layout = swibox_layout
+}
+ppp0_widgets[1]:set_scale(true)
 
 -- method, channels, formatter
 sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, nil, sensual.formatters.hms } }, 60)
@@ -260,6 +266,11 @@ sensual.registermore(sensual.mem(), usedmem_widgets, {
     { nil, { 3 }, sensual.formatters.humanize },
     --{ nil, { 1 }, sensual.formatters.humanize },
 }, 2)
+
+sensual.registermore(sensual.net("ppp0"), ppp0_widgets, {
+    { nil, 5, nil },
+    { "set_color", { 1 }, sensual.formatters.theme },
+}, 5)
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -306,6 +317,7 @@ for s = 1, screen.count() do
         sensual.label(" cpu: "),
         usedmem_widgets,
         sensual.label(" mem:"),
+        ppp0_widgets,
         battery_widgets,
         mypromptbox[s],
 

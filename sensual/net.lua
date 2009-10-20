@@ -42,6 +42,7 @@ local function new(iface)
     sensor.args = iface
     sensor.cache = { 0, 0 }
     setmetatable(sensor, { __call = worker })
+    return sensor
 end
 
 setmetatable(_M, { __call = function(_, ...) return new(...) end })

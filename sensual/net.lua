@@ -7,6 +7,7 @@
 -- {{{ Grab environment
 local tonumber = tonumber
 local setmetatable = setmetatable
+local table = { insert = table.insert }
 local helpers = require("sensual.helpers")
 -- }}}
 

@@ -19,13 +19,13 @@ local basedir = "/sys/class/net/"
 -- {{{ Net widget type
 function worker(self)
     -- Get /proc/net/dev
-    local statdir = basedir .. self.args .. "/statistics/"
+    local statdir = basedir .. self.args .. "/"
 
     local data = {
-        helpers.readfile(statdir .. "../operstate", "*l"),
-        tonumber(helpers.readfile(statdir .. "../carrier", "*n")) == 1,
-        tonumber(helpers.readfile(statdir .. "rx_bytes", "*n")),
-        tonumber(helpers.readfile(statdir .. "tx_bytes", "*n")),
+        helpers.readfile(statdir .. "operstate", "*l"),
+        tonumber(helpers.readfile(statdir .. "carrier", "*n")) == 1,
+        tonumber(helpers.readfile(statdir .. "statistics/rx_bytes", "*n")),
+        tonumber(helpers.readfile(statdir .. "statistics/tx_bytes", "*n")),
     }
 
     local d_rx = data[3] - self.cache[1]; self.cache[1] = data[3]

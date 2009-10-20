@@ -216,12 +216,16 @@ usedmem_widgets[1]:set_border_color("#006600")
 usedmem_widgets[1]:set_background_color("#000000dd")
 usedmem_widgets[1]:set_color("#009900")
 
-ppp0_widgets = {
+netifaces_widgets = {
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
     sensual.label(" ppp0 "),
+
+    awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    sensual.label(" wlan0 "),
     layout = swibox_layout
 }
-ppp0_widgets[1]:set_scale(true)
+netifaces_widgets[1]:set_scale(true)
+netifaces_widgets[3]:set_scale(true)
 
 -- method, channels, formatter
 sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, nil, sensual.formatters.hms } }, 60)
@@ -267,7 +271,11 @@ sensual.registermore(sensual.mem(), usedmem_widgets, {
     --{ nil, { 1 }, sensual.formatters.humanize },
 }, 2)
 
-sensual.registermore(sensual.net("ppp0"), ppp0_widgets, {
+sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2] }, {
+    { nil, 5, nil },
+    { "set_color", { 1 }, sensual.formatters.theme },
+}, 5)
+sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4] }, {
     { nil, 5, nil },
     { "set_color", { 1 }, sensual.formatters.theme },
 }, 5)
@@ -317,7 +325,7 @@ for s = 1, screen.count() do
         sensual.label(" cpu: "),
         usedmem_widgets,
         sensual.label(" mem:"),
-        ppp0_widgets,
+        netifaces_widgets,
         battery_widgets,
         mypromptbox[s],
 

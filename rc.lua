@@ -224,7 +224,9 @@ netifaces_widgets = {
     sensual.label(" wlan0 "),
     layout = swibox_layout
 }
+netifaces_widgets[1]:set_max_value(1024)
 netifaces_widgets[1]:set_scale(true)
+netifaces_widgets[3]:set_max_value(1024)
 netifaces_widgets[3]:set_scale(true)
 
 -- method, channels, formatter

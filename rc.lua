@@ -22,6 +22,7 @@ beautiful.init(theme_path)
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
+terminal_cmd = terminal .. " -e screen"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -116,7 +117,7 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 table.insert(menu_items, { "awesome", myawesomemenu, beautiful.awesome_icon })
-table.insert(menu_items, { "open terminal", terminal .. " -e screen", freedesktop.utils.lookup_icon({icon = 'terminal'}) })
+table.insert(menu_items, { "open terminal", terminal_cmd, freedesktop.utils.lookup_icon({icon = 'terminal'}) })
 
 mymainmenu = awful.menu({ items = menu_items, width = 150 })
 
@@ -417,7 +418,7 @@ globalkeys = awful.util.table.join(
     awful.key({                   }, "Num_Lock", function () awful.util.spawn("3ddesk --mode=viewmaster") end),
 
     -- Standard program
-    awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal .. " -e screen") end),
+    awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal_cmd) end),
     awful.key({                   }, "Scroll_Lock", function () awful.util.spawn(locker) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),

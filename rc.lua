@@ -324,7 +324,8 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mytextclock,
-        uptime_widget,
+        s == 1 and uptime_widget or nil,
+        s == 1 and keyboard_widget.widget or nil,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -333,14 +334,14 @@ for s = 1, screen.count() do
     statwibox[s] = awful.wibox({ position = "bottom", screen = s })
     statwibox[s].widgets = {
 
-        thermal_widgets,
-        cpufreq_widgets,
-        cpuload_widgets,
+        s == 1 and thermal_widgets or nil,
+        s == 1 and cpufreq_widgets,
+        s == 1 and cpuload_widgets,
         sensual.label(" cpu: "),
-        usedmem_widgets,
+        s == 1 and usedmem_widgets,
         sensual.label(" mem:"),
-        netifaces_widgets,
-        battery_widgets,
+        s == 1 and netifaces_widgets,
+        s == 1 and battery_widgets,
         mypromptbox[s],
 
         layout = awful.widget.layout.horizontal.rightleft

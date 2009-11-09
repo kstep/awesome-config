@@ -96,7 +96,7 @@ function registermore(sensor, widgets, params, timer)
     reg.params  = params
     reg.timer   = timer
 
-    -- 1:widget, 2:method, 3:channels, 4:formatter
+    -- 1:method, 2:channels, 3:formatter
     for i, widget in ipairs(reg.widgets) do
         if type(reg.params[i][1]) == "string" then
             reg.params[i][1] = widget[reg.params[i][1]]

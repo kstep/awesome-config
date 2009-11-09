@@ -168,6 +168,17 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+
+keyboard_widget = {
+    widget = widget({ type = "textbox" }),
+    kbdgroup = "",
+    format = " <span color='#000000'>%s</span> ",
+    groups = {["En"] = "#ffffff", ["Ru"] = "#00cbcb"},
+    set_value = function(w, val) w.widget.text = w.format:format(val); w.widget.bg = w.groups[val] or "#ffffff"; w.kbdgroup = val end,
+    toggle = function(w) w:set_value((w.kbdgroup == "En") and "Ru" or "En") end,
+}
+keyboard_widget:set_value("En")
+
 swibox_layout = awful.widget.layout.horizontal.rightleft
 uptime_widget = sensual.label(" [%dd %2d:%02d]")
 
@@ -379,6 +390,10 @@ end
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({ }, "ISO_Next_Group", function ()
+        keyboard_widget:toggle()
+    end),
+
 	awful.key({ "Control", "Mod1", "Shift" }, "Escape",
               function ()
                   awful.prompt.run({ prompt = "Keyboard locked" },

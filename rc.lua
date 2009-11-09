@@ -89,7 +89,7 @@ shifty.config.apps = {
 	{ match = {"Gliv", "GQview", "Xloadimage", "Kview", "Kpdf"},  tag = "view" },
 	{ match = {"Thunderbird.*"},  tag = "msgs" },
 	{ match = {"Pidgin", "Skype.*"},  tag = "msgs", slave = true },
-	{ match = {"Xterm", "URxvt"},  tag = "term", opacity = 0.8 },
+	{ match = {"Xterm", "URxvt"},  tag = "term", opacity = 0.8, slave = true },
 	{ match = {"^Dia$", "designer", "glade"}, tag = "design", slave = true },
 	{ match = {"mysql-.*"}, tag = "dbms" },
 	{ match = {"xmessage"},  float = true, nopopup = true, geometry = { x = 1000, y = 600 } },

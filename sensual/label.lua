@@ -14,9 +14,11 @@ end
 
 local function set_value(w, data)
     local text = ""
-    if type(data) == "table" then
+    if type(w.format) == "function" then
+        text = w.format(data)
+    elseif type(data) == "table" then
         text = helpers.reformat(w.format, data)
-    else
+    elseif type(w.format) == "string" then
         text = w.format:format(data)
     end
     w:set_text(text)

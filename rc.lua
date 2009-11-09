@@ -62,15 +62,15 @@ layouts =
 
 -- {{{ Tags
 shifty.config.tags = {
-	["term"]   = { position = 1, layout = awful.layout.suit.tile, init = true, },
-	["msgs"]   = { position = 2, layout = awful.layout.suit.tile, mwfact = 0.75, },
-	["www"]    = { position = 3, layout = awful.layout.suit.max, },
-	["git"]    = { position = 4, layout = awful.layout.suit.tile.bottom, },
+	["term"]   = { position = 1, layout = awful.layout.suit.tile.bottom, init = true, screen = 1 },
+	["msgs"]   = { position = 2, layout = awful.layout.suit.tile, mwfact = 0.75, screen = 1 },
+	["www"]    = { position = 3, layout = awful.layout.suit.max, screen = 2 },
+	["git"]    = { position = 4, layout = awful.layout.suit.tile.bottom, screen = 2 },
 	["video"]  = { position = 5, layout = awful.layout.suit.max, nopopup = false, },
 	["files"]  = { position = 6, layout = awful.layout.suit.tile, nopopup = false, },
 	["graph"]  = { position = 7, layout = awful.layout.suit.tile.left, },
-	["view"]   = { position = 8, layout = awful.layout.suit.tile, },
-	["edit"]   = { position = 9, layout = awful.layout.suit.tile.bottom, },
+	["view"]   = { position = 8, layout = awful.layout.suit.tile, screen = 2 },
+	["edit"]   = { position = 9, layout = awful.layout.suit.tile.bottom, screen = 2 },
 	["design"] = { layout = awful.layout.suit.fair, mwfact = 0.7, ncol = 2, },
 	["dbms"]   = { layout = awful.layout.suit.max, },
 	["other"]  = { position = 0, },

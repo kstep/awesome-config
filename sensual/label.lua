@@ -9,7 +9,7 @@ local helpers = require("sensual.helpers")
 module("sensual.label")
 
 local function attrs(w, text)
-    return '<span color="' .. (w.color or theme.fg_normal) .. '" bgcolor="' .. (w.background_color or theme.bg_normal) .. '">' .. text .. '</span>'
+    return '<span color="' .. (w.color or theme.fg_normal or "#ffffff00") .. '" bgcolor="' .. (w.background_color or theme.bg_normal or "#000000ff") .. '">' .. text .. '</span>'
 end
 
 local function set_value(w, data)

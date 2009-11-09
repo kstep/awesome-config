@@ -375,7 +375,8 @@ end
 function find_clients(name)
 	if not name or name == "" then return end
 
-	local clients = client.get(mouse.screen)
+	local clients = {}
+        for i = 1, screen.count() do clients = awful.util.table.join(clients, client.get(i)) end
 	local found_clis = {}
 	if clients and #clients > 1 then
 		for i, cli in ipairs(clients) do

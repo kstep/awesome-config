@@ -94,6 +94,8 @@ function slice(tbl, start, stop)
 end
 
 function reformat(frm, pars)
+    if not frm then return "" end
+    if not pars then return frm end
     local args = {}
     for p in frm:gmatch("%%%(([%d%w]+)%)") do
         table.insert(args, pars[tonumber(p) or p])

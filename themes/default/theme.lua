@@ -13,7 +13,7 @@ theme.up      = "#39C83C"
 theme.down    = "#C84D4D"
 theme.unknown = "#C4C871"
 
-theme.wallpaper_cmd = { "awsetbg " .. awful.util.getdir("config") .. "/themes/default/Desktopography-1800x1125.jpg" }
+theme.wallpaper_cmd = { "awsetbg " .. os.getenv("HOME") .. "/wallpapers/Drops_Rain.jpg" }
 
 return theme
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

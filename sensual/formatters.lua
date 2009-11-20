@@ -20,25 +20,22 @@ function format(format, args)
 end
 
 function scale(widget, args, meta)
-    local value = args[1]
     local max = meta.max or 100
     local min = meta.min or 0
 
-    return (value - min) / (max - min)
+    return (args - min) / (max - min)
 end
 
 function percent(widget, args, meta)
-    local result = scale(widget, args, meta) * 100
-    args[1] = result
-    return args
+    return scale(widget, args, meta) * 100
 end
 
 function theme(widget, args, meta)
-    return beautiful[args[1]] or beautiful.fg_normal
+    return beautiful[args] or beautiful.fg_normal
 end
 
 function hms(widget, args, meta)
-    local secs = args[1]
+    local secs = args
     local days  = math.floor(secs / 86400); secs = secs % 86400
     local hours = math.floor(secs / 3600); secs = secs % 3600
     local mins  = math.floor(secs / 60); secs = secs % 60
@@ -49,7 +46,7 @@ function humanize(widget, args, meta)
     local suffixes = meta.suffixes or { "b", "Kb", "Mb", "Gb", "Tb" }
     local scale = meta.scale or 1024
     local init = meta.init or 1
-    local value = args[1]
+    local value = args
 
     local suffix = init
     while value > scale and suffix < #suffixes do

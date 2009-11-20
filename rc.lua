@@ -242,34 +242,34 @@ netifaces_widgets[3]:set_max_value(1024*30)
 --netifaces_widgets[3]:set_scale(true)
 
 -- method, channels, formatter
-sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, nil, sensual.formatters.hms } }, 60)
+sensual.registermore(sensual.uptime(), { uptime_widget }, { { nil, 1, sensual.formatters.hms } }, 60)
 
 sensual.registermore(sensual.thermal(1), { thermal_widgets[1], thermal_widgets[3] }, {
-    { nil, nil, sensual.formatters.scale },
+    { nil, 1, sensual.formatters.scale },
     { nil, nil, nil },
 },
 10)
 
 sensual.registermore(sensual.thermal(0), { thermal_widgets[2], thermal_widgets[4] }, {
-    { nil, nil, sensual.formatters.scale },
+    { nil, 1, sensual.formatters.scale },
     { nil, nil, nil },
 },
 10)
 
 sensual.registermore(sensual.cpufreq("cpu0"), cpufreq_widgets, {
-    { nil, nil, sensual.formatters.scale },
-    { nil, nil, sensual.formatters.humanize },
+    { nil, 1, sensual.formatters.scale },
+    { nil, 1, sensual.formatters.humanize },
 },
 5)
 
 sensual.registermore(sensual.bat("BAT0"), awful.util.table.join(battery_widgets, battery_widgets), {
-    { nil, { 1 }, sensual.formatters.scale },
-    { nil, { 2 }, sensual.formatters.hms },
-    { nil, { 1 }, sensual.formatters.percent },
+    { nil, 1, sensual.formatters.scale },
+    { nil, 2, sensual.formatters.hms },
+    { nil, 1, sensual.formatters.percent },
 
-    { "set_color", { 3 }, sensual.formatters.theme },
-    { "set_color", { 3 }, sensual.formatters.theme },
-    { "set_color", { 3 }, sensual.formatters.theme },
+    { "set_color", 3, sensual.formatters.theme },
+    { "set_color", 3, sensual.formatters.theme },
+    { "set_color", 3, sensual.formatters.theme },
 },
 5)
 
@@ -279,19 +279,19 @@ sensual.registermore(sensual.cpu(), cpuload_widgets, {
 }, 2)
 
 sensual.registermore(sensual.mem(), usedmem_widgets, {
-    { nil, { 1 }, sensual.formatters.scale },
-    { nil, { 4 }, sensual.formatters.humanize },
-    { nil, { 3 }, sensual.formatters.humanize },
+    { nil, 1, sensual.formatters.scale },
+    { nil, 4, sensual.formatters.humanize },
+    { nil, 3, sensual.formatters.humanize },
     --{ nil, { 1 }, sensual.formatters.humanize },
 }, 2)
 
 sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2] }, {
     { nil, 5, nil },
-    { "set_color", { 1 }, sensual.formatters.theme },
+    { "set_color", 1, sensual.formatters.theme },
 }, 5)
 sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4] }, {
     { nil, 5, nil },
-    { "set_color", { 1 }, sensual.formatters.theme },
+    { "set_color", 1, sensual.formatters.theme },
 }, 5)
 
 for s = 1, screen.count() do

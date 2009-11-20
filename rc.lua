@@ -173,7 +173,7 @@ keyboard_widget = {
     widget = widget({ type = "textbox" }),
     kbdgroup = "",
     format = " <span color='#000000'>%s</span> ",
-    groups = {["En"] = "#ffffff", ["Ru"] = "#00cbcb"},
+    groups = {["En"] = "#afff2f", ["Ru"] = "#ff6347"},
     set_value = function(w, val) w.widget.text = w.format:format(val); w.widget.bg = w.groups[val] or "#ffffff"; w.kbdgroup = val end,
     toggle = function(w) w:set_value((w.kbdgroup == "En") and "Ru" or "En") end,
 }

@@ -286,11 +286,11 @@ sensual.registermore(sensual.mem(), usedmem_widgets, {
 }, 2)
 
 sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2] }, {
-    { nil, 5, nil },
+    { nil, 3, sensual.formatters.delta },
     { "set_color", 1, sensual.formatters.theme },
 }, 5)
 sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4] }, {
-    { nil, 5, nil },
+    { nil, 3, sensual.formatters.delta },
     { "set_color", 1, sensual.formatters.theme },
 }, 5)
 

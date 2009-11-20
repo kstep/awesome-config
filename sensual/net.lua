@@ -28,11 +28,6 @@ function worker(self)
         tonumber(helpers.readfile(statdir .. "statistics/tx_bytes", "*n") or 0),
     }
 
-    local d_rx = data[3] - self.cache[1]; self.cache[1] = data[3]
-    local d_tx = data[4] - self.cache[2]; self.cache[2] = data[4]
-    table.insert(data, d_rx)
-    table.insert(data, d_tx)
-
     -- returns: state (up|down), carrier (bool), total rx & tx bytes, delta rx & tx bytes (since last call)
     return data
 end
@@ -41,7 +36,7 @@ end
 local function new(iface)
     local sensor = {}
     sensor.args = iface
-    sensor.cache = { 0, 0 }
+    sensor.meta = {}
     setmetatable(sensor, { __call = worker })
     return sensor
 end

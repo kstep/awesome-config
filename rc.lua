@@ -230,10 +230,10 @@ usedmem_widgets[1]:set_color("#009900")
 
 netifaces_widgets = {
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
-    sensual.label(" ppp0 "),
+    sensual.label(" ppp0 [%3d %s] "),
 
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
-    sensual.label(" wlan0 "),
+    sensual.label(" wlan0 [%3d %s] "),
     layout = swibox_layout
 }
 netifaces_widgets[1]:set_max_value(1024*30)
@@ -285,12 +285,14 @@ sensual.registermore(sensual.mem(), usedmem_widgets, {
     --{ nil, { 1 }, sensual.formatters.humanize },
 }, 2)
 
-sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2] }, {
+sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2], netifaces_widgets[2] }, {
     { nil, 3, sensual.formatters.delta },
+    { nil, 3, sensual.formatters.velocity },
     { "set_color", 1, sensual.formatters.theme },
 }, 5)
-sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4] }, {
+sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4], netifaces_widgets[4] }, {
     { nil, 3, sensual.formatters.delta },
+    { nil, 3, sensual.formatters.velocity },
     { "set_color", 1, sensual.formatters.theme },
 }, 5)
 

@@ -7,6 +7,9 @@ local string = {
 local math = {
     floor = math.floor
 }
+local os = {
+    time = os.time
+}
 local beautiful = require("beautiful")
 
 module("sensual.formatters")
@@ -32,6 +35,27 @@ end
 
 function theme(widget, args, meta)
     return beautiful[args] or beautiful.fg_normal
+end
+
+local velocity_data = {}
+function velocity(widget, args, meta)
+    local time = os.time()
+    local vel = 0
+    if velocity_data[widget] then
+        vel = (args - velocity_data[widget][1]) / (time - velocity_data[widget][2])
+        if vel < 0 then vel = 0 end
+    end
+    velocity_data[widget] = { args, time }
+    vel = humanize(widget, vel, meta)
+    vel[2] = vel[2] .. "/s"
+    return vel
+end
+
+local delta_data = {}
+function delta(widget, args, meta)
+    local d = args - (delta_data[widget] or 0)
+    delta_data[widget] = args
+    return d
 end
 
 function hms(widget, args, meta)

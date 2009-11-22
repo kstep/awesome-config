@@ -96,13 +96,13 @@ function registermore(sensor, widgets, params, timer)
     reg.params  = params
     reg.timer   = timer
 
-    -- 1:method, 2:channels, 3:formatter
+    -- 1:channels, 2:formatter, 3:method
     for i, widget in ipairs(reg.widgets) do
-        if type(reg.params[i][1]) == "string" then
-            reg.params[i][1] = widget[reg.params[i][1]]
+        if type(reg.params[i][3]) == "string" then
+            reg.params[i][3] = widget[reg.params[i][3]]
         end
-        if type(reg.params[i][1]) ~= "function" then
-            reg.params[i][1] = widget.set_value or widget.add_value
+        if type(reg.params[i][3]) ~= "function" then
+            reg.params[i][3] = widget.set_value or widget.add_value
         end
     end
 
@@ -249,9 +249,9 @@ local function get_cache(reg)
 end
 
 local function update_widget(widget, params, data, meta)
-    local method = params[1]
-    local channels = params[2]
-    local format = params[3]
+    local method = params[3]
+    local channels = params[1]
+    local format = params[2]
 
     if type(data) == "table" and channels ~= nil then
         if type(channels) == "table" then

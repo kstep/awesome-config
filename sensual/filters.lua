@@ -1,3 +1,4 @@
+local setmetatable = setmetatable
 local print = print
 local pairs = pairs
 local string = {
@@ -79,3 +80,16 @@ function humanize(widget, args, meta)
     end
     return { value, suffixes[suffix] }
 end
+
+function all(...)
+    local allfilter = function (w, args, meta)
+        for i,filter in arg do
+            if type(filter) == "function" then
+               filter(w, args, meta)
+            end
+        end
+    end
+    return allfilter
+end
+
+setmetatable(_M, { __call = function(_, ...) return all(...) end })

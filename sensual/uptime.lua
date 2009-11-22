@@ -21,7 +21,7 @@ function worker(self)
     -- Get /proc/uptime
     local line = helpers.readfile("/proc/uptime", "*line")
     local total_uptime   = math.floor(tonumber(line:match("[%d%.]+")))
-    -- use sensual.formatters.hms() to get days/hours/mins/secs
+    -- use sensual.filters.hms() to get days/hours/mins/secs
     return { total_uptime }
 end
 -- }}}

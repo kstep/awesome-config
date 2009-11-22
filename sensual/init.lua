@@ -9,7 +9,7 @@
 -- {{{ Grab environment
 require("awful")
 require("sensual.helpers")
-require("sensual.formatters")
+require("sensual.filters")
 require("sensual.label")
 
 local type = type

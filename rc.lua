@@ -242,34 +242,34 @@ netifaces_widgets[3]:set_max_value(1024*30)
 --netifaces_widgets[3]:set_scale(true)
 
 -- method, channels, formatter
-sensual.registermore(sensual.uptime(), { uptime_widget }, { { 1, sensual.formatters.hms } }, 60)
+sensual.registermore(sensual.uptime(), { uptime_widget }, { { 1, sensual.filters.hms } }, 60)
 
 sensual.registermore(sensual.thermal(1), { thermal_widgets[1], thermal_widgets[3] }, {
-    { 1, sensual.formatters.scale },
+    { 1, sensual.filters.scale },
     { },
 },
 10)
 
 sensual.registermore(sensual.thermal(0), { thermal_widgets[2], thermal_widgets[4] }, {
-    { 1, sensual.formatters.scale },
+    { 1, sensual.filters.scale },
     { },
 },
 10)
 
 sensual.registermore(sensual.cpufreq("cpu0"), cpufreq_widgets, {
-    { 1, sensual.formatters.scale },
-    { 1, sensual.formatters.humanize },
+    { 1, sensual.filters.scale },
+    { 1, sensual.filters.humanize },
 },
 5)
 
 sensual.registermore(sensual.bat("BAT0"), awful.util.table.join(battery_widgets, battery_widgets), {
-    { 1, sensual.formatters.scale },
-    { 2, sensual.formatters.hms },
-    { 1, sensual.formatters.percent },
+    { 1, sensual.filters.scale },
+    { 2, sensual.filters.hms },
+    { 1, sensual.filters.percent },
 
-    { 3, sensual.formatters.theme, "set_color" },
-    { 3, sensual.formatters.theme, "set_color" },
-    { 3, sensual.formatters.theme, "set_color" },
+    { 3, sensual.filters.theme, "set_color" },
+    { 3, sensual.filters.theme, "set_color" },
+    { 3, sensual.filters.theme, "set_color" },
 },
 5)
 
@@ -278,20 +278,20 @@ sensual.registermore(sensual.cpu(), cpuload_widgets, {
 }, 2)
 
 sensual.registermore(sensual.mem(), usedmem_widgets, {
-    { 1, sensual.formatters.scale },
-    { 4, sensual.formatters.humanize },
-    { 3, sensual.formatters.humanize },
+    { 1, sensual.filters.scale },
+    { 4, sensual.filters.humanize },
+    { 3, sensual.filters.humanize },
 }, 2)
 
 sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2], netifaces_widgets[2] }, {
-    { 3, sensual.formatters.delta },
-    { 3, sensual.formatters.velocity },
-    { 1, sensual.formatters.theme, "set_color" },
+    { 3, sensual.filters.delta },
+    { 3, sensual.filters.velocity },
+    { 1, sensual.filters.theme, "set_color" },
 }, 5)
 sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4], netifaces_widgets[4] }, {
-    { 3, sensual.formatters.delta },
-    { 3, sensual.formatters.velocity },
-    { 1, sensual.formatters.theme, "set_color" },
+    { 3, sensual.filters.delta },
+    { 3, sensual.filters.velocity },
+    { 1, sensual.filters.theme, "set_color" },
 }, 5)
 
 for s = 1, screen.count() do

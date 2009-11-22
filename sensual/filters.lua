@@ -12,7 +12,7 @@ local os = {
 }
 local beautiful = require("beautiful")
 
-module("sensual.formatters")
+module("sensual.filters")
 
 function format(format, args)
     for var, val in pairs(args) do

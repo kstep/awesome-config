@@ -23,43 +23,43 @@ function format(format, args)
     return format
 end
 
-function scale(widget, args, meta)
+function scale(w, args, meta)
     local max = meta.max or 100
     local min = meta.min or 0
 
     return (args - min) / (max - min)
 end
 
-function percent(widget, args, meta)
-    return scale(widget, args, meta) * 100
+function percent(w, args, meta)
+    return scale(w, args, meta) * 100
 end
 
-function theme(widget, args, meta)
+function theme(w, args, meta)
     return beautiful[args] or beautiful.fg_normal
 end
 
 local velocity_data = {}
-function velocity(widget, args, meta)
+function velocity(w, args, meta)
     local time = os.time()
     local vel = 0
-    if velocity_data[widget] then
-        vel = (args - velocity_data[widget][1]) / (time - velocity_data[widget][2])
+    if velocity_data[w] then
+        vel = (args - velocity_data[w][1]) / (time - velocity_data[w][2])
         if vel < 0 then vel = 0 end
     end
-    velocity_data[widget] = { args, time }
-    vel = humanize(widget, vel, meta)
+    velocity_data[w] = { args, time }
+    vel = humanize(w, vel, meta)
     vel[2] = vel[2] .. "/s"
     return vel
 end
 
 local delta_data = {}
-function delta(widget, args, meta)
-    local d = args - (delta_data[widget] or 0)
-    delta_data[widget] = args
+function delta(w, args, meta)
+    local d = args - (delta_data[w] or 0)
+    delta_data[w] = args
     return d
 end
 
-function hms(widget, args, meta)
+function hms(w, args, meta)
     local secs = args
     local days  = math.floor(secs / 86400); secs = secs % 86400
     local hours = math.floor(secs / 3600); secs = secs % 3600
@@ -67,7 +67,7 @@ function hms(widget, args, meta)
     return { days, hours, mins, secs }
 end
 
-function humanize(widget, args, meta)
+function humanize(w, args, meta)
     local suffixes = meta.suffixes or { "b", "Kb", "Mb", "Gb", "Tb" }
     local scale = meta.scale or 1024
     local init = meta.init or 1

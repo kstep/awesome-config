@@ -1,3 +1,11 @@
+/**
+ * To compile use command:
+ * gcc -I/usr/include -I/usr/include/lua5.1 -c mixer.c \
+ *   && gcc -o mixer.so -shared mixer.o \
+ *   && strip mixer.so \
+ *   && rm mixer.o
+ */
+
 #include <fcntl.h>
 #include <sys/soundcard.h>
 #include <stdlib.h>

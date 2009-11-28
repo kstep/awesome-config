@@ -15,6 +15,13 @@ local beautiful = require("beautiful")
 
 module("sensual.filters")
 
+function weaktable(mode)
+    if not mode then mode = "k" end
+    local tbl = {}
+    setmetatable(tbl, { __mode = mode })
+    return tbl
+end
+
 function format(format, args)
     for var, val in pairs(args) do
         format = string.gsub(format, "$" .. var, val)
@@ -38,7 +45,7 @@ function theme(w, args, meta)
     return beautiful[args] or beautiful.fg_normal
 end
 
-local velocity_data = {}
+local velocity_data = weaktable()
 function velocity(w, args, meta)
     local time = os.time()
     local vel = 0
@@ -52,7 +59,7 @@ function velocity(w, args, meta)
     return vel
 end
 
-local delta_data = {}
+local delta_data = weaktable()
 function delta(w, args, meta)
     local d = args - (delta_data[w] or 0)
     delta_data[w] = args

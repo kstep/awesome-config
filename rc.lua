@@ -183,6 +183,12 @@ keyboard_widget:set_value("En")
 swibox_layout = awful.widget.layout.horizontal.rightleft
 uptime_widget = sensual.label(" [%dd %2d:%02d]")
 
+volume_widgets = {
+    awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- volume
+    sensual.label(" %d%% "), -- volume
+    layout = swibox_layout
+}
+
 thermal_widgets = {
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz1
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz0
@@ -256,6 +262,12 @@ sensual.registermore(sensual.thermal(0), { thermal_widgets[2], thermal_widgets[4
     { },
 },
 10)
+
+sensual.registermore(sensual.mixer(-1, "vol"), volume_widgets, {
+    { 1 },
+    { 1 },
+},
+5)
 
 sensual.registermore(sensual.cpufreq("cpu0"), cpufreq_widgets, {
     { 1, sensual.filters.scale },
@@ -343,6 +355,7 @@ for s = 1, screen.count() do
         sensual.label(" mem:"),
         s == 1 and netifaces_widgets,
         s == 1 and battery_widgets,
+        s == 1 and volume_widgets,
         mypromptbox[s],
 
         layout = awful.widget.layout.horizontal.rightleft

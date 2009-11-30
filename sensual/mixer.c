@@ -83,7 +83,7 @@ static inline int luaA_usemetatable(lua_State *L, int objidx, int methodidx) {
 }
 
 static int luaA_mixer_device(lua_State *L) {
-	mixer_t **mixer = luaL_checkudata(L, 1, "mixer");
+	mixer_t **mixer = luaL_checkudata(L, 1, "mixer_meta");
         if ((*mixer)->num > 0) {
             lua_pushfstring(L, "/dev/mixer%d", (*mixer)->num);
         } else {
@@ -98,11 +98,10 @@ static int luaA_device_device(lua_State *L) {
 }
 
 static int luaA_mixer_get(lua_State *L) {
-	mixer_t **mixer = luaL_checkudata(L, 1, "mixer");
+	if (luaA_usemetatable(L, 1, 2)) return 1;
+	mixer_t **mixer = luaL_checkudata(L, 1, "mixer_meta");
 
 	const char* devname = luaL_checkstring(L, 2);
-
-	if (luaA_usemetatable(L, 1, 2)) return 1;
 
 	int devno = get_mixer_dev_num(devname);
 
@@ -124,7 +123,7 @@ static int luaA_mixer_get(lua_State *L) {
 
 
 static int luaA_mixer_set(lua_State *L) {
-	mixer_t **mixer = luaL_checkudata(L, 1, "mixer");
+	mixer_t **mixer = luaL_checkudata(L, 1, "mixer_meta");
 	const char* devname = luaL_checkstring(L, 2);
 	int type = lua_type(L, 3);
 	int value = -1, leftchan, rightchan;
@@ -156,7 +155,7 @@ static int luaA_mixer_set(lua_State *L) {
 }
 
 static int luaA_mixer_name(lua_State *L) {
-	mixer_t **mixer = luaL_checkudata(L, 1, "mixer");
+	mixer_t **mixer = luaL_checkudata(L, 1, "mixer_meta");
         if ((*mixer)->num > 0) {
             lua_pushfstring(L, "udata mixer /dev/mixer%d [fh:%d]", (*mixer)->num, (*mixer)->fh);
         } else {
@@ -182,7 +181,7 @@ static int luaA_mixer_open(lua_State *L) {
 	newmixer->refcnt = 1;
 	warn("Mixer %p refcount initialized to %d", newmixer, newmixer->refcnt);
 
-	luaL_getmetatable(L, "mixer");
+	luaL_getmetatable(L, "mixer_meta");
 	lua_setmetatable(L, -2);
 
 	return 1;
@@ -220,15 +219,15 @@ static int luaA_device_mixer(lua_State *L) {
 	(*mixer)->refcnt++;
 	warn("Mixer %p refcount increased to %d", *mixer, (*mixer)->refcnt);
 
-	luaL_getmetatable(L, "mixer");
+	luaL_getmetatable(L, "mixer_meta");
 	lua_setmetatable(L, -2);
 	return 1;
 }
 
 static int luaA_device_get(lua_State *L) {
-	mixer_device_t *channel = luaL_checkudata(L, 1, "mixer_device");
-
 	if (luaA_usemetatable(L, 1, 2)) return 1;
+
+	mixer_device_t *channel = luaL_checkudata(L, 1, "mixer_device");
 
 	if (lua_isstring(L, 2)) {
 		const char* tmp = luaL_checkstring(L, 2);
@@ -345,14 +344,14 @@ static int luaA_device_less(lua_State *L) {
 }
 
 static int luaA_mixer_equal(lua_State *L) {
-	mixer_t **mixer1 = luaL_checkudata(L, 1, "mixer");
-	mixer_t **mixer2 = luaL_checkudata(L, 2, "mixer");
+	mixer_t **mixer1 = luaL_checkudata(L, 1, "mixer_meta");
+	mixer_t **mixer2 = luaL_checkudata(L, 2, "mixer_meta");
 	lua_pushboolean(L, (*mixer1)->num == (*mixer2)->num);
 	return 1;
 }
 
 static int luaA_mixer_close(lua_State *L) {
-	mixer_t **mixer = luaL_checkudata(L, 1, "mixer");
+	mixer_t **mixer = luaL_checkudata(L, 1, "mixer_meta");
 	(*mixer)->refcnt--;
 	warn("Mixer %p refcount decreased to %d", *mixer, (*mixer)->refcnt);
 	if ((*mixer)->refcnt < 1) {
@@ -400,28 +399,15 @@ static const luaL_reg mixer_device_meta[] = {
 	{NULL, NULL}
 };
 
-inline void luaA_openlib (lua_State *L, const char* name, const luaL_reg meta[], const luaL_reg methods[]) {
+inline void luaA_newmetatable(lua_State *L, const char* name, const luaL_reg meta[]) {
 	luaL_newmetatable(L, name);
-	lua_pushvalue(L, -1);
-	lua_setfield(L, -2, "__index");
-
 	luaL_register(L, NULL, meta);
-	luaL_register(L, name, methods);
-	lua_pushvalue(L, -1);
-	lua_setmetatable(L, -2);
-	lua_pop(L, 2);
+	lua_pop(L, 1);
 }
 
 LUALIB_API int luaopen_mixer (lua_State *L) {
-	luaL_newmetatable(L, "mixer_device");
-	luaL_register(L, NULL, mixer_device_meta);
-	lua_pop(L, 1);
-
-	luaA_openlib(L, "mixer", mixer_meta, mixer_methods);
-/*
-	lua_pushliteral(L, "version");
-	lua_pushliteral(L, "mixer library for lua");
-	lua_settable(L, -3);
-*/
-	return 0;
+        luaA_newmetatable(L, "mixer_device", mixer_device_meta);
+        luaA_newmetatable(L, "mixer_meta", mixer_meta);
+        luaL_register(L, "mixer", mixer_methods);
+	return 1;
 }

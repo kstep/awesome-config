@@ -188,6 +188,7 @@ volume_widgets = {
     sensual.label(" %d%% "), -- volume
     layout = swibox_layout
 }
+volume_widgets[1]:set_vertical(true)
 
 thermal_widgets = {
     awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- tz1
@@ -263,8 +264,8 @@ sensual.registermore(sensual.thermal(0), { thermal_widgets[2], thermal_widgets[4
 },
 10)
 
-sensual.registermore(sensual.mixer(-1, "vol"), volume_widgets, {
-    { 1 },
+mixer_reg = sensual.registermore(sensual.mixer(-1, "vol"), volume_widgets, {
+    { 1, sensual.filters.scale },
     { 1 },
 },
 5)
@@ -473,9 +474,9 @@ globalkeys = awful.util.table.join(
         end
     end),
 
-	awful.key({ modkey }, "F5", function () awful.util.spawn("amixer sset Master 5%+") end),
-	awful.key({ modkey }, "F4", function () awful.util.spawn("amixer sset Master 5%-") end),
-	awful.key({ modkey }, "F3", function () awful.util.spawn("amixer sset Master toggle") end),
+	awful.key({ modkey }, "F5", function () mixer_reg.sensor.devices[1]:both(mixer_reg.sensor.devices[1][1] + 1) mixer_reg.update() end),
+	awful.key({ modkey }, "F4", function () mixer_reg.sensor.devices[1]:both(mixer_reg.sensor.devices[1][1] - 1) mixer_reg.update() end),
+	awful.key({ modkey }, "F3", function () mixer_reg.sensor.devices[1].muted = not mixer_reg.sensor.devices[1].muted mixer_reg.update() end),
 
     -- Prompt
     awful.key({ modkey },            "grave", function () mypromptbox[mouse.screen]:run() end),

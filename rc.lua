@@ -170,13 +170,27 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 
+function sendkey(...)
+    local keys = {}
+    for _, keycode in ipairs(arg) do
+        root.fake_input("key_press", keycode)
+        table.insert(keys, 1, keycode)
+    end
+    for _, keycode in ipairs(keys) do
+        root.fake_input("key_release", keycode)
+    end
+end
+
 keyboard_widget = {
     widget = widget({ type = "textbox" }),
     kbdgroup = "",
+    switchkey = 66,
     format = " <span color='#000000'>%s</span> ",
     groups = {["En"] = "#afff2f", ["Ru"] = "#ff6347"},
+
     set_value = function(w, val) w.widget.text = w.format:format(val); w.widget.bg = w.groups[val] or "#ffffff"; w.kbdgroup = val end,
     toggle = function(w) w:set_value((w.kbdgroup == "En") and "Ru" or "En") end,
+    set_kbdgroup = function(w, val) if val ~= w.kbdgroup then w:set_value(val); sendkey(w.switchkey) end end,
 }
 keyboard_widget:set_value("En")
 
@@ -406,10 +420,23 @@ function find_clients(name)
 end
 
 -- {{{ Key bindings
+iso_next_group_lock = true
 globalkeys = awful.util.table.join(
-    awful.key({ }, "ISO_Next_Group", function ()
+    awful.key({ }, "ISO_Next_Group",
+    function ()
         keyboard_widget:toggle()
-    end),
+    end,
+    function ()
+        iso_next_group_lock = not iso_next_group_lock
+        if iso_next_group_lock then return end
+        if client.focus and (client.focus.class == "Gvim" or client.focus.icon_name == "Vim") then
+            if keyboard_widget.kbdgroup == "Ru" then
+                sendkey(keyboard_widget.switchkey)
+            end
+            sendkey(37, 15)
+        end
+    end
+    ),
 
 	awful.key({ "Control", "Mod1", "Shift" }, "Escape",
               function ()

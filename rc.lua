@@ -255,6 +255,7 @@ netifaces_widgets = {
     sensual.label(" ppp0 [%3d %s] "),
 
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    awful.widget.progressbar({ width = 5, layout = swibox_layout }),
     sensual.label(" wlan0 [%3d %s] "),
     layout = swibox_layout
 }
@@ -262,8 +263,8 @@ netifaces_widgets[1]:set_max_value(1024*3000)
 --netifaces_widgets[1]:set_scale(true)
 netifaces_widgets[3]:set_max_value(1024*3000)
 --netifaces_widgets[3]:set_scale(true)
+netifaces_widgets[4]:set_vertical(true)
 
--- method, channels, formatter
 sensual.registermore(sensual.uptime(), { uptime_widget }, { { 1, sensual.filters.hms } }, 60)
 
 sensual.registermore(sensual.thermal(1), { thermal_widgets[1], thermal_widgets[3] }, {
@@ -316,10 +317,13 @@ sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widg
     { 3, sensual.filters.velocity },
     { 1, sensual.filters.theme, "set_color" },
 }, 5)
-sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[4], netifaces_widgets[4] }, {
+sensual.registermore(sensual.net("wlan0"), { netifaces_widgets[3], netifaces_widgets[5], netifaces_widgets[5] }, {
     { 3, sensual.filters.delta },
     { 3, sensual.filters.velocity },
     { 1, sensual.filters.theme, "set_color" },
+}, 5)
+sensual.registermore(sensual.wifi("wlan0"), { netifaces_widgets[4] }, {
+    { "link", sensual.filters.scale },
 }, 5)
 
 for s = 1, screen.count() do

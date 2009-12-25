@@ -22,7 +22,7 @@ beautiful.init(theme_path)
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
-terminal_cmd = terminal .. " -e screen"
+terminal_cmd = terminal .. " -e tmux"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 

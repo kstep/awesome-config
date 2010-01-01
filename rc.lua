@@ -350,7 +350,8 @@ sensual.registermore(sensual.wifi("wlan0"), { netifaces_widgets[4] }, {
     { "link", sensual.filters.scale },
 }, 5)
 
-for s = 1, screen.count() do
+screens = screen.count()
+for s = 1, screens do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.flex })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -380,9 +381,9 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mytextclock,
-        s == 1 and uptime_widget or nil,
-        s == 1 and keyboard_widget.widget or nil,
-        s == 1 and mysystray or nil,
+        s == screens and uptime_widget or nil,
+        s == screens and keyboard_widget.widget or nil,
+        s == screens and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -390,15 +391,16 @@ for s = 1, screen.count() do
     statwibox[s] = awful.wibox({ position = "bottom", screen = s })
     statwibox[s].widgets = {
 
-        s == 1 and thermal_widgets or nil,
-        s == 1 and cpufreq_widgets,
-        s == 1 and cpuload_widgets,
+        s == screens and thermal_widgets or nil,
+        s == screens and cpufreq_widgets,
+        s == screens and cpuload_widgets,
         sensual.label(" cpu: "),
-        s == 1 and usedmem_widgets,
+        s == screens and usedmem_widgets,
         sensual.label(" mem:"),
-        s == 1 and netifaces_widgets,
-        s == 1 and battery_widgets,
-        s == 1 and volume_widgets,
+        s == screens and netifaces_widgets,
+        s == screens and diskio_widgets,
+        s == screens and battery_widgets,
+        s == screens and volume_widgets,
         mypromptbox[s],
 
         layout = awful.widget.layout.horizontal.rightleft
@@ -698,3 +700,4 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 
 shifty.init()
 -- }}}
+

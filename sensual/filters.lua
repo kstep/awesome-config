@@ -1,6 +1,8 @@
 local setmetatable = setmetatable
 local print = print
 local pairs = pairs
+local ipairs = ipairs
+local type = type
 local string = {
     sub = string.sub,
     gsub = string.gsub
@@ -88,13 +90,40 @@ function humanize(w, args, meta)
     return { value, suffixes[suffix] }
 end
 
+function sum(w, args, meta)
+    if type(args) == "table" then
+        result = 0
+        for _, v in pairs(args) do
+            result = result + v
+        end
+        return result
+    else
+        return args
+    end
+end
+
 function all(...)
     local allfilter = function (w, args, meta)
-        for i,filter in arg do
+        result = nil
+        for i,filter in ipairs(arg) do
             if type(filter) == "function" then
-               filter(w, args, meta)
+               result = filter(w, args, meta)
             end
         end
+        return result
+    end
+    return allfilter
+end
+
+function pipe(...)
+    local allfilter = function (w, args, meta)
+        result = args
+        for i,filter in ipairs(arg) do
+            if type(filter) == "function" then
+                result = filter(w, result, meta)
+            end
+        end
+        return result
     end
     return allfilter
 end

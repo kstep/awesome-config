@@ -253,6 +253,18 @@ usedmem_widgets[1]:set_border_color("#006600")
 usedmem_widgets[1]:set_background_color("#000000dd")
 usedmem_widgets[1]:set_color("#009900")
 
+diskio_widgets = {
+    awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    sensual.label(" /%3d %s "),
+
+    awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    sensual.label(" ~%3d %s "),
+
+    layout = swibox_layout
+}
+diskio_widgets[1]:set_max_value(20000)
+diskio_widgets[3]:set_max_value(20000)
+
 netifaces_widgets = {
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
     sensual.label(" ppp0 [%3d %s] "),
@@ -314,6 +326,15 @@ sensual.registermore(sensual.mem(), usedmem_widgets, {
     { 4, sensual.filters.humanize },
     { 3, sensual.filters.humanize },
 }, 2)
+
+sensual.registermore(sensual.dio("sda5"), { diskio_widgets[1], diskio_widgets[2] }, {
+    { { "sec_read", "sec_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.delta) },
+    { { "bytes_read", "bytes_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.velocity) },
+}, 5)
+sensual.registermore(sensual.dio("sda6"), { diskio_widgets[3], diskio_widgets[4] }, {
+    { { "sec_read", "sec_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.delta) },
+    { { "bytes_read", "bytes_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.velocity) },
+}, 5)
 
 sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2], netifaces_widgets[2] }, {
     { 3, sensual.filters.delta },

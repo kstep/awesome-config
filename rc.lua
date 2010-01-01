@@ -267,11 +267,11 @@ diskio_widgets[3]:set_max_value(20000)
 
 netifaces_widgets = {
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
-    sensual.label(" ppp0 [%3d %s] "),
+    sensual.label(" ◊%3d %s "),
 
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
     awful.widget.progressbar({ width = 5, layout = swibox_layout }),
-    sensual.label(" wlan0 [%3d %s] "),
+    sensual.label(" ☼%3d %s "),
     layout = swibox_layout
 }
 netifaces_widgets[1]:set_max_value(1024*3000)

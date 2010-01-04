@@ -77,7 +77,7 @@ function hms(w, args, meta)
 end
 
 function humanize(w, args, meta)
-    local suffixes = meta.suffixes or { "b", "K", "M", "G", "T" }
+    local suffixes = meta.suffixes or { "b", "K", "M", "G", "T", "P" }
     local scale = meta.scale or 1024
     local init = meta.init or 1
     local value = args

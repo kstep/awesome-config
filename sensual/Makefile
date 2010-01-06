@@ -7,3 +7,9 @@ mixer.so: mixer.c
 	strip mixer.so && \
 	rm -f mixer.o
 
+statfs.so: statfs.c
+	gcc ${GCC_FLAGS} -c statfs.c && \
+	gcc -o statfs.so -shared statfs.o && \
+	strip statfs.so && \
+	rm -f statfs.o
+

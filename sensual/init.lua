@@ -56,6 +56,7 @@ require("sensual.mixer")
 -- require("sensual.volume")
 -- require("sensual.weather")
 -- require("sensual.date")
+require("sensual.statfs")
 -- }}}
 
 -- Vicious: widgets for the awesome window manager

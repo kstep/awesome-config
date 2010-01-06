@@ -255,15 +255,21 @@ usedmem_widgets[1]:set_color("#009900")
 
 diskio_widgets = {
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    awful.widget.progressbar({ width = 5, layout = swibox_layout }),
+    sensual.label("%.1f %s "),
     sensual.label(" /%3d %s "),
 
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
+    awful.widget.progressbar({ width = 5, layout = swibox_layout }),
+    sensual.label("%.1f %s "),
     sensual.label(" ~%3d %s "),
 
     layout = swibox_layout
 }
 diskio_widgets[1]:set_max_value(20000)
-diskio_widgets[3]:set_max_value(20000)
+diskio_widgets[5]:set_max_value(20000)
+diskio_widgets[2]:set_vertical(true)
+diskio_widgets[6]:set_vertical(true)
 
 netifaces_widgets = {
     awful.widget.graph({ width = 30, height = 17, layout = swibox_layout }),
@@ -327,14 +333,22 @@ sensual.registermore(sensual.mem(), usedmem_widgets, {
     { 3, sensual.filters.humanize },
 }, 2)
 
-sensual.registermore(sensual.dio("sda5"), { diskio_widgets[1], diskio_widgets[2] }, {
+sensual.registermore(sensual.dio("sda5"), { diskio_widgets[1], diskio_widgets[4] }, {
     { { "sec_read", "sec_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.delta) },
     { { "bytes_read", "bytes_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.velocity) },
 }, 5)
-sensual.registermore(sensual.dio("sda6"), { diskio_widgets[3], diskio_widgets[4] }, {
+sensual.registermore(sensual.dio("sda6"), { diskio_widgets[5], diskio_widgets[8] }, {
     { { "sec_read", "sec_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.delta) },
     { { "bytes_read", "bytes_write" }, sensual.filters.pipe(sensual.filters.sum, sensual.filters.velocity) },
 }, 5)
+sensual.registermore(sensual.statfs("/"), { diskio_widgets[2], diskio_widgets[3] }, {
+    { "boccup", sensual.filters.scale },
+    { "avail", sensual.filters.humanize },
+}, 27)
+sensual.registermore(sensual.statfs("/home"), { diskio_widgets[6], diskio_widgets[7] }, {
+    { "boccup", sensual.filters.scale },
+    { "avail", sensual.filters.humanize },
+}, 27)
 
 sensual.registermore(sensual.net("ppp0"), { netifaces_widgets[1], netifaces_widgets[2], netifaces_widgets[2] }, {
     { 3, sensual.filters.delta },

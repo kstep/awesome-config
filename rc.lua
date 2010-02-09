@@ -218,7 +218,7 @@ thermal_widgets[1]:set_vertical(true)
 thermal_widgets[2]:set_vertical(true)
 
 cpufreq_widgets = {
-    awful.widget.progressbar({ width = 10, layout = swibox_layout }), -- cpu0
+    awful.widget.progressbar({ width = 5, layout = swibox_layout }), -- cpu0
     sensual.label(" %5.1f %s "), -- cpu0
     layout = swibox_layout
 }
@@ -406,11 +406,9 @@ for s = 1, screens do
     statwibox[s].widgets = {
 
         s == screens and thermal_widgets or nil,
-        s == screens and cpufreq_widgets,
         s == screens and cpuload_widgets,
-        sensual.label(" cpu: "),
+        s == screens and cpufreq_widgets,
         s == screens and usedmem_widgets,
-        sensual.label(" mem:"),
         s == screens and netifaces_widgets,
         s == screens and diskio_widgets,
         s == screens and battery_widgets,

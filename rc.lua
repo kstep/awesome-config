@@ -26,7 +26,7 @@ terminal_cmd = terminal .. " -e tmux"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
-locker = "xlock"
+locker = "xscreensaver-command -lock"
 
 -- Freedesktop menus support
 require("freedesktop.utils")
@@ -522,7 +522,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal_cmd) end),
-    awful.key({                   }, "Scroll_Lock", function () awful.util.spawn(locker) end),
+    awful.key({                   }, "Pause", function () awful.util.spawn(locker) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 

@@ -13,7 +13,7 @@ theme.up      = "#39C83C"
 theme.down    = "#C84D4D"
 theme.unknown = "#C4C871"
 
-theme.wallpaper_cmd = { "awsetbg " .. os.getenv("HOME") .. "/wallpapers/Drops_Rain.jpg" }
+theme.wallpaper_cmd = { "awsetbg /usr/share/slim/themes/parallel-dimensions/background.jpg" }
 
 return theme
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

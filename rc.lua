@@ -553,6 +553,15 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey }, "F4", function () mixer_reg.sensor.devices[1]:both(mixer_reg.sensor.devices[1][1] - 1) mixer_reg.update() end),
 	awful.key({ modkey }, "F3", function () mixer_reg.sensor.devices[1].muted = not mixer_reg.sensor.devices[1].muted mixer_reg.update() end),
 
+	awful.key({ }, "XF86AudioRaiseVolume", function () mixer_reg.sensor.devices[1]:both(mixer_reg.sensor.devices[1][1] + 15) mixer_reg.update() end),
+	awful.key({ }, "XF86AudioLowerVolume", function () mixer_reg.sensor.devices[1]:both(mixer_reg.sensor.devices[1][1] - 15) mixer_reg.update() end),
+	awful.key({ }, "XF86AudioMute", function () awful.util.spawn("cmus-remote --pause"); mixer_reg.sensor.devices[1].muted = not mixer_reg.sensor.devices[1].muted mixer_reg.update() end),
+
+	awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("cmus-remote --prev") end),
+	awful.key({ }, "XF86AudioNext", function () awful.util.spawn("cmus-remote --next") end),
+	awful.key({ }, "XF86AudioPlay", function () awful.util.spawn("cmus-remote --pause") end),
+	awful.key({ }, "XF86AudioStop", function () awful.util.spawn("cmus-remote --stop") end),
+
     -- Prompt
     awful.key({ modkey },            "grave", function () mypromptbox[mouse.screen]:run() end),
 

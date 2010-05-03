@@ -563,7 +563,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ }, "XF86AudioStop", function () awful.util.spawn("cmus-remote --stop") end),
 
     -- Prompt
-    awful.key({ modkey },            "grave", function () mypromptbox[mouse.screen]:run() end),
+    awful.key({ modkey }, "grave", function () mypromptbox[mouse.screen]:run() end),
 
     awful.key({ modkey }, "x",
               function ()

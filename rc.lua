@@ -64,7 +64,7 @@ layouts =
 shifty.config.tags = {
     ["term"]   = { position = 1, layout = awful.layout.suit.tile.bottom, init = true, screen = 1 },
     ["msgs"]   = { position = 2, layout = awful.layout.suit.tile, mwfact = 0.75, screen = 1 },
-    ["skype"]  = { layout = awful.layout.suit.tile, mwfact = 0.6, screen = 1 },
+    ["skype"]  = { layout = awful.layout.suit.fair, screen = 1 },
     ["www"]    = { position = 3, layout = awful.layout.suit.max, screen = 2 },
     ["git"]    = { position = 4, layout = awful.layout.suit.tile.bottom, screen = 2 },
     ["video"]  = { position = 5, layout = awful.layout.suit.max, nopopup = false, },

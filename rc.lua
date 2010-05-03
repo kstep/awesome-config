@@ -525,6 +525,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal_cmd) end),
+    awful.key({ }, "XF86Tools", function () awful.util.spawn(terminal_cmd) end),
     awful.key({                   }, "Pause", function () awful.util.spawn(locker) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),

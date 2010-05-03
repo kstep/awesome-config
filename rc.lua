@@ -186,18 +186,18 @@ function sendkey(...)
     end
 end
 
-keyboard_widget = {
-    widget = widget({ type = "textbox" }),
-    kbdgroup = "",
-    switchkey = 66,
-    format = " <span color='#000000'>%s</span> ",
-    groups = {["En"] = "#afff2f", ["Ru"] = "#ff6347"},
+--keyboard_widget = {
+    --widget = widget({ type = "textbox" }),
+    --kbdgroup = "",
+    --switchkey = 66,
+    --format = " <span color='#000000'>%s</span> ",
+    --groups = {["En"] = "#afff2f", ["Ru"] = "#ff6347"},
 
-    set_value = function(w, val) w.widget.text = w.format:format(val); w.widget.bg = w.groups[val] or "#ffffff"; w.kbdgroup = val end,
-    toggle = function(w) w:set_value((w.kbdgroup == "En") and "Ru" or "En") end,
-    set_kbdgroup = function(w, val) if val ~= w.kbdgroup then w:set_value(val); sendkey(w.switchkey) end end,
-}
-keyboard_widget:set_value("En")
+    --set_value = function(w, val) w.widget.text = w.format:format(val); w.widget.bg = w.groups[val] or "#ffffff"; w.kbdgroup = val end,
+    --toggle = function(w) w:set_value((w.kbdgroup == "En") and "Ru" or "En") end,
+    --set_kbdgroup = function(w, val) if val ~= w.kbdgroup then w:set_value(val); sendkey(w.switchkey) end end,
+--}
+--keyboard_widget:set_value("En")
 
 swibox_layout = awful.widget.layout.horizontal.rightleft
 uptime_widget = sensual.label(" [%dd %2d:%02d]")
@@ -398,7 +398,7 @@ for s = 1, screens do
         },
         mytextclock,
         s == screens and uptime_widget or nil,
-        s == screens and keyboard_widget.widget or nil,
+        --s == screens and keyboard_widget.widget or nil,
         s == screens and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -464,23 +464,26 @@ function find_clients(name)
 end
 
 -- {{{ Key bindings
-iso_next_group_lock = true
+iso_next_group_lock = false
 globalkeys = awful.util.table.join(
-    awful.key({ }, "ISO_Next_Group",
-    function ()
-        keyboard_widget:toggle()
-    end,
-    function ()
-        iso_next_group_lock = not iso_next_group_lock
-        if iso_next_group_lock then return end
-        if client.focus and (client.focus.class == "Gvim" or client.focus.icon_name == "Vim") then
-            if keyboard_widget.kbdgroup == "Ru" then
-                sendkey(keyboard_widget.switchkey)
-            end
-            sendkey(37, 15)
-        end
-    end
-    ),
+    --awful.key({ }, "ISO_Next_Group",
+    --function ()
+        --keyboard_widget:toggle()
+    --end,
+    --function ()
+        ----if iso_next_group_lock then
+            ----iso_next_group_lock = false
+            ----return
+        ----end
+        ----if client.focus and (client.focus.class == "Gvim" or client.focus.icon_name == "Vim") then
+            ----if keyboard_widget.kbdgroup == "Ru" then
+                ----iso_next_group_lock = true
+                ----sendkey(keyboard_widget.switchkey)
+            ----end
+            ----sendkey(37, 15)
+        ----end
+    --end
+    --),
 
 	awful.key({ "Control", "Mod1", "Shift" }, "Escape",
               function ()

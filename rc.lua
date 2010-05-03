@@ -88,7 +88,7 @@ shifty.config.apps = {
     { match = {"Smplayer", "MPlayer", "VLC.*"},  tag = "video" },
     { match = {"Opera", "Firefox", "Links", "IEXPLORE", "Google-chrome", "Uzbl"},  tag = "www" },
     { match = {"Rox", "Konqueror", "emelfm2"},  tag = "files" },
-    { match = {"Gliv", "GQview", "Xloadimage", "Kview", "Kpdf"},  tag = "view" },
+    { match = {"Gliv", "Mirage", "GQview", "Xloadimage", "Kview", "Kpdf"},  tag = "view" },
     { match = {"Thunderbird.*"},  tag = "msgs" },
     { match = {"Skype.*"},  tag = "skype" },
     { match = {"Pidgin"},  tag = "msgs", slave = true },
@@ -98,8 +98,9 @@ shifty.config.apps = {
     { match = {"xmessage"},  float = true, nopopup = true, geometry = { x = 1000, y = 600 } },
     { match = {".*calc.*", "screenruler", "Airappinstaller"},  float = true },
     { match = {"Giggle", "Gitg"}, tag = "git" },
-    { match = {"Gournal", "Xournal"}, tag = "notes" },
+    { match = {"^freemind", "Gournal", "Xournal"}, tag = "notes" },
     { match = {"Pgadmin3"}, tag = "sql" },
+    { match = {"VirtualBox"}, tag = "vbox" },
 }
 
 shifty.config.defaults = {

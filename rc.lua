@@ -72,9 +72,10 @@ shifty.config.tags = {
     ["graph"]  = { position = 7, layout = awful.layout.suit.tile.left, },
     ["view"]   = { position = 8, layout = awful.layout.suit.tile, screen = 2 },
     ["edit"]   = { position = 9, layout = awful.layout.suit.tile.bottom, screen = 2 },
-    ["design"] = { layout = awful.layout.suit.fair, mwfact = 0.7, ncol = 2, },
+    ["design"] = { layout = awful.layout.suit.fair, mwfact = 0.7, ncol = 2, screen = 2 },
     ["dbms"]   = { layout = awful.layout.suit.max, },
     ["other"]  = { position = 0, },
+    ["vbox"]   = { layout = awful.layout.suit.max, screen = 2 },
     ["notes"]  = { },
     ["sql"]    = { screen = 2 },
 }

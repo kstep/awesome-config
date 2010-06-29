@@ -26,7 +26,7 @@ terminal_cmd = terminal .. " -e tmux"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
-locker = "xscreensaver-command -lock"
+locker = "/usr/bin/slock"
 
 -- Freedesktop menus support
 require("freedesktop.utils")

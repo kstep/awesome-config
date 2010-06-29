@@ -658,6 +658,7 @@ for i = 1, 9 do
                   function ()
                         local tag = shifty.getpos(i)
                         if tag then
+                            awful.screen.focus(tag.screen)
                             awful.tag.viewonly(tag)
                         end
                   end),

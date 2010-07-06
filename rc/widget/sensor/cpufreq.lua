@@ -3,6 +3,8 @@ local progressbar = require("awful.widget.progressbar")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.cpufreq")
@@ -13,6 +15,9 @@ local widgets = {
     layout = vars.statbox_layout
 }
 widgets[1]:set_vertical(true)
+widgets[1]:set_color(theme.cpu.load)
+widgets[1]:set_border_color(theme.cpu.load)
+widgets[2]:set_color(theme.cpu.load)
 
 reg = sensual.registermore(sensual.cpufreq("cpu0"), widgets, {
     { 1, sensual.filters.scale },

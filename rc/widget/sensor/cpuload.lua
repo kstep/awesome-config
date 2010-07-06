@@ -5,6 +5,8 @@ local graph       = require("awful.widget.graph")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.cpuload")
@@ -14,9 +16,9 @@ local widgets = {
     layout = vars.statbox_layout
 }
 widgets[1]:set_max_value(100)
-widgets[1]:set_border_color("#006600")
-widgets[1]:set_background_color("#000000dd")
-widgets[1]:set_color("#009900")
+widgets[1]:set_border_color(theme.cpu.load)
+--widgets[1]:set_background_color("#000000dd")
+widgets[1]:set_color(theme.cpu.load)
 
 reg = sensual.registermore(sensual.cpu(), widgets, {
     { 1 },

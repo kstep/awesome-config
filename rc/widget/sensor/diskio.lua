@@ -5,6 +5,8 @@ local graph       = require("awful.widget.graph")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.diskio")
@@ -24,8 +26,18 @@ local widgets = {
 }
 widgets[1]:set_max_value(20000)
 widgets[5]:set_max_value(20000)
+
 widgets[2]:set_vertical(true)
 widgets[6]:set_vertical(true)
+
+for i = 1,4 do
+    widgets[i]:set_color(theme.disk.root)
+    widgets[i+4]:set_color(theme.disk.home)
+    if i < 3 then
+	widgets[i]:set_border_color(theme.disk.root)
+	widgets[i+4]:set_border_color(theme.disk.home)
+    end
+end
 
 regs = {
     sensual.registermore(sensual.dio("sda5"), { widgets[1], widgets[4] }, {

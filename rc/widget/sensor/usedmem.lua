@@ -4,6 +4,8 @@ local graph = require("awful.widget.graph")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.usedmem")
@@ -15,9 +17,11 @@ local widgets = {
     layout = vars.statbox_layout
 }
 widgets[1]:set_max_value(1)
-widgets[1]:set_border_color("#006600")
-widgets[1]:set_background_color("#000000dd")
-widgets[1]:set_color("#009900")
+widgets[1]:set_border_color(theme.mem.ram)
+--widgets[1]:set_background_color("#000000dd")
+widgets[1]:set_color(theme.mem.ram)
+widgets[2]:set_color(theme.mem.swap)
+widgets[3]:set_color(theme.mem.ram)
 
 reg = sensual.registermore(sensual.mem(), widgets, {
     { 1, sensual.filters.scale },

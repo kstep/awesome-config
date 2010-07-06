@@ -5,6 +5,8 @@ local graph       = require("awful.widget.graph")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.netstat")
@@ -22,6 +24,13 @@ local widgets = {
 widgets[1]:set_max_value(1024*3000)
 widgets[3]:set_max_value(1024*3000)
 widgets[4]:set_vertical(true)
+
+widgets[1]:set_color(theme.netstat.ppp)
+widgets[1]:set_border_color(theme.netstat.ppp)
+widgets[3]:set_color(theme.netstat.wifi)
+widgets[3]:set_border_color(theme.netstat.wifi)
+widgets[4]:set_color(theme.netstat.wifi)
+widgets[4]:set_border_color(theme.netstat.wifi)
 
 regs = {
     sensual.registermore(sensual.net("ppp0"), { widgets[1], widgets[2], widgets[2] }, {

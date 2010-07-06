@@ -3,6 +3,8 @@ local progressbar = require("awful.widget.progressbar")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.volume")
@@ -13,6 +15,9 @@ local widgets = {
     layout = vars.statbox_layout
 }
 widgets[1]:set_vertical(true)
+widgets[1]:set_color(theme.volume)
+widgets[1]:set_border_color(theme.volume)
+widgets[2]:set_color(theme.volume)
 
 reg = sensual.registermore(sensual.mixer(-1, "vol"), widgets, {
     { 1, sensual.filters.scale },

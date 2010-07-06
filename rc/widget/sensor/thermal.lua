@@ -3,6 +3,8 @@ local progressbar = require("awful.widget.progressbar")
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
+local theme = require("beautiful")
+
 local setmetatable = setmetatable
 
 module("rc.widget.sensor.thermal")
@@ -14,8 +16,13 @@ local widgets = {
     sensual.label(" %.1f°C"), -- tz0
     layout = vars.statbox_layout
 }
-widgets[1]:set_vertical(true)
-widgets[2]:set_vertical(true)
+
+for i = 1,2 do
+    widgets[i]:set_vertical(true)
+    widgets[i]:set_color(theme.cpu.therm[i])
+    widgets[i]:set_border_color(theme.cpu.therm[i])
+    widgets[i+2]:set_color(theme.cpu.therm[i])
+end
 
 regs = {
     sensual.registermore(sensual.thermal(1), { widgets[1], widgets[3] }, {

@@ -25,21 +25,31 @@ widgets[1]:set_max_value(1024*3000)
 widgets[3]:set_max_value(1024*3000)
 widgets[4]:set_vertical(true)
 
+widgets[1]:set_stack(true)
 widgets[1]:set_color(theme.netstat.ppp)
+widgets[1]:set_stack_colors({ theme.down, theme.up })
+widgets[1]:set_background_color(theme.netstat.ppp.."33")
 widgets[1]:set_border_color(theme.netstat.ppp)
+
+widgets[3]:set_stack(true)
 widgets[3]:set_color(theme.netstat.wifi)
+widgets[3]:set_stack_colors({ theme.down, theme.up })
+widgets[3]:set_background_color(theme.netstat.wifi.."33")
 widgets[3]:set_border_color(theme.netstat.wifi)
+
 widgets[4]:set_color(theme.netstat.wifi)
 widgets[4]:set_border_color(theme.netstat.wifi)
 
 regs = {
-    sensual.registermore(sensual.net("ppp0"), { widgets[1], widgets[2], widgets[2] }, {
-        { 3, sensual.filters.delta },
+    sensual.registermore(sensual.net("ppp0"), { widgets[1], widgets[1], widgets[2], widgets[2] }, {
+        { 3, sensual.filters.delta, nil, 1 },
+        { 4, sensual.filters.delta, nil, 2 },
         { 3, sensual.filters.velocity },
         { 1, sensual.filters.theme, "set_color" },
     }, 5),
-    sensual.registermore(sensual.net("wlan0"), { widgets[3], widgets[5], widgets[5] }, {
-        { 3, sensual.filters.delta },
+    sensual.registermore(sensual.net("wlan0"), { widgets[3], widgets[3], widgets[5], widgets[5] }, {
+        { 3, sensual.filters.delta, nil, 1 },
+        { 4, sensual.filters.delta, nil, 2 },
         { 3, sensual.filters.velocity },
         { 1, sensual.filters.theme, "set_color" },
     }, 5),

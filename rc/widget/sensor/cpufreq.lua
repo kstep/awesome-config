@@ -16,7 +16,7 @@ local widgets = {
 }
 widgets[1]:set_vertical(true)
 widgets[1]:set_color(theme.cpu.load)
-widgets[1]:set_border_color(theme.cpu.load)
+widgets[1]:set_ticks(true)
 widgets[2]:set_color(theme.cpu.load)
 
 reg = sensual.registermore(sensual.cpufreq("cpu0"), widgets, {

@@ -15,13 +15,16 @@ local widgets = {
     graph({ width = 30, height = 17, layout = vars.statbox_layout }),
     layout = vars.statbox_layout
 }
+widgets[1]:set_stack(true)
 widgets[1]:set_max_value(100)
 widgets[1]:set_border_color(theme.cpu.load)
---widgets[1]:set_background_color("#000000dd")
+widgets[1]:set_stack_colors(theme.cpu.therm)
+widgets[1]:set_background_color(theme.cpu.load.."33")
 widgets[1]:set_color(theme.cpu.load)
 
 reg = sensual.registermore(sensual.cpu(), widgets, {
-    { 1 },
+    { 1, nil, nil, 1 },
+    { 3, nil, nil, 2 },
 }, 2)
 
 local function get(s)

@@ -98,7 +98,7 @@ function registermore(sensor, widgets, params, timer)
     reg.params  = params
     reg.timer   = timer
 
-    -- 1:channels, 2:formatter, 3:method
+    -- 1:channels, 2:formatter, 3:method, 4:stack
     for i, widget in ipairs(reg.widgets) do
         if type(reg.params[i][3]) == "string" then
             reg.params[i][3] = widget[reg.params[i][3]]
@@ -254,6 +254,7 @@ local function update_widget(widget, params, data, meta)
     local method = params[3]
     local channels = params[1]
     local format = params[2]
+    local stack = params[4]
 
     if type(data) == "table" and channels ~= nil then
         if type(channels) == "table" then
@@ -268,7 +269,7 @@ local function update_widget(widget, params, data, meta)
     end
 
     if method ~= nil then
-        method(widget, data)
+        method(widget, data, stack)
     else
         widget.text = data
     end

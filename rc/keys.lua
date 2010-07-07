@@ -68,18 +68,6 @@ local function toggle_opacity()
     end
 end
 
-local mixer_reg = volume.reg
-local function inc_vol(v)
-    return function ()
-	mixer_reg.sensor.devices[1]:both(mixer_reg.sensor.devices[1][1] + v)
-	mixer_reg.update()
-    end
-end
-local function toggle_vol()
-    mixer_reg.sensor.devices[1].muted = not mixer_reg.sensor.devices[1].muted
-    mixer_reg.update()
-end
-
 local function run_lua_code()
     prompt.run({ prompt = "Run Lua code: " },
     promptbox(mouse.screen).widget,
@@ -228,13 +216,13 @@ key({ modkey, "Shift"   }, "q", awesome.quit),
 
 key({ modkey, "Control", "Mod1" }, "space", toggle_opacity),
 
-key({ modkey }, "F5", inc_vol( 1)),
-key({ modkey }, "F4", inc_vol(-1)),
-key({ modkey }, "F3", toggle_vol),
+key({ modkey }, "F5", volume.inc_vol( 5)),
+key({ modkey }, "F4", volume.inc_vol(-5)),
+key({ modkey }, "F3", volume.toggle_mute),
 
-key({ }, "XF86AudioRaiseVolume", inc_vol( 15)),
-key({ }, "XF86AudioLowerVolume", inc_vol(-15)),
-key({ }, "XF86AudioMute", function () cmus_cmd("pause")() toggle_vol() end),
+key({ }, "XF86AudioRaiseVolume", volume.inc_vol( 15)),
+key({ }, "XF86AudioLowerVolume", volume.inc_vol(-15)),
+key({ }, "XF86AudioMute", function () cmus_cmd("pause")() volume.toggle_mute() end),
 
 key({ }, "XF86AudioPrev", cmus_cmd("prev")),
 key({ }, "XF86AudioNext", cmus_cmd("next")),

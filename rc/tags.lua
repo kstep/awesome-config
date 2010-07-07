@@ -1,10 +1,4 @@
-local shifty = require("shifty")
 local layout = require("awful.layout.suit")
-local button = require("awful.button")
-local util   = require("awful.util")
-local mouse  = require("awful.mouse")
-local client = client
-local vars   = require("rc.vars")
 
 module("rc.tags")
 
@@ -57,10 +51,4 @@ defaults = {
 	nopopup = true,
 	tag     = "other",
 }
-
-buttons = util.table.join(
-    button({ }, 1, function (c) client.focus = c; c:raise() end),
-    button({ vars.modkey }, 1, mouse.client.move),
-    button({ vars.modkey }, 3, mouse.client.resize)
-)
 

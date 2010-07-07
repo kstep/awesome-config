@@ -1,19 +1,20 @@
 require("awful")
+require("awful.autofocus")
+
 require("beautiful")
+require("shifty")
 
 require("rc.vars")
 beautiful.init(rc.vars.theme_path)
 
 require("rc.tags")
-require("rc.keys")
+require("rc.binds")
 
 require("rc.widget")
 
-shifty.config.apps          = rc.tags.rules
-shifty.config.tags          = rc.tags.tags
-shifty.config.defaults      = rc.tags.defaults
-shifty.config.clientbuttons = rc.tags.buttons
-shifty.config.clientkeys    = rc.keys.client
+shifty.config.apps     = rc.tags.rules
+shifty.config.tags     = rc.tags.tags
+shifty.config.defaults = rc.tags.defaults
 
 screens = screen.count()
 topwibox  = {}
@@ -23,14 +24,17 @@ for s = 1, screens do
     statwibox[s] = rc.widget.statbar(s)
 end
 
-root.buttons(rc.keys.buttons)
-root.keys(rc.keys.global)
+root.keys    ( rc.binds.global.keys    )
+root.buttons ( rc.binds.global.buttons )
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
 client.add_signal("manage", function (c, startup)
     -- Add a titlebar
     -- awful.titlebar.add(c, { modkey = modkey })
+
+    c:keys    ( rc.binds.client.keys    )
+    c:buttons ( rc.binds.client.buttons )
 
     -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)

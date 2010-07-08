@@ -48,23 +48,27 @@ function theme(w, args, meta)
 end
 
 local velocity_data = weaktable()
-function velocity(w, args, meta)
+function velocity(w, args, meta, stack)
+    if not velocity_data[w] then velocity_data[w] = {} end
+    if not stack then stack = 1 end
     local time = os.time()
     local vel = 0
-    if velocity_data[w] then
-        vel = (args - velocity_data[w][1]) / (time - velocity_data[w][2])
+    if velocity_data[w][stack] then
+        vel = (args - velocity_data[w][stack][1]) / (time - velocity_data[w][stack][2])
         if vel < 0 then vel = 0 end
     end
-    velocity_data[w] = { args, time }
+    velocity_data[w][stack] = { args, time }
     vel = humanize(w, vel, meta)
     vel[2] = vel[2] .. "/s"
     return vel
 end
 
 local delta_data = weaktable()
-function delta(w, args, meta)
-    local d = args - (delta_data[w] or 0)
-    delta_data[w] = args
+function delta(w, args, meta, stack)
+    if not delta_data[w] then delta_data[w] = {} end
+    if not stack then stack = 1 end
+    local d = args - (delta_data[w][stack] or 0)
+    delta_data[w][stack] = args
     return d
 end
 
@@ -103,11 +107,11 @@ function sum(w, args, meta)
 end
 
 function all(...)
-    local allfilter = function (w, args, meta)
+    local allfilter = function (w, args, meta, stack)
         result = nil
         for i,filter in ipairs(arg) do
             if type(filter) == "function" then
-               result = filter(w, args, meta)
+               result = filter(w, args, meta, stack)
             end
         end
         return result
@@ -116,11 +120,11 @@ function all(...)
 end
 
 function pipe(...)
-    local allfilter = function (w, args, meta)
+    local allfilter = function (w, args, meta, stack)
         result = args
         for i,filter in ipairs(arg) do
             if type(filter) == "function" then
-                result = filter(w, result, meta)
+                result = filter(w, result, meta, stack)
             end
         end
         return result

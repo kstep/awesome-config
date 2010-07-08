@@ -265,7 +265,7 @@ local function update_widget(widget, params, data, meta)
     end
 
     if type(format) == "function" then
-        data = format(widget, data, meta)
+        data = format(widget, data, meta, stack)
     end
 
     if method ~= nil then

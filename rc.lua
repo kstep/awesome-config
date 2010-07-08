@@ -3,6 +3,7 @@ require("awful.autofocus")
 
 require("beautiful")
 require("shifty")
+require("naughty")
 
 require("rc.vars")
 beautiful.init(rc.vars.theme_path)
@@ -17,6 +18,19 @@ shifty.config.tags     = rc.tags.tags
 shifty.config.defaults = rc.tags.defaults
 
 screens = screen.count()
+naughty.config.presets = {
+    normal   = { screen = screens },
+    low      = { screen = screens },
+    critical = {
+        screen       = screens,
+        ontop        = true,
+        timeout      = 10,
+        bg           = beautiful.palette[1],
+        border_color = beautiful.palette[5],
+        fg           = "#ffffff00"
+    },
+}
+
 topwibox  = {}
 statwibox = {}
 for s = 1, screens do

@@ -21,6 +21,7 @@ for i = 1,2 do
     widgets[i]:set_vertical(true)
     widgets[i]:set_color(theme.cpu.therm[i])
     widgets[i]:set_border_color(theme.cpu.therm[i])
+    widgets[i]:set_height(17)
     widgets[i+2]:set_color(theme.cpu.therm[i])
 end
 

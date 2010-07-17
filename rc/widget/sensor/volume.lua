@@ -20,6 +20,7 @@ local widgets = {
 widgets[1]:set_vertical(true)
 widgets[1]:set_color(theme.volume)
 widgets[1]:set_border_color(theme.volume)
+widgets[1]:set_height(17)
 widgets[2]:set_color(theme.volume)
 
 reg = sensual.registermore(sensual.mixer(-1, "vol"), widgets, {

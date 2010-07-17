@@ -17,7 +17,9 @@ local widgets = {
     layout = vars.statbox_layout
 }
 widgets[1]:set_vertical(true)
-widgets[1]:set_border_color(theme.Discharging)
+widgets[1]:set_ticks(true)
+widgets[1]:set_height(17)
+widgets[1]:set_ticks_size(2)
 
 reg = sensual.registermore(sensual.bat("BAT0"), util.table.join(widgets, widgets), {
     { 1, sensual.filters.scale },

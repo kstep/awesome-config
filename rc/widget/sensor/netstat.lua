@@ -39,6 +39,7 @@ widgets[3]:set_border_color(theme.netstat.wifi)
 
 widgets[4]:set_color(theme.netstat.wifi)
 widgets[4]:set_border_color(theme.netstat.wifi)
+widgets[4]:set_height(17)
 
 regs = {
     sensual.registermore(sensual.net("ppp0"), { widgets[1], widgets[1], widgets[2], widgets[2] }, {

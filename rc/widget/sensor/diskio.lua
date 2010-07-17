@@ -29,6 +29,8 @@ widgets[5]:set_max_value(20000)
 
 widgets[2]:set_vertical(true)
 widgets[6]:set_vertical(true)
+widgets[2]:set_height(17)
+widgets[6]:set_height(17)
 
 for i = 1,4 do
     widgets[i]:set_color(theme.disk.root)

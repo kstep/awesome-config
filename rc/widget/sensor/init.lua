@@ -1,4 +1,5 @@
 
+require("rc.widget.sensor.weather")
 require("rc.widget.sensor.uptime")
 require("rc.widget.sensor.volume")
 require("rc.widget.sensor.thermal")

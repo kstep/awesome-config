@@ -9,6 +9,7 @@ local layoutbox = require("rc.widget.layoutbox")
 local systray   = require("rc.widget.systray")
 local textclock = require("rc.widget.textclock")
 local uptime    = require("rc.widget.sensor.uptime")
+local weather   = require("rc.widget.sensor.weather")
 
 local setmetatable = setmetatable
 
@@ -30,6 +31,7 @@ local function get(s)
 
 	textclock(s),
 	uptime(s),
+	weather(s),
 	systray(s),
 	tasklist(s),
 

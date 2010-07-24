@@ -11,6 +11,7 @@ require("awful")
 require("sensual.helpers")
 require("sensual.filters")
 require("sensual.label")
+require("sensual.icon")
 
 local type = type
 local pairs = pairs

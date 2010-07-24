@@ -55,7 +55,7 @@ require("sensual.wifi")
 -- require("sensual.mpd")
 require("sensual.mixer")
 -- require("sensual.volume")
--- require("sensual.weather")
+require("sensual.yaweather")
 -- require("sensual.date")
 require("sensual.statfs")
 -- }}}

@@ -57,7 +57,7 @@ theme.cpu = {
 
 theme.volume = theme.palette[8]
 
-theme.wallpaper_cmd = { "awsetbg /usr/share/slim/themes/parallel-dimensions/background.jpg" }
+theme.wallpaper_cmd = { "awsetbg " .. awful.util.getdir('config') .. "/themes/default/Desktopography-1800x1125.jpg" }
 
 return theme
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

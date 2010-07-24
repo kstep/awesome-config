@@ -14,6 +14,7 @@ end
 
 local function set_value(w, data)
     local text = ""
+    if not data then data = "" end
     if type(w.format) == "function" then
         text = w.format(data)
     elseif type(data) == "table" then

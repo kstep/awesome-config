@@ -5,10 +5,12 @@
 ----------------------------------------------------------
 
 -- {{{ Grab environment
-local type = type
-local ipairs = ipairs
-local unpack = unpack
+local type     = type
+local ipairs   = ipairs
+local unpack   = unpack
 local tonumber = tonumber
+local pcall    = pcall
+local dofile   = dofile
 local io = {
     open = io.open
 }
@@ -29,6 +31,12 @@ function readfile(filename, format)
         f:close()
         return line
     end
+end
+
+function luafile(filename)
+    local s,r = pcall(function () return dofile(filename) end)
+    if not s then return nil end
+    return r
 end
 
 function readtfile(filename, format)

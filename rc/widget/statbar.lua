@@ -4,6 +4,7 @@ local wibox = require("awful.wibox")
 
 local sensor    = require("rc.widget.sensor")
 local promptbox = require("rc.widget.promptbox")
+local playerctl = require("rc.widget.cmus")
 
 local setmetatable = setmetatable
 
@@ -24,6 +25,7 @@ local function get(s)
         sensor.diskio(s),
         sensor.battery(s),
         sensor.volume(s),
+	playerctl(s),
         promptbox(s),
 
         layout = wiout.horizontal.rightleft

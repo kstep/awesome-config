@@ -59,5 +59,16 @@ theme.volume = theme.palette[8]
 
 theme.wallpaper_cmd = { "awsetbg " .. awful.util.getdir('config') .. "/themes/default/Desktopography-1800x1125.jpg" }
 
+theme.icons_dir = "/usr/share/icons/gnome/16x16/actions"
+theme.icons = {
+    player = {
+        ['play']  = theme.icons_dir .. "/player_play.png",
+        ['pause'] = theme.icons_dir .. "/player_pause.png",
+        ['stop']  = theme.icons_dir .. "/player_stop.png",
+        ['next']  = theme.icons_dir .. "/player_fwd.png",
+        ['prev']  = theme.icons_dir .. "/player_rew.png",
+    }
+}
+
 return theme
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

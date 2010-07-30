@@ -12,7 +12,7 @@ widget.layout = layouts.horizontal.rightleft
 hint = tooltip({
     objects = { widget[1].widget, widget[2].widget },
     timer_function = function ()
-        data = reg.sensor()
+        local data = reg.sensor()
         if not data then return "" end
         result = ("Ветер %s, давление %s мм.рт.ст., влажность %s.\n"):format(data[1].wind, data[1].pressure, data[1].humidity)
         line = "%s %s, %s°C (%s°C ночью)\n"

@@ -4,7 +4,7 @@ local helpers = require("sensual.helpers")
 module("sensual.yaweather")
 
 function worker(self)
-    return helpers.luafile("/tmp/weather.lua") or {}
+    return helpers.luafile("/tmp/weather.lua") or { { temp = "N/A" } }
 end
 
 local sensor

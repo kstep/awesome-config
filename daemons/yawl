@@ -1,0 +1,61 @@
+#!/bin/sh
+
+WEATHERDIR=/tmp/weather-icons
+WEATHERFILE=/tmp/weather.lua
+WEATHERURL=http://pogoda.yandex.ru/26850/
+
+PATH=/bin:/usr/bin
+
+TF=`mktemp`
+wget -q -O $TF $WEATHERURL && cat <<XSLT | xsltproc --novalid --html --output $WEATHERFILE - $TF 2> /dev/null
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0" encoding="utf-8" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:output method="text" encoding="utf-8" indent="yes"/>
+<xsl:template match="/">
+result = {}
+
+table.insert(result, {
+    temp     = "<xsl:value-of select="substring(//table[@class='b-current-weather']/tr/td[starts-with(@class, 't')]/span/text(), 1, 3)" />",
+    icon     = "$WEATHERDIR<xsl:value-of select="substring(//table[@class='b-current-weather']/tr/td/i[starts-with(@class, 'b-wea-icon')]/img/@src, 30)" />",
+    icon_url = "http:<xsl:value-of select="//table[@class='b-current-weather']/tr/td/i[starts-with(@class, 'b-wea-icon')]/img/@src" />",
+    desc     = "<xsl:value-of select="//table[@class='b-current-weather']/tr/td[3]/div/text()" />",
+    wind     = "<xsl:value-of select="substring(//table[@class='b-current-weather']/tr/td[3]/span/text(), 7)" />",
+    pressure = "<xsl:value-of select="substring(//table[@class='b-current-weather']/tr/td[4]/div/text(), 11, 3)" />",
+    humidity = "<xsl:value-of select="substring(//table[@class='b-current-weather']/tr/td[4]/span/text(), 12, 3)" />",
+})
+
+<xsl:for-each select="//table[starts-with(@class, 'b-forecast-brief')]/tr[1]/th[starts-with(@class, 'cur')]">
+<xsl:variable name="curpos" select="position()" />
+<xsl:variable name="curdate" select="span[not(@class='today')]/text()" />
+table.insert(result, {
+    weekday    = "<xsl:value-of select="b/text()" />",
+<xsl:choose>
+<xsl:when test="contains(\$curdate, ' ')">
+    month = "<xsl:value-of select="substring-after(\$curdate, ' ')" />",
+    date  = "<xsl:value-of select="translate(\$curdate, ' ', ' ')" />",
+</xsl:when>
+<xsl:otherwise>
+    month      = result[<xsl:value-of select="\$curpos" />].month,
+    date       = "<xsl:value-of select="\$curdate" /> " .. result[<xsl:value-of select="\$curpos" />].month,
+</xsl:otherwise>
+</xsl:choose>
+    desc       = "<xsl:value-of select="../../tr[2]/td[\$curpos]/text()" />",
+    icon       = "$WEATHERDIR<xsl:value-of select="substring(../../tr[2]/td[\$curpos]/i/img/@src, 30)" />",
+    icon_url   = "http:<xsl:value-of select="../../tr[2]/td[\$curpos]/i/img/@src" />",
+    position   = "<xsl:value-of select="\$curpos" />",
+    temp       = "<xsl:value-of select="../../tr[3]/td[\$curpos]/b/text()" />",
+    temp_night = "<xsl:value-of select="../../tr[4]/td[\$curpos]/span/text()" />",
+})
+</xsl:for-each>
+
+return result
+</xsl:template>
+
+</xsl:stylesheet>
+XSLT
+
+mkdir -p $WEATHERDIR
+cat $WEATHERFILE | grep icon_url | sed -e 's/^\s\+icon_url\s\+=\s\+"//;s/",$//' | wget -q -c -i - -P $WEATHERDIR/
+
+rm -f $TF
+

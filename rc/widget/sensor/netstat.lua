@@ -1,6 +1,8 @@
 
 local progressbar = require("awful.widget.progressbar")
 local graph       = require("awful.widget.graph")
+local tooltip     = require("awful.tooltip")
+local util        = require("awful.util")
 
 local sensual = require("sensual")
 local vars = require("rc.vars")
@@ -40,6 +42,16 @@ widgets[3]:set_border_color(theme.netstat.wifi)
 widgets[4]:set_color(theme.netstat.wifi)
 widgets[4]:set_border_color(theme.netstat.wifi)
 widgets[4]:set_height(17)
+
+hint = tooltip({
+    objects = {
+        widgets[1].widget, widgets[2].widget,
+        widgets[3].widget, widgets[5].widget,
+    },
+    timer_function = function ()
+        return util.pread("netstat -t -u -e -e | head -n 15")
+    end
+})
 
 regs = {
     sensual.registermore(sensual.net("ppp0"), { widgets[1], widgets[1], widgets[2], widgets[2] }, {

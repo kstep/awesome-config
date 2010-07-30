@@ -1,6 +1,8 @@
 
 local progressbar = require("awful.widget.progressbar")
 local graph       = require("awful.widget.graph")
+local tooltip     = require("awful.tooltip")
+local util        = require("awful.util")
 
 local sensual = require("sensual")
 local vars = require("rc.vars")
@@ -40,6 +42,18 @@ for i = 1,4 do
 	widgets[i+4]:set_border_color(theme.disk.home)
     end
 end
+
+hint = tooltip({
+    objects = {
+        widgets[1].widget, widgets[2].widget,
+        widgets[3].widget, widgets[4].widget,
+        widgets[5].widget, widgets[6].widget,
+        widgets[7].widget, widgets[8].widget,
+    },
+    timer_function = function ()
+        return util.pread("df -h")
+    end
+})
 
 regs = {
     sensual.registermore(sensual.dio("sda5"), { widgets[1], widgets[4] }, {

@@ -1,6 +1,8 @@
 
-local util = require("awful.util")
 local progressbar = require("awful.widget.progressbar")
+local tooltip     = require("awful.tooltip")
+local util        = require("awful.util")
+
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
@@ -20,6 +22,17 @@ widgets[1]:set_vertical(true)
 widgets[1]:set_ticks(true)
 widgets[1]:set_height(17)
 widgets[1]:set_ticks_size(2)
+
+hint = tooltip({
+    objects = {
+	widgets[1].widget,
+	widgets[2].widget,
+	widgets[3].widget,
+    },
+    timer_function = function () 
+	return util.pread("acpi -b -i")
+    end
+})
 
 reg = sensual.registermore(sensual.bat("BAT0"), util.table.join(widgets, widgets), {
     { 1, sensual.filters.scale },

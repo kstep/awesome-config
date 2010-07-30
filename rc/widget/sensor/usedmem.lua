@@ -1,5 +1,7 @@
 
-local graph = require("awful.widget.graph")
+local graph   = require("awful.widget.graph")
+local tooltip = require("awful.tooltip")
+local util    = require("awful.util")
 
 local sensual = require("sensual")
 local vars = require("rc.vars")
@@ -22,6 +24,17 @@ widgets[1]:set_border_color(theme.mem.ram)
 widgets[1]:set_color(theme.mem.ram)
 widgets[2]:set_color(theme.mem.swap)
 widgets[3]:set_color(theme.mem.ram)
+
+hint = tooltip({
+    objects = {
+	widgets[1].widget,
+	widgets[2].widget,
+	widgets[3].widget,
+    },
+    timer_function = function ()
+	return util.pread("free -k")
+    end
+})
 
 reg = sensual.registermore(sensual.mem(), widgets, {
     { 1, sensual.filters.scale },

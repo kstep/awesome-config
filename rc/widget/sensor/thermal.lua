@@ -1,5 +1,8 @@
 
 local progressbar = require("awful.widget.progressbar")
+local tooltip     = require("awful.tooltip")
+local util        = require("awful.util")
+
 local sensual = require("sensual")
 local vars = require("rc.vars")
 
@@ -24,6 +27,16 @@ for i = 1,2 do
     widgets[i]:set_height(17)
     widgets[i+2]:set_color(theme.cpu.therm[i])
 end
+
+hint = tooltip({
+    objects = {
+	widgets[1].widget, widgets[2].widget,
+	widgets[3].widget, widgets[4].widget,
+    },
+    timer_function = function () 
+	return util.pread("acpi -t -c -i")
+    end
+})
 
 regs = {
     sensual.registermore(sensual.thermal(1), { widgets[1], widgets[3] }, {

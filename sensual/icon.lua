@@ -6,7 +6,10 @@ local layouts = require("awful.widget.layout")
 module("sensual.icon")
 
 local function set_value(w, icon_path)
-    w.widget.image = type(icon_path) == "string" and capi.image(icon_path) or icon_path
+    local img = icon_path
+    if not img or img == "" then return end
+    if type(img) == "string" then img = capi.image(img) end
+    w.widget.image = img
 end
 
 local function set_background_color(w, bgcolor)

@@ -1,10 +1,13 @@
 local capi = { image = image, widget = widget }
 
-local wiout  = require("awful.widget.layout")
-local util   = require("awful.util")
-local button = require("awful.button")
+local wiout   = require("awful.widget.layout")
+local util    = require("awful.util")
+local button  = require("awful.button")
+local tooltip = require("awful.tooltip")
 local theme  = require("beautiful")
 
+local cmus    = require("sensual.cmus")
+local filters = require("sensual.filters")
 local naughty = require("naughty")
 local vars = require("rc.vars")
 local ipairs = ipairs
@@ -16,23 +19,39 @@ local widgets = {
     layout = wiout.horizontal.leftright
 }
 
-local function cmus_cmd(cmd)
-    return function ()
-        util.spawn("cmus-remote --" .. cmd) 
-    end
+widgets[1] = capi.widget({ type = "imagebox" })
+widgets[1].image = capi.image(theme.icons.player["pause"])
+widgets[1].resize = false
+widgets[2] = capi.widget({ type = "textbox" })
+widgets[2].text = " - Сообщений от CMus не было -"
+
+widgets.buttons = util.table.join(
+    button({}, 1, cmus.cmus_cmd("pause")),
+    button({}, 3, cmus.cmus_cmd("stop")),
+    button({}, 4, cmus.cmus_cmd("prev")),
+    button({}, 5, cmus.cmus_cmd("next"))
+)
+
+for i = 1,2 do
+    widgets[i]:buttons(widgets.buttons)
 end
 
-icons = { "prev", "next", "pause" }
-for _, icon in ipairs(icons) do
-    widgets[_] = capi.widget({ type = "imagebox" })
-    widgets[_].image = capi.image(theme.icons.player[icon])
-    widgets[_].resize = false
-    widgets[_]:buttons(util.table.join(
-        button({}, 1, cmus_cmd(icon))
-    ))
-end
-widgets[4] = capi.widget({ type = "textbox" })
-widgets[4].text = "- Сообщений от CMus не было -"
+hint = tooltip({
+    objects = { widgets[1], widgets[2] },
+    timer_function = function ()
+        local data = cmus.cmus_query()
+        local pos, dur = filters.hms(nil, data.position), filters.hms(nil, data.duration)
+        local text = ("%s — «%s» is %s [%02d:%02d/%02d:%02d]\nRepeat %s\nShuffle is %s"):format(
+            data.tag.artist or "Unknown artist",
+            data.tag.title or "Unknown title",
+            data.status,
+            pos[3], pos[4], dur[3], dur[4],
+            data.set['repeat_current'] and "current"
+                or (data.set['repeat'] and "all" or "none"),
+            data.set.shuffle and "on" or "off")
+        return text
+    end
+})
 
 local function get(s)
     return s == vars.widgets_screen and widgets or nil
@@ -44,12 +63,12 @@ function update(data)
         ["paused"]  = theme.icons.player.pause,
         ["stopped"] = theme.icons.player.stop,
     }
-    local title = data.artist .. ' — «' .. data.title .. '»'
+    local title = (" %s — «%s»"):format(data.artist, data.title)
     local img = capi.image(icons[data.status])
 
     naughty.notify({ timeout = 3, preset = naughty.config.presets.low, icon = img, text = title }) 
-    widgets[3].image = img
-    widgets[4].text  = title
+    widgets[1].image = img
+    widgets[2].text  = title
 end
 
 setmetatable(_M, { __call = function (_, ...) return get(...) end })

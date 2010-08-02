@@ -59,7 +59,7 @@ theme.volume = theme.palette[8]
 
 theme.wallpaper_cmd = { "awsetbg " .. awful.util.getdir('config') .. "/themes/default/Desktopography-1800x1125.jpg" }
 
-theme.icons_dir = "/usr/share/icons/gnome/16x16/actions"
+theme.icons_dir = "/usr/share/icons/oxygenrefit2-black/16x16/actions"
 theme.icons = {
     player = {
         ['play']  = theme.icons_dir .. "/player_play.png",

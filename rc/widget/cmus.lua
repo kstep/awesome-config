@@ -36,16 +36,26 @@ for i = 1,2 do
     widgets[i]:buttons(widgets.buttons)
 end
 
+local function icon_by_status(status)
+    local icons = {
+        ["playing"] = theme.icons.player.play,
+        ["paused"]  = theme.icons.player.pause,
+        ["stopped"] = theme.icons.player.stop,
+    }
+    return icons[status]
+end
+
 hint = tooltip({
     objects = { widgets[1], widgets[2] },
     timer_function = function ()
         local data = cmus.cmus_query()
         local pos, dur = filters.hms(nil, data.position), filters.hms(nil, data.duration)
-        local text = ("%s — «%s» is %s [%02d:%02d/%02d:%02d]\nRepeat %s\nShuffle is %s"):format(
+        local text = ("%s — «%s» is %s [%02d:%02d/%02d:%02d]\nFile: %s\nRepeat %s\nShuffle is %s"):format(
             data.tag.artist or "Unknown artist",
             data.tag.title or "Unknown title",
             data.status,
             pos[3], pos[4], dur[3], dur[4],
+            data.file,
             data.set['repeat_current'] and "current"
                 or (data.set['repeat'] and "all" or "none"),
             data.set.shuffle and "on" or "off")
@@ -58,13 +68,8 @@ local function get(s)
 end
 
 function update(data)
-    local icons = {
-        ["playing"] = theme.icons.player.play,
-        ["paused"]  = theme.icons.player.pause,
-        ["stopped"] = theme.icons.player.stop,
-    }
-    local title = (" %s — «%s»"):format(data.artist, data.title)
-    local img = capi.image(icons[data.status])
+    local title = (" %s — «%s»"):format(data.artist or "Unknown artist", data.title or data.file or "Unknown title")
+    local img = capi.image(icon_by_status(data.status))
 
     naughty.notify({ timeout = 3, preset = naughty.config.presets.low, icon = img, text = title }) 
     widgets[1].image = img

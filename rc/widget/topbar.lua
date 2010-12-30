@@ -2,7 +2,7 @@
 local wiout = require("awful.widget.layout")
 local wibox = require("awful.wibox")
 
-local menu      = require("rc.widget.menu")
+--local menu      = require("rc.widget.menu")
 local taglist   = require("rc.widget.taglist")
 local tasklist  = require("rc.widget.tasklist")
 local layoutbox = require("rc.widget.layoutbox")
@@ -22,7 +22,7 @@ local function get(s)
 
     wbox.widgets = {
 	{
-	    menu(s),
+	    --menu(s),
 	    taglist(s),
 	    layoutbox(s),
 	    

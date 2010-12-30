@@ -18,18 +18,12 @@ shifty.config.tags     = rc.tags.tags
 shifty.config.defaults = rc.tags.defaults
 
 screens = screen.count()
-naughty.config.presets = {
-    normal   = { screen = screens },
-    low      = { screen = screens },
-    critical = {
-        screen       = screens,
-        ontop        = true,
-        timeout      = 10,
-        bg           = beautiful.palette[1],
-        border_color = beautiful.palette[5],
-        fg           = "#ffffff00"
-    },
-}
+naughty.config.presets.normal.screen = screens
+naughty.config.presets.low.screen = screens
+
+for k, v in pairs({ screen = screens, ontop = true, timeout = 10, bg = beautiful.palette[1], border_color = beautiful.palette[5], fg = "#ffffff00" }) do
+    naughty.config.presets.critical[k] = v
+end
 
 topwibox  = {}
 statwibox = {}

@@ -1,7 +1,7 @@
 require("awful.util")
 -- Inherit default theme
 
-theme = dofile("/usr/local/share/awesome/themes/zenburn/theme.lua")
+theme = dofile("/usr/share/awesome/themes/zenburn/theme.lua")
 
 theme.font          = "terminus 8"
 

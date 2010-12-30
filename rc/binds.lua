@@ -212,7 +212,9 @@ global = {
 
     -- Standard programs
     key({ modkey , "Control" } , "Return", function () util.spawn(vars.terminal_cmd) end) , 
-    key({ } , "XF86Tools" , function () util.spawn(vars.terminal_cmd) end) , 
+    --key({ } , "XF86Tools" , function () util.spawn(vars.terminal_cmd) end) , 
+    key({ } , "XF86Tools" , function () util.spawn("/home/kstep/bin/n9clip") end) , 
+    key({ "Shift" } , "XF86Tools" , function () util.spawn("/home/kstep/bin/clipn9") end) , 
     key({ } , "Pause"     , function () util.spawn(vars.locker) end)       , 
 
     key({ modkey, "Control" }, "r", awesome.restart),

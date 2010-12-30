@@ -43,13 +43,33 @@ widgets[4]:set_color(theme.netstat.wifi)
 widgets[4]:set_border_color(theme.netstat.wifi)
 widgets[4]:set_height(17)
 
-hint = tooltip({
+hint_net = tooltip({
     objects = {
-        widgets[1].widget, widgets[2].widget,
-        widgets[3].widget, widgets[5].widget,
+        widgets[1].widget,
+        widgets[3].widget,
     },
     timer_function = function ()
         return util.pread("netstat --numeric-hosts -t -u -e -e | head -n 15")
+    end
+})
+
+hint_ppp0 = tooltip({
+    objects = {
+        widgets[2].widget,
+    },
+    timer_function = function ()
+        local out = util.pread("ifconfig ppp0")
+        if out == '' then out = 'Not connected.' end
+        return out
+    end
+})
+
+hint_wlan0 = tooltip({
+    objects = {
+        widgets[5].widget,
+    },
+    timer_function = function ()
+        return util.pread("ifconfig wlan0; iwconfig wlan0")
     end
 })
 

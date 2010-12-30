@@ -26,7 +26,7 @@ layouts =
     layout.floating
 }
 
-terminal     = "urxvt"
+terminal     = "xterm"
 terminal_cmd = terminal .. " -e tmux"
 
 editor       = getenv("EDITOR") or "vim"

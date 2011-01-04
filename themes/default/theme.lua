@@ -28,6 +28,11 @@ theme.palette = {
     "#AEBFEF", -- 14 gray blue
 }
 
+theme.kbd = {
+    [0] = theme.palette[2],
+    [1] = theme.palette[5],
+}
+
 theme.Full        = theme.palette[11]
 theme.Charging    = theme.palette[3]
 theme.Discharging = theme.palette[5]

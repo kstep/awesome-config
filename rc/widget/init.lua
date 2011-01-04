@@ -7,6 +7,7 @@ require("rc.widget.textclock")
 require("rc.widget.systray")
 require("rc.widget.menu")
 require("rc.widget.cmus")
+require("rc.widget.keyboard")
 
 require("rc.widget.topbar")
 require("rc.widget.statbar")

@@ -73,7 +73,7 @@ function delta(w, args, meta, stack)
 end
 
 function hms(w, args, meta)
-    local secs = args
+    local secs = args or 0
     local days  = math.floor(secs / 86400); secs = secs % 86400
     local hours = math.floor(secs / 3600); secs = secs % 3600
     local mins  = math.floor(secs / 60); secs = secs % 60

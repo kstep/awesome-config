@@ -1,0 +1,14 @@
+#!/bin/sh
+
+DATA=
+while test $# -gt 1
+do
+    DATA="$DATA ['$1'] = [[$2]],"
+    shift
+    shift
+done
+
+echo $DATA > /home/kstep/.cmus/cmus-status-log
+
+echo "rc.widget.cmus.update({ $DATA })" | /usr/bin/awesome-client
+

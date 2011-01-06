@@ -1,7 +1,9 @@
 
 local capi = { widget = widget, dbus = dbus }
 local theme = require("beautiful")
+local dbus = require("simpledbus")
 local setmetatable = setmetatable
+local print = print
 
 module("rc.widget.keyboard")
 
@@ -15,6 +17,14 @@ capi.dbus.add_signal("ru.gentoo.kbdd", function (src, layout)
     widget.text = layouts[layout]
     widget.background_color = theme.kbd[layout]
 end)
+
+local bus = dbus.SessionBus()
+function set_layout(layout)
+    return bus:call_method('ru.gentoo.KbddService', '/ru/gentoo/KbddService', 'ru.gentoo.kbdd', 'set_layout', true, 'u', layout or 0)
+end
+function prev_layout()
+    return bus:call_method('ru.gentoo.KbddService', '/ru/gentoo/KbddService', 'ru.gentoo.kbdd', 'prev_layout', true)
+end
 
 setmetatable(_M, { __call = function (_, ...) return widget end })
 

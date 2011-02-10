@@ -94,7 +94,19 @@ theme.cpu = {
 
 theme.volume = theme.palette[8]
 
-theme.wallpaper_cmd = { "awsetbg " .. awful.util.getdir('config') .. "/themes/default/Desktopography-1800x1125.jpg" }
+function map(func, table)
+    result = {}
+    for k, v in pairs(table) do
+        result[k] = func(v)
+    end
+    return result
+end
+
+theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/Cosmosition_" .. v .. ".jpg" end,
+    {
+        "1280x800",
+        "1680x1050",
+    })
 
 theme.icons_dir = "/usr/share/icons/oxygenrefit2-black/16x16/actions"
 theme.icons = {

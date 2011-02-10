@@ -24,6 +24,8 @@ local vars  = require("rc.vars")
 local rutil = require("rc.util")
 local menu  = require("rc.menu")
 
+local scratch = require("scratch")
+
 local modkey = vars.modkey
 
 module("rc.binds")
@@ -190,6 +192,8 @@ global = {
     key({ modkey } , "j" , next_client)                                   , 
     key({ modkey } , "k" , prev_client)                                   , 
     key({ modkey } , "w" , function () menu.mainmenu:show(true) end) , 
+
+    key({ modkey }, "s", function () scratch.drop(vars.terminal) end),
 
     -- Layout manipulation
     key({ modkey , "Shift"   } , "j" , function () aclient.swap.byidx( 1) end) , 

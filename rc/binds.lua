@@ -65,7 +65,7 @@ end
 local function toggle_opacity()
     local clients = cclient.get()
     local opacity = (clients[1].opacity or 1.0)
-    opacity = opacity == 1.0 and 0.4 or 1.0
+    opacity = opacity == 1.0 and 0.9 or 1.0
 
     for k, c in ipairs(clients) do
 	c.opacity = opacity
@@ -273,7 +273,7 @@ client = {
         c.maximized_horizontal = not c.maximized_horizontal
         c.maximized_vertical   = not c.maximized_vertical
     end),
-    key({ modkey, "Mod1" }, "space", function (c) c.opacity = (c.opacity or 1.0) == 1.0 and 0.4 or 1.0 end),
+    key({ modkey, "Mod1" }, "space", function (c) c.opacity = (c.opacity or 1.0) == 1.0 and 0.9 or 1.0 end),
     key({ modkey }, "minus", function (c) c.opacity = c.opacity - 0.1 end),
     key({ modkey }, "equal", function (c) c.opacity = c.opacity + 0.1 end)
     ),

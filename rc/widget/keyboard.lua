@@ -3,12 +3,11 @@ local capi = { widget = widget, dbus = dbus }
 local theme = require("beautiful")
 local dbus = require("simpledbus")
 local setmetatable = setmetatable
-local print = print
 
 module("rc.widget.keyboard")
 
 widget = capi.widget({ type = "textbox" })
-layouts = { [0] = "<span color='#000000' bgcolor='" .. theme.kbd[0] .. "'> En </span>", [1] = "<span color='#000000' bgcolor='" .. theme.kbd[1] .. "'> Ru </span>" }
+layouts = { [0] = "<span color='#FFFFFF' bgcolor='" .. theme.kbd[0] .. "'> En </span>", [1] = "<span color='#FFFFFF' bgcolor='" .. theme.kbd[1] .. "'> Ru </span>" }
 widget.text = layouts[0]
 
 capi.dbus.request_name("session", "ru.gentoo.kbdd")

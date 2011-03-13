@@ -32,7 +32,8 @@ terminal_cmd = terminal .. " -e tmux"
 editor       = getenv("EDITOR") or "vim"
 editor_cmd   = terminal .. " -e " .. editor
 
-browser      = "/usr/bin/firefox"
+--browser      = "/usr/bin/firefox"
+browser      = "/usr/bin/luakit"
 browser_cmd  = browser
 
 player       = "/usr/bin/smplayer"

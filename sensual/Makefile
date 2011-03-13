@@ -13,3 +13,7 @@ statfs.so: statfs.c
 	strip statfs.so && \
 	rm -f statfs.o
 
+mixer4.so: mixer4.c
+	gcc -I/usr/lib/oss/include ${GCC_FLAGS} -c mixer4.c && \
+	gcc -o mixer4.so -shared mixer4.o && \
+	strip mixer4.so

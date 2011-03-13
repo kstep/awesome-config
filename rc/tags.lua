@@ -29,7 +29,7 @@ rules = {
     { match = {"Gvim", "Vim", "OpenOffice", "Pida"},  tag = "edit" },
     { match = {"gimp"},  tag = "graph" },
     { match = {"Smplayer", "MPlayer", "VLC.*"},  tag = "video" },
-    { match = {"Opera", "Firefox", "Links", "IEXPLORE", "Google-chrome", "Uzbl"},  tag = "www" },
+    { match = {"luakit", "Opera", "Firefox", "Links", "IEXPLORE", "Google-chrome", "Uzbl"},  tag = "www" },
     { match = {"Rox", "Konqueror", "emelfm2"},  tag = "files" },
     { match = {"Gliv", "Mirage", "GQview", "Xloadimage", "Kview", "Kpdf"},  tag = "view" },
     { match = {"Thunderbird.*"},  tag = "msgs" },

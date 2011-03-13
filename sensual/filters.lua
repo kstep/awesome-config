@@ -33,6 +33,7 @@ function format(format, args)
 end
 
 function scale(w, args, meta)
+    args = args or 0
     local max = meta.max or 100
     local min = meta.min or 0
 

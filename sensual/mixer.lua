@@ -9,7 +9,9 @@ module("sensual.mixer")
 function worker(self)
    local volumes = {}
    for _, dev in ipairs(self.devices) do
-       table.insert(volumes, dev.pvalue)
+       local value = dev.pvalue
+       if type(value) == 'table' then value = value[1] end
+       table.insert(volumes, value)
    end
    return volumes
 end

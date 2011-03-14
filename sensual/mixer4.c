@@ -365,6 +365,14 @@ static int luaA_mixer_get(lua_State *L) {
             if (ioctl((*mixer)->fh, SNDCTL_MIX_EXTINFO, &(mext->ext)) < 0)
                 return 0;
 
+            // Ignore group nodes when searching with name
+            switch (mext->ext.type) {
+                case MIXT_DEVROOT:
+                case MIXT_GROUP:
+                    continue;
+                default:;
+            }
+
             if ((strcmp(mext->ext.extname, devname) == 0)) { // || (strcmp(mext->ext.id, devname) == 0)) {
                 devno = i;
                 break;

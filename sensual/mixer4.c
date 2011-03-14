@@ -1,6 +1,9 @@
+// let b:syntastic_c_cflags=' -I/usr/lib/oss/include/sys/soundcard.h -I/usr/include -I/usr/include/lua5.1 '
+
 #include <fcntl.h>
 #include <sys/soundcard.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <lua.h>
 #include <lauxlib.h>
@@ -79,6 +82,10 @@ static int write_mixer(mixer_ext_t *mext, int value) {
     val.timestamp = mext->ext.timestamp;
     val.value = value;
     if (ioctl(mext->mixer->fh, SNDCTL_MIX_WRITE, &val) < 0) return -1;
+    // Sleep a little to avoid glitter bug.
+    // See http://comments.gmane.org/gmane.comp.audio.oss.devel/1076 for details.
+    // TODO: make it as small as possible, needs a lot of testing with flood ioctl() write calls.
+    usleep(100000);
     return 0;
 }
 

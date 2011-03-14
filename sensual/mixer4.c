@@ -82,7 +82,38 @@ static int write_mixer(mixer_ext_t *mext, int value) {
     return 0;
 }
 
-static int format_stereo_value(lua_State *L, mixer_ext_t *mext, int value) {
+static void normalize(mixer_ext_t *mext, int exp, int num, ...) {
+    va_list args;
+    int* arg;
+    int i;
+    int min = mext->ext.minvalue;
+    int delta = mext->ext.maxvalue - min;
+
+    va_start(args, num);
+    for (i = 0; i < num; i++) {
+        arg = va_arg(args, int*);
+        *arg = (*arg - min) * exp / delta;
+    }
+    va_end(args);
+}
+
+static void denormalize(mixer_ext_t *mext, int exp, int num, ...) {
+    va_list args;
+    int* arg;
+    int i;
+    int min = mext->ext.minvalue;
+    int delta = mext->ext.maxvalue - min;
+
+    va_start(args, num);
+    for (i = 0; i < num; i++) {
+        arg = va_arg(args, int*);
+        *arg = min + (delta * *arg) / exp;
+    }
+    va_end(args);
+}
+
+static int format_stereo_value(lua_State *L, mixer_ext_t *mext, int norm, int value) {
+    int rvalue;
     int shift = 8;
     int mask = 0xff;
     switch (mext->ext.type) {
@@ -97,12 +128,18 @@ static int format_stereo_value(lua_State *L, mixer_ext_t *mext, int value) {
     return 0;
     }
 
-    lua_pushnumber(L, value & mask);
-    lua_pushnumber(L, (value >> shift) & mask);
+    rvalue = (value >> shift) & mask;
+    value &= mask;
+
+    if (norm)
+        normalize(mext, norm, 2, &value, &rvalue);
+
+    lua_pushnumber(L, value);
+    lua_pushnumber(L, rvalue);
     return 2;
 }
 
-static int format_mono_value(lua_State *L, mixer_ext_t *mext, int value) {
+static int format_mono_value(lua_State *L, mixer_ext_t *mext, int norm, int value) {
     int mask = 0xff;
     switch (mext->ext.type) {
     case MIXT_SLIDER:
@@ -118,7 +155,12 @@ static int format_mono_value(lua_State *L, mixer_ext_t *mext, int value) {
     return 0; return;
     }
 
-    lua_pushnumber(L, value & mask);
+    value &= mask;
+
+    if (norm)
+        normalize(mext, norm, 1, &value);
+
+    lua_pushnumber(L, value);
     return 1;
 }
 
@@ -149,7 +191,7 @@ static int format_enum_value(lua_State *L, mixer_ext_t *mext, int value) {
     return 1;
 }
 
-static int format_normal_value(lua_State *L, mixer_ext_t *mext, int value) {
+static int format_normal_value(lua_State *L, mixer_ext_t *mext, int norm, int value) {
     switch (mext->ext.type) {
     case MIXT_VALUE:
     case MIXT_HEXVALUE:
@@ -157,6 +199,9 @@ static int format_normal_value(lua_State *L, mixer_ext_t *mext, int value) {
     default:
     return 0;
     }
+
+    if (norm)
+        normalize(mext, norm, 1, &value);
 
     lua_pushnumber(L, value);
     return 1;
@@ -435,13 +480,27 @@ static int luaA_mixer_ext_get(lua_State *L) {
         lua_pushstring(L, mext->ext.id);
         return 1;
 
-    } else if (strcmp(index, "value") == 0) {
+    } else if (strcmp(index, "parent") == 0) {
+        lua_pushnumber(L, mext->ext.parent + 1);
+        return 1;
+
+    } else if (
+            (strcmp(index, "value") == 0) ||
+            (strcmp(index, "nvalue") == 0) ||
+            (strcmp(index, "pvalue") == 0)) {
+
         value = read_mixer(mext);
         if (value < 0) return 0;
 
-        if (result = format_normal_value(L, mext, value));
-        else if (result = format_stereo_value(L, mext, value));
-        else if (result = format_mono_value(L, mext, value));
+        switch (*index) {
+            case 'n': i = 1; break;
+            case 'p': i = 100; break;
+            default: i = 0;
+        }
+
+        if (result = format_normal_value(L, mext, i, value));
+        else if (result = format_stereo_value(L, mext, i, value));
+        else if (result = format_mono_value(L, mext, i, value));
         else if (result = format_switch_value(L, mext, value));
         else if (result = format_enum_value(L, mext, value));
         else return 0;
@@ -508,7 +567,15 @@ static int luaA_mixer_ext_set(lua_State *L) {
     if ((mext->ext.flags & MIXF_WRITEABLE) == 0) return 0;
 
     const char* strindex = luaL_checkstring(L, 2);
-    if (strcmp(strindex, "value") != 0) return 0;
+    int do_normalize;
+    if (strcmp(strindex, "value") == 0)
+        do_normalize = 0;
+    else if (strcmp(strindex, "nvalue") == 0)
+        do_normalize = 1;
+    else if (strcmp(strindex, "pvalue") == 0)
+        do_normalize = 100;
+    else
+        return 0;
 
     oss_mixer_enuminfo enuminf;
     int shift = 0, mask = 0, mono = 0, onoff = 0;
@@ -546,8 +613,14 @@ static int luaA_mixer_ext_set(lua_State *L) {
 
         lua_rawgeti(L, 3, 1); // left channel
         lua_rawgeti(L, 3, 2); // right channel
-        value = luaL_checknumber(L, -1); BOUND_CHECK(value, mext->ext.minvalue, mext->ext.maxvalue);
-        rvalue = luaL_checknumber(L, -2); BOUND_CHECK(rvalue, mext->ext.minvalue, mext->ext.maxvalue);
+        value = luaL_checknumber(L, -1);
+        rvalue = luaL_checknumber(L, -2);
+
+        if (do_normalize)
+            denormalize(mext, do_normalize, 2, &value, &rvalue);
+
+        BOUND_CHECK(value, mext->ext.minvalue, mext->ext.maxvalue);
+        BOUND_CHECK(rvalue, mext->ext.minvalue, mext->ext.maxvalue);
 
         value = ((value & mask) << shift) | (rvalue & mask);
         lua_pop(L, 2);
@@ -559,12 +632,20 @@ static int luaA_mixer_ext_set(lua_State *L) {
     } else if (lua_isnumber(L, 3)) { // single channel or set both channels to this value
         if (!mask) return 0;
         value = lua_tonumber(L, 3);
+
+        if (do_normalize)
+            denormalize(mext, do_normalize, 1, &value);
+
         BOUND_CHECK(value, mext->ext.minvalue, mext->ext.maxvalue);
-        value = value & mask;
-        if (!mono) value = (value << shift) | value;
+
+        if (mask) {
+            value = value & mask;
+            if (!mono) value = (value << shift) | value;
+        }
 
     } else if (lua_isstring(L, 3)) { // set enum
         if (mext->ext.type != MIXT_ENUM) return 0;
+        if (do_normalize) return 0;
         enuminf.dev = mext->ext.dev;
         enuminf.ctrl = mext->ext.ctrl;
         if (ioctl(mext->mixer->fh, SNDCTL_MIX_ENUMINFO, &enuminf) < 0) return 0;

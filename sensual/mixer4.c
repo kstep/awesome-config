@@ -116,6 +116,7 @@ static int format_stereo_value(lua_State *L, mixer_ext_t *mext, int norm, int va
     int rvalue;
     int shift = 8;
     int mask = 0xff;
+
     switch (mext->ext.type) {
     case MIXT_STEREOSLIDER16:
     case MIXT_STEREODB:
@@ -694,9 +695,9 @@ static const luaL_reg mixer_ext_meta[] = {
 };
 
 inline void luaA_newmetatable(lua_State *L, const char* name, const luaL_reg meta[]) {
-	luaL_newmetatable(L, name);
-	luaL_register(L, NULL, meta);
-	lua_pop(L, 1);
+    luaL_newmetatable(L, name);
+    luaL_register(L, NULL, meta);
+    lua_pop(L, 1);
 }
 
 LUALIB_API int luaopen_mixer (lua_State *L) {

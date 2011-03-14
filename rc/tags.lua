@@ -18,6 +18,7 @@ tags = {
     ["dbms"]   = { layout = layout.max, },
     ["other"]  = { position = 0, },
     ["vbox"]   = { layout = layout.max, screen = 2 },
+    ["fpas"]   = { layout = layout.tile.right, nmaster = 3, mwfact = 0.8, screen = 2 },
     ["notes"]  = { },
     ["sql"]    = { screen = 2 },
 }
@@ -44,6 +45,7 @@ rules = {
     { match = {"^freemind", "Gournal", "Xournal"}, tag = "notes" },
     { match = {"Pgadmin3"}, tag = "sql" },
     { match = {"VirtualBox"}, tag = "vbox" },
+    { match = {"lazarus"}, tag = "fpas", slave = true },
 }
 
 defaults = {

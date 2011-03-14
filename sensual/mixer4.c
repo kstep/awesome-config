@@ -457,6 +457,7 @@ static int luaA_mixer_ext_get(lua_State *L) {
     }
 
     oss_mixer_enuminfo enuminf;
+    oss_audioinfo audioinf;
     int result;
 
     if (strcmp(index, "type") == 0) {
@@ -571,6 +572,26 @@ static int luaA_mixer_ext_get(lua_State *L) {
         if (ioctl(mext->mixer->fh, SNDCTL_MIX_DESCRIPTION, &enuminf) < 0) return 0;
 
         lua_pushstring(L, enuminf.strings);
+        return 1;
+
+    } else if (strcmp(index, "engine") == 0) {
+        if (mext->ext.id[0] != '@') return 0;
+        if (sscanf(mext->ext.id + 1, "pcm%d", &value) != 1) return 0;
+        audioinf.dev = value;
+        if (ioctl(mext->mixer->fh, SNDCTL_ENGINEINFO, &audioinf) == -1) return 0;
+
+#define luaA_settable(L, tind, key, typ, val) lua_push##typ(L, (val)); lua_setfield(L, (tind), (key))
+        lua_createtable(L, 0, 10);
+        luaA_settable(L, -2, "num", number, audioinf.dev);
+        luaA_settable(L, -2, "name", string, audioinf.name);
+        luaA_settable(L, -2, "id", string, audioinf.handle);
+        luaA_settable(L, -2, "busy", boolean, audioinf.busy);
+        luaA_settable(L, -2, "pid", number, audioinf.pid);
+        luaA_settable(L, -2, "cmdline", string, audioinf.cmd);
+        luaA_settable(L, -2, "label", string, audioinf.label);
+        luaA_settable(L, -2, "song", string, audioinf.song_name);
+        luaA_settable(L, -2, "devnode", string, audioinf.devnode);
+        luaA_settable(L, -2, "enabled", boolean, audioinf.enabled);
         return 1;
 
     } else if (strcmp(index, "flags") == 0) {

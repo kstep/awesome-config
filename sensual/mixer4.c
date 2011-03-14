@@ -14,6 +14,8 @@
 #define warn(fmt, ...)
 #endif
 
+#define WRITE_DELAY 250000
+
 #define IN_ENUM(ext, ind) ((ext)[(ind) / 8] & (1 << ((ind) % 8)))
 #define BOUND_CHECK(value, min, max) if ((value) < (min)) (value) = (min); else if ((value) > (max)) (value) = (max)
 
@@ -82,10 +84,12 @@ static int write_mixer(mixer_ext_t *mext, int value) {
     val.timestamp = mext->ext.timestamp;
     val.value = value;
     if (ioctl(mext->mixer->fh, SNDCTL_MIX_WRITE, &val) < 0) return -1;
+#ifdef WRITE_DELAY
     // Sleep a little to avoid glitter bug.
     // See http://comments.gmane.org/gmane.comp.audio.oss.devel/1076 for details.
     // TODO: make it as small as possible, needs a lot of testing with flood ioctl() write calls.
-    usleep(100000);
+    usleep(WRITE_DELAY);
+#endif
     return 0;
 }
 

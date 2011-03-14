@@ -434,21 +434,17 @@ static int luaA_mixer_ext_get(lua_State *L) {
     mixer_ext_t *mext = luaL_checkudata(L, 1, "mixer_ext");
     if (luaA_usemetatable(L, 1, 2)) return 1;
 
-    int value, i;
-    
+    char *index;
+    int value, i, channel;
+
     if (lua_isnumber(L, 2)) {
-        i = luaL_checknumber(L, 2);
-        if (i < 1 || 2 < i) return 0;
-
-        value = read_mixer(mext);
-        if (format_stereo_value(L, mext, value) == 0)
-            return 0;
-
-        lua_remove(L, -i);
-        return 1;
+        channel = luaL_checknumber(L, 2);
+        index = "value";
+    } else {
+        index = (char *)luaL_checkstring(L, 2);
+        channel = 0;
     }
 
-    const char *index = luaL_checkstring(L, 2);
     oss_mixer_enuminfo enuminf;
     int result;
 
@@ -514,7 +510,12 @@ static int luaA_mixer_ext_get(lua_State *L) {
         else if (result = format_enum_value(L, mext, value));
         else return 0;
 
-        if (result > 1) pack_into_table(L, result);
+        if (result > 1) {
+            if (0 < channel && channel <= result)
+                lua_remove(L, -channel);
+            else
+                pack_into_table(L, result);
+        }
         return 1;
 
     } else if (strcmp(index, "min") == 0) {
@@ -639,7 +640,6 @@ static int luaA_mixer_ext_set(lua_State *L) {
         value = lua_toboolean(L, 3);
 
     } else if (lua_isnumber(L, 3)) { // single channel or set both channels to this value
-        if (!mask) return 0;
         value = lua_tonumber(L, 3);
 
         if (do_normalize)

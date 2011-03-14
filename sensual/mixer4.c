@@ -27,6 +27,32 @@ typedef struct {
     oss_mixext ext;
 } mixer_ext_t;
 
+typedef struct {
+    int flag;
+    char *name;
+} mixer_flag_names_t;
+
+static const mixer_flag_names_t mixer_flag_names[] = {
+    {MIXF_CENTIBEL , "cB"},
+    {MIXF_DECIBEL  , "dB"},
+    {MIXF_DESCR    , "desc"},
+    {MIXF_DYNAMIC  , "dyn"},
+    {MIXF_FLAT     , "flat"},
+    {MIXF_HZ       , "Hz"},
+    {MIXF_LEGACY   , "legacy"},
+    {MIXF_MAINVOL  , "mainvol"},
+    {MIXF_MONVOL   , "monvol"},
+    {MIXF_OKFAIL   , "ok/fail"},
+    {MIXF_PCMVOL   , "pcmvol"},
+    {MIXF_POLL     , "poll"},
+    {MIXF_READABLE , "read"},
+    {MIXF_RECVOL   , "recvol"},
+    {MIXF_STRING   , "string"},
+    {MIXF_WIDE     , "wide"},
+    {MIXF_WRITEABLE, "write"},
+    {0, NULL}
+};
+
 static int open_mixer_dev(int mixerno) {
     char buf[14];
     if (mixerno > 0) {
@@ -455,6 +481,22 @@ static int luaA_mixer_ext_get(lua_State *L) {
 
     } else if (strcmp(index, "readonly") == 0) {
         lua_pushboolean(L, (mext->ext.flags & MIXF_WRITEABLE) == 0);
+        return 1;
+
+    } else if (strcmp(index, "flags") == 0) {
+        lua_createtable(L, 0, 0);
+        value = 0;
+        for (i = 0; mixer_flag_names[i].flag; i++) {
+            if (mext->ext.flags & mixer_flag_names[i].flag) {
+                lua_pushnumber(L, ++value);
+                lua_pushstring(L, mixer_flag_names[i].name);
+                lua_pushvalue(L, -1);
+                lua_pushboolean(L, 1);
+                lua_settable(L, -5);
+                lua_settable(L, -3);
+            }
+        }
+
         return 1;
     }
 

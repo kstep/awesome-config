@@ -552,6 +552,16 @@ static int luaA_mixer_ext_get(lua_State *L) {
         lua_pushboolean(L, (mext->ext.flags & MIXF_WRITEABLE) == 0);
         return 1;
 
+    } else if (strcmp(index, "desc") == 0) {
+        if ((mext->ext.flags & MIXF_DESCR) == 0) return 0;
+
+        enuminf.dev = mext->ext.dev;
+        enuminf.ctrl = mext->ext.ctrl;
+        if (ioctl(mext->mixer->fh, SNDCTL_MIX_DESCRIPTION, &enuminf) < 0) return 0;
+
+        lua_pushstring(L, enuminf.strings);
+        return 1;
+
     } else if (strcmp(index, "flags") == 0) {
         lua_createtable(L, 0, 0);
         value = 0;

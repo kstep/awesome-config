@@ -1,15 +1,15 @@
 local setmetatable = setmetatable
 local ipairs = ipairs
 local table = { insert = table.insert }
-local mixer = assert(package.loadlib("/home/kstep/.config/awesome/sensual/mixer.so", "luaopen_mixer"))()
+local mixer = assert(package.loadlib("/home/kstep/.config/awesome/sensual/mixer4.so", "luaopen_mixer"))()
+local type = type
 
 module("sensual.mixer")
 
 function worker(self)
    local volumes = {}
    for _, dev in ipairs(self.devices) do
-       table.insert(volumes, dev[1])
-       table.insert(volumes, dev.muted)
+       table.insert(volumes, dev.pvalue)
    end
    return volumes
 end
@@ -18,9 +18,9 @@ local sensor
 local function new(mixno, ...)
     if not sensor then
         sensor = {}
-        sensor.meta = { min = 0, max = 100 }
         sensor.args = mixno
         sensor.mixer = mixer.open(mixno)
+        sensor.meta = { min = 0, max = 100 }
         sensor.devices = {}
         for _, name in ipairs(arg) do
             table.insert(sensor.devices, sensor.mixer[name])

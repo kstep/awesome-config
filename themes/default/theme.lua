@@ -102,7 +102,7 @@ function map(func, table)
     return result
 end
 
-theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/Cosmosition_" .. v .. ".jpg" end,
+theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/02510_home_" .. v .. ".jpg" end,
     {
         "1280x800",
         "1680x1050",

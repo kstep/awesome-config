@@ -27,7 +27,7 @@ rules = {
     { match = {"Qjackctl"}, tag = "audio", float = true, geometry = { width = 550, height = 115 } },
     { match = {"Rosegarden"}, tag = "audio" },
     { match = {"Grecord"}, tag = "audio", float = true },
-    { match = {"Gvim", "Vim", "OpenOffice", "Pida"},  tag = "edit" },
+    { match = {"Gvim", "Vim", "^libreoffice", "OpenOffice", "Pida"},  tag = "edit" },
     { match = {"gimp"},  tag = "graph" },
     { match = {"Smplayer", "MPlayer", "VLC.*"},  tag = "video" },
     { match = {"luakit", "Opera", "Firefox", "Links", "IEXPLORE", "Google-chrome", "Uzbl"},  tag = "www" },

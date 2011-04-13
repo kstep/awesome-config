@@ -14,7 +14,7 @@ module("rc.widget.sensor.volume")
 
 local widgets = {
     progressbar({ width = 5, layout = vars.statbox_layout }),
-    sensual.label(" %d%% "),
+    sensual.label(" %d%% %s "),
     layout = vars.statbox_layout
 }
 widgets[1]:set_vertical(true)
@@ -24,9 +24,9 @@ widgets[1]:set_height(17)
 widgets[2]:set_color(theme.volume)
 
 set_mute_color = function (w, value, meta) return value and theme.down or theme.up end
-reg = sensual.registermore(sensual.mixer(0, "misc.front1", "misc.front-mute"), util.table.join(widgets, widgets), {
+reg = sensual.registermore(sensual.mixer(0, "misc.front1", "misc.front-mute", "jack.int-purple.mute"), util.table.join(widgets, widgets), {
     { 1, sensual.filters.scale },
-    { 1 },
+    { { 1, 3 }, function (w, a, m) return {a[1], a[2] and "♪" or "♫"} end },
     { 2, set_mute_color, "set_color" },
     { 2, set_mute_color, "set_color" },
 }, 5)
@@ -57,6 +57,7 @@ function toggle_mute()
 end
 
 widgets[2].widget:buttons(util.table.join(
+    button({ }, 1, function () reg.sensor.devices[3].value = not reg.sensor.devices[3].value; reg.update() end),
     button({ }, 3, toggle_mute),
     button({ }, 4, inc_vol(1)),
     button({ }, 5, inc_vol(-1))

@@ -15,7 +15,7 @@ module("rc.widget.sensor.battery")
 local widgets = {
     progressbar({ width = 10, layout = vars.statbox_layout }),
     sensual.label("[%(2)2d:%(3)02d] "),
-    sensual.label(" %3d%% "),
+    sensual.label(" ⚡%3d%% "),
     layout = vars.statbox_layout
 }
 widgets[1]:set_vertical(true)

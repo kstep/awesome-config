@@ -42,7 +42,7 @@ player_cmd   = player
 veditor      = "/usr/bin/gvim"
 veditor_cmd  = veditor
 
-locker = "/usr/bin/slock"
+locker = "/usr/bin/slimlock"
 
 modkey = "Mod4"
 

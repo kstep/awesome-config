@@ -10,6 +10,7 @@ local cmus    = require("sensual.cmus")
 local filters = require("sensual.filters")
 local naughty = require("naughty")
 local vars = require("rc.vars")
+local volume = require("rc.widget.sensor.volume")
 local ipairs = ipairs
 local setmetatable = setmetatable
 
@@ -71,6 +72,7 @@ function update(data)
     local title = (" %s — «%s»"):format(data.artist or "Unknown artist", data.title or data.file or "Unknown title")
     local img = capi.image(icon_by_status(data.status))
 
+    volume.headphones_only(true)
     naughty.notify({ timeout = 3, preset = naughty.config.presets.low, icon = img, text = title }) 
     widgets[1].image = img
     widgets[2].text  = title

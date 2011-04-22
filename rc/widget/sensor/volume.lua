@@ -56,8 +56,16 @@ function toggle_mute()
     set_mute(not get_mute())
 end
 
+function headphones_only(v)
+    reg.sensor.devices[3].value = v
+    reg.update()
+end
+function headphones_toggle()
+    headphones_only(not reg.sensor.devices[3].value)
+end
+
 widgets[2].widget:buttons(util.table.join(
-    button({ }, 1, function () reg.sensor.devices[3].value = not reg.sensor.devices[3].value; reg.update() end),
+    button({ }, 1, headphones_toggle),
     button({ }, 3, toggle_mute),
     button({ }, 4, inc_vol(1)),
     button({ }, 5, inc_vol(-1))

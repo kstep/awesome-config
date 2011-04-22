@@ -102,11 +102,12 @@ function map(func, table)
     return result
 end
 
-theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/02510_home_" .. v .. ".jpg" end,
-    {
-        "1280x800",
-        "1680x1050",
-    })
+theme.wallpaper_cmd = { "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/apple-wallpaper_" .. screen.count() .. ".jpg" }
+--theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/02510_home_" .. v .. ".jpg" end,
+    --{
+        --"1280x800",
+        --"1680x1050",
+    --})
 
 theme.icons_dir = "/usr/share/icons/oxygenrefit2-black/16x16/actions"
 theme.icons = {
@@ -120,4 +121,4 @@ theme.icons = {
 }
 
 return theme
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fenc=utf-8:textwidth=80

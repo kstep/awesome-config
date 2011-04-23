@@ -1,7 +1,7 @@
 local capi = { timer = timer, widget = widget }
 local setmetatable = setmetatable
 local ipairs = ipairs
-local table = { insert = table.insert }
+local table = { insert = table.insert, concat = table.concat }
 
 local util = require("awful.util")
 local button = require("awful.button")
@@ -12,15 +12,14 @@ local naughty = require("naughty")
 module("rc.widget.tomato")
 
 config = {
-    default = 2,
+    default = 1,
     timers = {
-        { 1,  name = 'Тест',      message = 'Тест окончен!'    , color = '#0000ff', urgency = 'critical' },
         { 25, name = 'Помидорка', message = 'Пора отдохнуть!'  , color = '#ff00ff', urgency = 'critical' }, 
         { 5 , name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' }, 
         { 30, name = 'Отдых'    , message = 'Отдых закончен.'  , color = '#00ffff', urgency = 'critical' }, 
     },
-    sequences = {
-        { 1, 2, 1, 2, 1, 2, 1, 3, name = 'Сессия', loop = true, pause = true },
+    series = {
+        { 1, 2, 1, 2, 1, 2, 1, 3, name = 'Pomidoro', loop = true, pause = false },
     }
 }
 
@@ -58,17 +57,6 @@ local function toggle(widget)
     end
 end
 
--- single timer click
-local function tick(widget)
-    widget.count = widget.count - 1
-    if widget.count < 1 then
-        stop(widget)
-        naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = widget.preset })
-    else
-        widget:update()
-    end
-end
-
 -- configure timer widget
 local function setup(widget, args)
     args = args or config.timers[config.default or 1] or {}
@@ -79,6 +67,42 @@ local function setup(widget, args)
     widget.preset = naughty.config.presets[args.urgency or "critical"]
 end
 
+local function set_series(widget, series)
+    widget.series = series
+    widget.current = 0
+end
+
+local function next_series(widget)
+    if not widget.series then stop(widget) return end
+    local series = config.series[widget.series]
+    widget.current = widget.current + 1
+    if widget.current > #series then
+        if series.loop then
+            widget.current = 1
+        else
+            widget.current = #series
+        end
+    end
+    setup(widget, config.timers[series[widget.current]])
+    if series.pause then
+        stop(widget)
+    else
+        reset(widget)
+    end
+end
+
+-- single timer click
+local function tick(widget)
+    widget.count = widget.count - 1
+    if widget.count < 1 then
+        naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = widget.preset })
+        next_series(widget)
+    else
+        widget:update()
+    end
+end
+
+
 -- create time widget
 local function new(s, args)
     local widget = {}
@@ -87,11 +111,26 @@ local function new(s, args)
     for _, item in ipairs(config.timers) do
         table.insert(timers, { ("%2d %s"):format(item[1], item.name),
             function ()
+                set_series(widget, nil)
                 setup(widget, item)
                 stop(widget)
             end })
     end
-    local timers_menu = menu({ items = timers, width = 150 })
+    for i, item in ipairs(config.series) do
+        local times = {}
+        for _, t in ipairs(item) do
+            table.insert(times, config.timers[t][1])
+        end
+        if item.loop then
+            table.insert(times, "…")
+        end
+        table.insert(timers, { ("%s %s"):format(table.concat(times, "→"), item.name),
+            function ()
+                set_series(widget, i)
+                next_series(widget)
+            end })
+    end
+    local timers_menu = menu({ items = timers, width = 200 })
 
     widget.running = false
     widget.timer = capi.timer({ timeout = 60 })

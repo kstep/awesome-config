@@ -12,7 +12,7 @@ local naughty = require("naughty")
 module("rc.widget.tomato")
 
 config = {
-    default = 1,
+    default = 2,
     timers = {
         { 1,  name = 'Тест',      message = 'Тест окончен!'    , color = '#0000ff', urgency = 'critical' },
         { 25, name = 'Помидорка', message = 'Пора отдохнуть!'  , color = '#ff00ff', urgency = 'critical' }, 
@@ -24,45 +24,45 @@ config = {
     }
 }
 
+-- update widget info
+local function update(widget)
+    widget[1].text = ('<span color="white" bgcolor="%s"> %02d </span>'):format(widget.running and widget.color or "red", widget.count)
+end
+
+-- reset countdown, don't stop timer
+local function reset(widget)
+    widget.count = widget.timeout
+    update(widget)
+end
+
 -- stop countdown and reset timer
 local function stop(widget)
     widget.timer:stop()
     widget.running = false
-    widget:reset()
+    reset(widget)
 end
 
 -- start countdown
 local function start(widget)
     widget.timer:start()
     widget.running = true
-    widget:update()
-end
-
--- reset countdown, don't stop timer
-local function reset(widget)
-    widget.count = widget.timeout
-    widget:update()
+    update(widget)
 end
 
 -- toggle timer
 local function toggle(widget)
     if widget.running then
-        widget:stop()
+        stop(widget)
     else
-        widget:start()
+        start(widget)
     end
-end
-
--- update widget info
-local function update(widget)
-    widget[1].text = ('<span color="white" bgcolor="%s"> %02d </span>'):format(widget.running and widget.color or "red", widget.count)
 end
 
 -- single timer click
 local function tick(widget)
     widget.count = widget.count - 1
     if widget.count < 1 then
-        widget:stop()
+        stop(widget)
         naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = widget.preset })
     else
         widget:update()
@@ -81,44 +81,35 @@ end
 
 -- create time widget
 local function new(s, args)
-    local widget = {
-        start = start,
-        stop = stop,
-        reset = reset,
-        setup = setup,
-        toggle = toggle,
-        tick = tick,
-        update = update,
+    local widget = {}
 
-        running = false,
-        layout = wiout.horizontal.rightleft
-    }
     local timers = {}
-
     for _, item in ipairs(config.timers) do
         table.insert(timers, { ("%2d %s"):format(item[1], item.name),
             function ()
-                widget:setup(item)
-                widget:stop()
+                setup(widget, item)
+                stop(widget)
             end })
     end
-    widget.menu = menu({ items = timers, width = 150 })
+    local timers_menu = menu({ items = timers, width = 150 })
 
+    widget.running = false
     widget.timer = capi.timer({ timeout = 60 })
-    widget.timer:add_signal("timeout", function () widget:tick() end)
+    widget.timer:add_signal("timeout", function () tick(widget) end)
 
     widget[1] = capi.widget({ type = "textbox" })
     widget[1]:buttons(util.table.join(
         button({ }, 1, nil, function ()
-            widget:toggle()
+            toggle(widget)
         end),
         button({ }, 3, nil, function ()
-            widget.menu:toggle()
+            timers_menu:toggle()
         end)
     ))
+    widget.layout = wiout.horizontal.rightleft
 
-    widget:setup(args)
-    widget:reset()
+    setup(widget, args)
+    reset(widget)
     return widget
 end
 

@@ -19,7 +19,8 @@ theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 
 -- My own config
-theme.font          = "terminus 8"
+--theme.font          = "terminus 8"
+theme.font          = "DejaVu Sans Mono 8"
 
 -- Palette generated with http://www.colorschemer.com/online.html,
 -- key color is #F0DFAF, colors taken:

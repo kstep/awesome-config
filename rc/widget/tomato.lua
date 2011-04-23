@@ -1,6 +1,7 @@
 local capi = { timer = timer, widget = widget }
 local setmetatable = setmetatable
 local ipairs = ipairs
+local type = type
 local table = { insert = table.insert, concat = table.concat }
 
 local util = require("awful.util")
@@ -14,18 +15,19 @@ module("rc.widget.tomato")
 config = {
     default = 1,
     timers = {
-        { 25, name = 'Помидорка', message = 'Пора отдохнуть!'  , color = '#ff00ff', urgency = 'critical' }, 
-        { 5 , name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' }, 
-        { 30, name = 'Отдых'    , message = 'Отдых закончен.'  , color = '#00ffff', urgency = 'critical' }, 
+        { 25, name = 'Помидорка', message = 'Пора отдохнуть!'  , color = '#ff00ff', urgency = 'critical' },
+        { 5 , name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' },
+        { 30, name = 'Отдых'    , message = 'Отдых закончен.'  , color = '#00ffff', urgency = 'critical' },
     },
     series = {
         { 1, 2, 1, 2, 1, 2, 1, 3, name = 'Pomidoro', loop = true, pause = false },
     }
 }
+counts = {}
 
 -- update widget info
 local function update(widget)
-    widget[1].text = ('<span color="white" bgcolor="%s"> %02d </span>'):format(widget.running and widget.color or "red", widget.count)
+    widget[1].text = ('<span color="white" bgcolor="%s"> %02d [×%d] </span>'):format(widget.running and widget.color or "red", widget.count, counts[widget.index] or 0)
 end
 
 -- reset countdown, don't stop timer
@@ -59,7 +61,13 @@ end
 
 -- configure timer widget
 local function setup(widget, args)
-    args = args or config.timers[config.default or 1] or {}
+    args = args or config.default or 1
+    if type(args) ~= "table" then
+        widget.index = args
+        args = config.timers[args] or {}
+    else
+        widget.index = nil
+    end
     widget.timeout = args[1] or 25
     widget.name = args.name or "Tomato!"
     widget.message = args.message or "Time to get some rest!"
@@ -83,7 +91,7 @@ local function next_series(widget)
             widget.current = #series
         end
     end
-    setup(widget, config.timers[series[widget.current]])
+    setup(widget, series[widget.current])
     if series.pause then
         stop(widget)
     else
@@ -96,9 +104,12 @@ local function tick(widget)
     widget.count = widget.count - 1
     if widget.count < 1 then
         naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = widget.preset })
+        if widget.index then
+            counts[widget.index] = (counts[widget.index] or 0) + 1
+        end
         next_series(widget)
     else
-        widget:update()
+        update(widget)
     end
 end
 
@@ -108,11 +119,11 @@ local function new(s, args)
     local widget = {}
 
     local timers = {}
-    for _, item in ipairs(config.timers) do
+    for i, item in ipairs(config.timers) do
         table.insert(timers, { ("%2d %s"):format(item[1], item.name),
             function ()
                 set_series(widget, nil)
-                setup(widget, item)
+                setup(widget, i)
                 stop(widget)
             end })
     end

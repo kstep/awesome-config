@@ -20,7 +20,7 @@ config = {
         { 30, name = 'Отдых'    , message = 'Отдых закончен.'  , color = '#00ffff', urgency = 'critical' },
     },
     series = {
-        { 1, 2, 1, 2, 1, 2, 1, 3, name = 'Pomidoro', loop = true, pause = false },
+        { 1, 2, 1, 2, 1, 2, 1, 3, name = 'Pomidoro', loop = true, pause = true },
     }
 }
 counts = {}

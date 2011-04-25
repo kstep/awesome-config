@@ -27,7 +27,12 @@ counts = {}
 
 -- update widget info
 local function update(widget)
-    widget[1].text = ('<span color="white" bgcolor="%s"> %02d [×%d] </span>'):format(widget.running and widget.color or "red", widget.count, counts[widget.index] or 0)
+    widget[1].text = ('<span color="white" bgcolor="%s"> %02d [×%d] </span>'):format(widget.running and widget.color or "red", widget.count, counts[widget] or 0)
+end
+
+-- show widget specific notification
+local function notify(widget)
+    naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = naughty.config.presets[widget.urgency] })
 end
 
 -- reset countdown, don't stop timer
@@ -61,18 +66,12 @@ end
 
 -- configure timer widget
 local function setup(widget, args)
-    args = args or config.default or 1
-    if type(args) ~= "table" then
-        widget.index = args
-        args = config.timers[args] or {}
-    else
-        widget.index = nil
-    end
+    args = args or config.timers[config.default] or {}
     widget.timeout = args[1] or 25
     widget.name = args.name or "Tomato!"
     widget.message = args.message or "Time to get some rest!"
     widget.color = args.color or '#00ff00'
-    widget.preset = naughty.config.presets[args.urgency or "critical"]
+    widget.urgency = args.urgency or "critical"
 end
 
 local function set_series(widget, series)
@@ -103,10 +102,8 @@ end
 local function tick(widget)
     widget.count = widget.count - 1
     if widget.count < 1 then
-        naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = widget.preset })
-        if widget.index then
-            counts[widget.index] = (counts[widget.index] or 0) + 1
-        end
+        notify(widget)
+        counts[widget] = (counts[widget] or 0) + 1
         next_series(widget)
     else
         update(widget)

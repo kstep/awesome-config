@@ -138,7 +138,7 @@ local function new(s, args)
                 next_series(widget)
             end })
     end
-    local timers_menu = menu({ items = timers, width = 200 })
+    local timers_menu = menu({ items = timers, width = 230 })
 
     widget.running = false
     widget.timer = capi.timer({ timeout = 60 })

@@ -1,4 +1,4 @@
-local capi = { timer = timer, widget = widget }
+local capi = { timer = timer, widget = widget, image = image }
 local setmetatable = setmetatable
 local pairs = pairs
 local ipairs = ipairs
@@ -42,9 +42,12 @@ local function update(widget)
 end
 
 -- show widget specific notification
+start_icon = capi.image("/usr/share/icons/oxygenrefit2-black/48x48/apps-extra/chronometer.png")
+stop_icon = capi.image("/usr/share/icons/oxygenrefit2-black/48x48/apps-extra/gazpacho.png")
 local function notify(widget, message)
+    icon = message and start_icon or stop_icon
     message = message or widget.message
-    naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = message, preset = naughty.config.presets[widget.urgency] })
+    naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = message, preset = naughty.config.presets[widget.urgency], icon = icon })
 end
 
 -- reset countdown, don't stop timer

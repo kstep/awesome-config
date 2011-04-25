@@ -25,7 +25,7 @@ local function worker(self)
         for line in f:lines() do
             if line:find(self.iface) then
                 local iface, state, link, level, noise, nwid, crypt, frag, retry, misc, beacon =
-                    line:match("^%s+([a-z0-9]+):%s+([0-9]+)%s+([0-9.]+)%s+(-[0-9]+)%s+(-[0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)")
+                    line:match("^%s+([a-z0-9]+):%s+([0-9]+)%s+([0-9.]+)%s+(-[0-9.]+)%s+(-[0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)%s+([0-9]+)")
                 data["state"] = state
                 data["link"]  = link
                 data["level"] = level

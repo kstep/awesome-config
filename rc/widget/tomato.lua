@@ -1,5 +1,6 @@
 local capi = { timer = timer, widget = widget }
 local setmetatable = setmetatable
+local pairs = pairs
 local ipairs = ipairs
 local type = type
 local table = { insert = table.insert, concat = table.concat }
@@ -13,21 +14,31 @@ local naughty = require("naughty")
 module("rc.widget.tomato")
 
 config = {
-    default = 1,
+    default = 'Помидорка',
     timers = {
         { 25, name = 'Помидорка', message = 'Пора отдохнуть!'  , color = '#ff00ff', urgency = 'critical' },
-        { 5 , name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' },
+        {  5, name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' },
         { 30, name = 'Отдых'    , message = 'Отдых закончен.'  , color = '#00ffff', urgency = 'critical' },
     },
     series = {
-        { 1, 2, 1, 2, 1, 2, 1, 3, name = 'Pomidoro', loop = true, pause = true },
+        ["Pomidoro"] = {
+            "Помидорка", "Перерыв",
+            "Помидорка", "Перерыв",
+            "Помидорка", "Перерыв",
+            "Помидорка", "Отдых",
+            loop = true, pause = true
+        },
     }
 }
 counts = {}
+timers_index = {}
+for i, item in ipairs(config.timers) do
+    timers_index[item.name] = i
+end
 
 -- update widget info
 local function update(widget)
-    widget[1].text = ('<span color="white" bgcolor="%s"> %02d [×%d] </span>'):format(widget.running and widget.color or "red", widget.count, counts[widget] or 0)
+    widget[1].text = ('<span color="white" bgcolor="%s"> %02d [×%d] </span>'):format(widget.running and widget.color or "red", widget.count, counts[widget.name] or 0)
 end
 
 -- show widget specific notification
@@ -66,7 +77,7 @@ end
 
 -- configure timer widget
 local function setup(widget, args)
-    args = args or config.timers[config.default] or {}
+    args = args or config.timers[timers_index[config.default]] or {}
     widget.timeout = args[1] or 25
     widget.name = args.name or "Tomato!"
     widget.message = args.message or "Time to get some rest!"
@@ -90,7 +101,8 @@ local function next_series(widget)
             widget.current = #series
         end
     end
-    setup(widget, series[widget.current])
+    local name = series[widget.current]
+    setup(widget, config.timers[timers_index[name]])
     if series.pause then
         stop(widget)
     else
@@ -103,7 +115,7 @@ local function tick(widget)
     widget.count = widget.count - 1
     if widget.count < 1 then
         notify(widget)
-        counts[widget] = (counts[widget] or 0) + 1
+        counts[widget.name] = (counts[widget.name] or 0) + 1
         next_series(widget)
     else
         update(widget)
@@ -120,21 +132,21 @@ local function new(s, args)
         table.insert(timers, { ("%2d %s"):format(item[1], item.name),
             function ()
                 set_series(widget, nil)
-                setup(widget, i)
+                setup(widget, item)
                 stop(widget)
             end })
     end
-    for i, item in ipairs(config.series) do
+    for name, item in pairs(config.series) do
         local times = {}
         for _, t in ipairs(item) do
-            table.insert(times, config.timers[t][1])
+            table.insert(times, config.timers[timers_index[t]][1])
         end
         if item.loop then
             table.insert(times, "…")
         end
-        table.insert(timers, { ("%s %s"):format(table.concat(times, "→"), item.name),
+        table.insert(timers, { ("%s %s"):format(table.concat(times, item.pause and "→" or "»"), name),
             function ()
-                set_series(widget, i)
+                set_series(widget, name)
                 next_series(widget)
             end })
     end

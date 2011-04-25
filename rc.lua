@@ -18,10 +18,20 @@ shifty.config.tags     = rc.tags.tags
 shifty.config.defaults = rc.tags.defaults
 
 screens = screen.count()
-naughty.config.presets.normal.screen = screens
-naughty.config.presets.low.screen = screens
+for k, v in pairs({ screen = screens, font = "DejaVu Sans Mono 10" }) do
+    naughty.config.presets.normal[k] = v
+    naughty.config.presets.low[k] = v
+end
 
-for k, v in pairs({ screen = screens, ontop = true, timeout = 10, bg = beautiful.palette[1], border_color = beautiful.palette[5], fg = "#ffffff" }) do
+for k, v in pairs({
+        screen = screens,
+        ontop = true,
+        timeout = 10,
+        bg = beautiful.palette[1],
+        border_color = beautiful.palette[5],
+        fg = "#ffffff",
+        font = "DejaVu Sans Mono 10"
+    }) do
     naughty.config.presets.critical[k] = v
 end
 

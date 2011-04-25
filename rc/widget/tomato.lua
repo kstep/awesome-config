@@ -42,8 +42,9 @@ local function update(widget)
 end
 
 -- show widget specific notification
-local function notify(widget)
-    naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = widget.message, preset = naughty.config.presets[widget.urgency] })
+local function notify(widget, message)
+    message = message or widget.message
+    naughty.notify({ title = "<big>" .. widget.name .. "</big>", text = message, preset = naughty.config.presets[widget.urgency] })
 end
 
 -- reset countdown, don't stop timer
@@ -63,6 +64,7 @@ end
 local function start(widget)
     widget.timer:start()
     widget.running = true
+    notify(widget, "Отсчёт пошёл.")
     update(widget)
 end
 

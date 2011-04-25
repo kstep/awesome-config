@@ -38,7 +38,7 @@ end
 
 -- update widget info
 local function update(widget)
-    widget[1].text = ('<span color="white" bgcolor="%s"> %02d [×%d] </span>'):format(widget.running and widget.color or "red", widget.count, counts[widget.name] or 0)
+    widget[1].text = ('<span color="white" bgcolor="%s"> %s %02d [×%d] </span>'):format(widget.color or "green", widget.running and "▶" or "■", widget.count, counts[widget.name] or 0)
 end
 
 -- show widget specific notification

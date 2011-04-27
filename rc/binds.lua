@@ -194,7 +194,7 @@ global = {
     key({ modkey } , "w" , function () menu.mainmenu:show(true) end) , 
 
     key({ modkey }, "s", function () scratch.drop(vars.terminal) end),
-    key({ modkey }, "p", function () scratch.drop('ipythonx') end),
+    key({ modkey }, "p", function () scratch.drop(vars.terminal .. ' -e ipython') end),
     key({ modkey }, "c", function () scratch.drop(vars.terminal .. ' -e cmus') end),
 
     -- Layout manipulation

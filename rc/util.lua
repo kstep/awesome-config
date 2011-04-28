@@ -1,5 +1,7 @@
 local root   = root
 local screen = screen
+local ipairs = ipairs
+local table = { insert = table.insert }
 
 local awful = require("awful")
 

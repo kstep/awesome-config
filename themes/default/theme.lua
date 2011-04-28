@@ -25,6 +25,10 @@ theme.taglist_squares_sel = '/home/kstep/doc/greentag2.png'
 theme.taglist_squares_unsel = nil
 theme.taglist_squares_resize = false
 
+theme.tooltip_fg_color = "#000000"
+theme.tooltip_bg_color = "#ffffff"
+theme.tooltip_font = "DejaVu Sans Mono 9"
+
 -- Palette generated with http://www.colorschemer.com/online.html,
 -- key color is #F0DFAF, colors taken:
 -- 1, 2, 3, 4,

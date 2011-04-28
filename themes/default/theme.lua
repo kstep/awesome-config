@@ -5,7 +5,7 @@ theme = dofile("/usr/share/awesome/themes/zenburn/theme.lua")
 
 -- Zhurazlik theme from https://awesome.naquadah.org/wiki/Zhuravlik_theme
 theme.bg_normal     = "#f7f7f7"
-theme.bg_focus      = "#535d6c"
+theme.bg_focus      = "#8ac23f" -- "#535d6c"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#444444"
 
@@ -20,6 +20,10 @@ theme.border_focus  = "#535d6c"
 
 -- My own config
 theme.font          = "terminus 8"
+
+theme.taglist_squares_sel = '/home/kstep/doc/greentag2.png'
+theme.taglist_squares_unsel = nil
+theme.taglist_squares_resize = false
 
 -- Palette generated with http://www.colorschemer.com/online.html,
 -- key color is #F0DFAF, colors taken:

@@ -1,8 +1,9 @@
 
-local capi = { widget = widget, dbus = dbus }
+local capi = { widget = widget, dbus = dbus, client = client }
 local theme = require("beautiful")
 local dbus = require("simpledbus")
 local button = require("awful.button")
+local util = require("rc.util")
 local setmetatable = setmetatable
 
 module("rc.widget.keyboard")
@@ -18,6 +19,11 @@ show_layout(0)
 capi.dbus.request_name("session", "ru.gentoo.kbdd")
 capi.dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
 capi.dbus.add_signal("ru.gentoo.kbdd", function (src, layout)
+    if capi.client.focus.class == 'Gvim' and layout ~= 0 then
+        util.sendkey(37, 51)
+        set_layout(0)
+        return
+    end
     show_layout(layout)
 end)
 

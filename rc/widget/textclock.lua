@@ -13,7 +13,7 @@ hint = tooltip({
         local f = os.popen(os.date('/usr/bin/ncal %Y'))
         local data = f:read('*all')
         f:close(io)
-        return data:gsub('_(%d)', '<span bgcolor="#000000" color="#ffffff"><b>%1</b></span>')
+        return data:gsub(' (%d%d%d%d)', '<big><b>%1</b></big>'):gsub('_(%d)', '<span bgcolor="#000000" color="#ffffff"><b>%1</b></span>')
     end,
     timeout = 0,
 })

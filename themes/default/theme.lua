@@ -22,7 +22,7 @@ theme.border_focus  = "#535d6c"
 theme.font          = "terminus 8"
 
 theme.taglist_squares_sel = '/home/kstep/doc/greentag2.png'
-theme.taglist_squares_unsel = nil
+theme.taglist_squares_unsel = theme.taglist_squares_sel
 theme.taglist_squares_resize = false
 
 theme.tooltip_fg_color = "#000000"

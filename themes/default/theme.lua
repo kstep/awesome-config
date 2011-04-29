@@ -27,7 +27,7 @@ theme.taglist_squares_resize = false
 
 theme.tooltip_fg_color = "#000000"
 theme.tooltip_bg_color = "#ffffff"
-theme.tooltip_font = "DejaVu Sans Mono 9"
+theme.tooltip_font = "Droid Sans Mono 9"
 
 -- Palette generated with http://www.colorschemer.com/online.html,
 -- key color is #F0DFAF, colors taken:

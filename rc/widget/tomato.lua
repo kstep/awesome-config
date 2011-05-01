@@ -129,6 +129,13 @@ local function tick(widget)
     if widget.count < 1 then
         notify(widget)
         counts[widget.name] = (counts[widget.name] or 0) + 1
+        if widget.command then
+            if type(widget.command) == 'function' then
+                widget.command(widget)
+            else
+                util.spawn(widget.command)
+            end
+        end
         next_series(widget)
     else
         update(widget)

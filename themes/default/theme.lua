@@ -27,7 +27,8 @@ theme.taglist_squares_resize = false
 
 theme.tooltip_fg_color = "#000000"
 theme.tooltip_bg_color = "#ffffff"
-theme.tooltip_font = "Droid Sans Mono 9"
+--theme.tooltip_font = "Droid Sans Mono 9"
+theme.tooltip_font = "Consolas 10"
 
 -- Palette generated with http://www.colorschemer.com/online.html,
 -- key color is #F0DFAF, colors taken:
@@ -110,7 +111,7 @@ function map(func, table)
     return result
 end
 
-theme.wallpaper_cmd = { "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/apple-wallpaper_" .. screen.count() .. ".jpg" }
+theme.wallpaper_cmd = { "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/color-lines_" .. screen.count() .. ".jpg" }
 --theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/02510_home_" .. v .. ".jpg" end,
     --{
         --"1280x800",

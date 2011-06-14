@@ -24,7 +24,8 @@ widgets[1]:set_height(17)
 widgets[2]:set_color(theme.volume)
 
 set_mute_color = function (w, value, meta) return value and theme.down or theme.up end
-reg = sensual.registermore(sensual.mixer(0, "misc.front1", "misc.front-mute", "jack.int-purple.mute"), util.table.join(widgets, widgets), {
+-- overall output volume, general/front mute, internal speakers mute
+reg = sensual.registermore(sensual.mixer(0, "vmix0-outvol", "misc.front-mute", "jack.int-purple.mute"), util.table.join(widgets, widgets), {
     { 1, sensual.filters.scale },
     { { 1, 3 }, function (w, a, m) return {a[1], a[2] and "♪" or "♫"} end },
     { 2, set_mute_color, "set_color" },
@@ -32,7 +33,7 @@ reg = sensual.registermore(sensual.mixer(0, "misc.front1", "misc.front-mute", "j
 }, 5)
 
 function get_volume()
-    return reg.sensor.devices[1].pvalue[1]
+    return reg.sensor.devices[1].pvalue
 end
 function set_volume(v)
     reg.sensor.devices[1].pvalue = v

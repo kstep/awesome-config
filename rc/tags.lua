@@ -4,9 +4,9 @@ local vars = require("rc.vars")
 module("rc.tags")
 
 tags = {
-    ["term"]   = { position = 1, layout = layout.tile.bottom, init = true, screen = 1, spawn = vars.terminal_cmd, },
-    --["msgs"]   = { position = 2, layout = layout.tile, mwfact = 0.75, screen = 1 },
-    ["skype"]  = { position = 2, layout = layout.fair, screen = 1, spawn = "/usr/bin/skype" },
+    ["term"]   = { position = 1, layout = layout.tile.bottom, init = true, screen = 1, --[[spawn = vars.terminal_cmd,]] },
+    ["msgs"]   = { position = 2, layout = layout.tile.right, mwfact = 0.75, screen = 1, spawn = "/usr/bin/pidgin" },
+    ["skype"]  = { layout = layout.fair, screen = 1, spawn = "/usr/bin/skype" },
     ["www"]    = { position = 3, layout = layout.max, screen = 2, spawn = vars.browser_cmd, },
     ["git"]    = { position = 4, layout = layout.tile.bottom, screen = 2 },
     ["video"]  = { position = 5, layout = layout.max, nopopup = false, spawn = vars.player_cmd },
@@ -35,7 +35,7 @@ rules = {
     { match = {"Gliv", "Mirage", "GQview", "Xloadimage", "Kview", "Kpdf"},  tag = "view" },
     { match = {"Thunderbird.*"},  tag = "msgs" },
     { match = {"Skype.*"},  tag = "skype" },
-    { match = {"Pidgin"},  tag = "msgs", slave = true },
+    { match = {"Pidgin"},  tag = "msgs" },
     { match = {"xterm", "URxvt"},  tag = "term", opacity = 0.8, slave = true },
     { match = {"^Dia$", "designer", "glade"}, tag = "design", slave = true },
     { match = {"mysql-.*"}, tag = "dbms" },

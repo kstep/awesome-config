@@ -19,7 +19,7 @@ config = {
         {  4, name = 'Первая сторона оладья', message = 'Пора перевернуть оладушек!' },
         {  4, name = 'Вторая сторона оладья', message = 'Пора снимать оладушек!' },
         { 25, name = 'Помидорка', message = 'Пора отдохнуть!'  , color = '#ff00ff', urgency = 'critical' },
-        { 10, name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' },
+        {  5, name = 'Перерыв'  , message = 'Перерыв закончен.', color = '#00ff00', urgency = 'critical' },
         { 30, name = 'Отдых'    , message = 'Отдых закончен.'  , color = '#00ffff', urgency = 'critical' },
     },
     series = {

@@ -49,7 +49,7 @@ hint_net = tooltip({
         widgets[3].widget,
     },
     timer_function = function ()
-        return util.pread("netstat --numeric-hosts -t -u -e -e | head -n 15")
+        return util.pread("netstat --numeric-hosts -t -u -e -e -p | head -n 15")
     end
 })
 

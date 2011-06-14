@@ -4,8 +4,10 @@ local util    = require("awful.util")
 local prompt  = require("awful.prompt")
 local tag     = require("awful.tag")
 local layout  = require("awful.layout")
+local completion = require("awful.completion")
 
 local shifty  = require("shifty")
+local naughty = require("naughty")
 
 local ascreen = require("awful.screen")
 local aclient = require("awful.client")
@@ -17,6 +19,7 @@ local cmouse   = mouse
 local awesome = awesome
 local tinsert = table.insert
 
+local cmus      = require("rc.widget.cmus")
 local promptbox = require("rc.widget.promptbox")
 local volume    = require("rc.widget.sensor.volume")
 
@@ -32,9 +35,14 @@ module("rc.binds")
 
 -- {{{ actions
 
+local function get_promptbox()
+    local w = cmus(cmouse.screen) or promptbox(cmouse.screen)
+    return w[2] or w.widget
+end
+
 local function lock_keys()
     prompt.run({ prompt = "Keyboard locked" },
-	promptbox(cmouse.screen).widget,
+	get_promptbox(),
 	function (c) end)
 end
 
@@ -74,15 +82,32 @@ end
 
 local function run_lua_code()
     prompt.run({ prompt = "Run Lua code: " },
-    promptbox(cmouse.screen).widget,
+    get_promptbox(),
     util.eval, nil,
     util.getdir("cache") .. "/history_eval")
+end
+
+local function stardict_translate()
+    local function translate_word(word)
+        local translation = util.pread('sdcv -n "'..word..'"')
+        naughty.notify { title = word, text = translation, timeout = 0, width = 500 }
+    end
+
+    local word = util.pread("xsel")
+    if word == "" then
+        prompt.run({ prompt = "Dict: " },
+        get_promptbox(),
+        translate_word, nil,
+        util.getdir("cache") .. "/history_stardict")
+    else
+        translate_word(word)
+    end
 end
 
 local function find_tag_by_name(multi)
     return function()
 	prompt.run({ prompt = "Tag name: " },
-	promptbox(cmouse.screen).widget,
+	get_promptbox(),
 	function (name)
 	    local tags = rutil.find_tags(name)
 	    if tags then
@@ -99,7 +124,7 @@ end
 local function find_client_by_name(multi)
     return function ()
 	prompt.run({ prompt = "Client name: " },
-	promptbox(cmouse.screen).widget,
+	get_promptbox(),
 	function (name)
 	    local clis = rutil.find_clients(name)
 	    if clis then
@@ -242,8 +267,21 @@ global = {
     key({ }, "XF86AudioStop", cmus_cmd("stop")),
 
     -- Prompt
-    key({ modkey }, "grave", function () promptbox(cmouse.screen):run() end),
+    key({ modkey }, "grave", function ()
+        local widget = get_promptbox()
+        prompt.run({ prompt = "Run: " },
+        widget,
+        function (...)
+            local result = util.spawn(...)
+            if type(result) == "string" then
+                widget.text = result
+            end
+        end,
+        completion.shell,
+        util.getdir("cache") .. "/history")
+        end),
     key({ modkey }, "x", run_lua_code),
+    key({ modkey }, "t", stardict_translate),
 
     key({ modkey          } , "apostrophe" , find_tag_by_name(false)), 
     key({ modkey, "Shift" } , "apostrophe" , find_tag_by_name(true)), 

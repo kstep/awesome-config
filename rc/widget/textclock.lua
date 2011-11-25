@@ -11,7 +11,7 @@ widget = clock({ align = right })
 hint = tooltip({
     objects = { widget },
     timer_function = function ()
-        local f = os.popen(os.date('/usr/bin/ncal %Y'))
+        local f = os.popen(os.date('/usr/bin/ncal -C %Y'))
         local data = f:read('*all')
         f:close(io)
         return data:gsub(' (%d%d%d%d)', '<big><b>%1</b></big>'):gsub('_([0-9 ])', ('<span bgcolor="%s" color="%s">%%1</span>'):format(theme.bg_focus, theme.fg_focus))

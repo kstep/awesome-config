@@ -111,7 +111,7 @@ function map(func, table)
     return result
 end
 
-theme.wallpaper_cmd = { "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/color-lines_" .. screen.count() .. ".jpg" }
+theme.wallpaper_cmd = { "awsetbg -t " .. awful.util.getdir('config') .. "/themes/october-11-celebration__10-calendar-1280x800.jpg" }
 --theme.wallpaper_cmd = map(function (v) return "awsetbg -t " .. awful.util.getdir('config') .. "/themes/default/02510_home_" .. v .. ".jpg" end,
     --{
         --"1280x800",

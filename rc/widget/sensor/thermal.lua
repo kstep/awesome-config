@@ -34,7 +34,7 @@ hint = tooltip({
 	widgets[3].widget, widgets[4].widget,
     },
     timer_function = function () 
-	return util.pread("acpi -t -c -i")
+	return util.pread("acpi -t; sudo hddtemp /dev/sda; echo -n NVidia \"GeForce 9300M GS: `nvidia-settings -t -q GPUCoreTemp`°C\"")
     end
 })
 
